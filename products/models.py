@@ -30,7 +30,7 @@ class ProductModel(models.Model):
     price = models.IntegerField(verbose_name=_('price'))
     promotional_price = models.CharField(max_length=200, verbose_name=_('promotional_price'))
     inbox = models.CharField(max_length=300, verbose_name=_('inbox'))
-    description = models.TextField(verbose_name=_('description'), null=True)
+    description = RichTextUploadingField(verbose_name=_('description'), null=True)
     material = models.CharField(max_length=300, verbose_name=_('material'))
     country = models.CharField(max_length=300, verbose_name=_('country'))
     season = models.CharField(max_length=200, verbose_name=_('season'))
