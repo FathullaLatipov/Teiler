@@ -20,5 +20,6 @@ class ProductModelAdmin(admin.ModelAdmin):
     list_filter = ['title', 'sku']
     search_fields = ['title', 'sku', 'category']
     inlines = [ProductImageModelAdmin]
+    readonly_fields = ['real_price']
 
 
