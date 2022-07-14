@@ -8,7 +8,8 @@ from products.views import HomeTemplate
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ckeditor/', include('ckeditor_uploader.urls')),
-    path('', HomeTemplate.as_view(),)
+    path('products/', include('products.urls')),
+    path('', HomeTemplate.as_view())
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -37,8 +37,8 @@
                                                         <svg width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M5.66261 0C5.86126 0 6.04287 0.112043 6.13171 0.289417L7.48425 2.98984L10.4583 3.42168C10.6558 3.45036 10.8199 3.58849 10.8816 3.77801C10.9433 3.96752 10.8918 4.17555 10.7489 4.31466L8.58439 6.42144L9.0713 9.39189C9.10348 9.5882 9.02144 9.78577 8.85955 9.90177C8.69767 10.0178 8.48392 10.0322 8.3079 9.93892L5.66261 8.53772L3.01733 9.93892C2.8413 10.0322 2.62755 10.0178 2.46567 9.90177C2.30379 9.78577 2.22174 9.5882 2.25392 9.39189L2.74084 6.42144L0.576304 4.31466C0.433385 4.17555 0.381956 3.96752 0.443636 3.77801C0.505317 3.58849 0.669412 3.45036 0.866942 3.42168L3.84097 2.98984L5.19352 0.289417C5.28236 0.112043 5.46396 0 5.66261 0ZM5.66261 1.69428L4.65665 3.70273C4.5799 3.85597 4.43289 3.96203 4.26305 3.98669L2.06919 4.30525L3.66865 5.86204C3.79121 5.98133 3.84775 6.15282 3.8201 6.32146L3.45987 8.51912L5.41679 7.48254C5.57052 7.40111 5.7547 7.40111 5.90844 7.48254L7.86536 8.51912L7.50512 6.32146C7.47748 6.15282 7.53401 5.98133 7.65657 5.86204L9.25604 4.30525L7.06218 3.98669C6.89234 3.96203 6.74533 3.85597 6.66857 3.70273L5.66261 1.69428Z" fill="#0047FF"/>
                                                             </svg>
-                                                                                                                                                                                                            
-                                                
+
+
                                     </div>
                                     <div class="info">
                                         4
@@ -55,41 +55,41 @@
                                 <div class="prod__content_gallery">
                                     <div class="prod__cond prod__cond_present">В наличии</div>
                                     <div class="prod__content_gallery_body carousel" id="mainCarousel">
-                                        <div class="prod__slide carousel__slide" data-fancybox="gallery" data-src="./img/product.png">
+                                        <div class="prod__slide carousel__slide" data-fancybox="gallery" data-src="{% static './img/product.png' %}">
                                             <picture>
                                                 <source type="image/webp" srcset="">
-                                                <img src="./img/product.png" alt="Iphone 13 Pro">
+                                                <img src="{% static './img/product.png' %}" alt="Iphone 13 Pro">
                                             </picture>
                                         </div>
-                                        <div class="prod__slide carousel__slide" data-fancybox="gallery" data-src="./img/product1.png">
+                                        <div class="prod__slide carousel__slide" data-fancybox="gallery" data-src="{% static './img/product1.png' %}">
                                             <picture>
                                                 <source type="image/webp" srcset="">
-                                                <img src="./img/product1.png" alt="Iphone 13 Pro">
+                                                <img src="{% static './img/product1.png' %}" alt="Iphone 13 Pro">
                                             </picture>
                                         </div>
-                                        
+
                                     </div>
 
                                     <div class="prod__content_gallery_thumbs carousel" id="thumbCarousel">
                                         <div class="prod__thumb carousel__slide">
                                             <picture>
                                                 <source type="image/webp" srcset="">
-                                                <img class="panzoom__content" src="./img/product.png" alt="Iphone 13 Pro">
+                                                <img class="panzoom__content" src="{% static './img/product.png' %}" alt="Iphone 13 Pro">
                                             </picture>
                                         </div>
                                         <div class="prod__thumb carousel__slide">
                                             <picture>
                                                 <source type="image/webp" srcset="">
-                                                <img class="panzoom__content" src="./img/product1.png" alt="Iphone 13 Pro">
+                                                <img class="panzoom__content" src="{% static './img/product1.png' %}" alt="Iphone 13 Pro">
                                             </picture>
-                                            
+
                                         </div>
                                     </div>
                                     <div class="prod__title">
                                         <div class="prod__discount">-19%</div>
                                         <h2 class="section_title">Смартфон Apple iPhone 13 128GB, темная ночь</h2>
                                     </div>
-                                    
+
                                 </div>
                                 <div class="prod__content_main">
                                     <form class="prod__content_form">
@@ -163,14 +163,14 @@
                                                 <li class="custom__descr_item"><span class="name">Стандарты связи</span> <span class="value">2G, 3G, LTE, 5G</span></li>
                                                 <li class="custom__descr_item"><span class="name">Вес товара, г</span> <span class="value">238 г</span></li>
                                                 <li class="custom__descr_item"><span class="name">Гарантия</span> <span class="value">1 год</span></li>
-                                                
+
                                             </ul>
                                             <a href="#descr" class="custom__link">Перейти к описанию</a>
                                             <div class="custom__ex">
                                                 <svg width="31" height="38" viewBox="0 0 31 38" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <path d="M21.0458 6.07608C22.2218 4.65506 23.0548 2.71954 23.0548 0.75951C23.0548 0.490006 23.0303 0.220503 22.9813 0C21.0703 0.073501 18.7672 1.27402 17.3952 2.89104C16.3172 4.11605 15.3127 6.07608 15.3127 8.03611C15.3127 8.33011 15.3617 8.62411 15.3862 8.72211C15.5087 8.74661 15.7047 8.77112 15.9007 8.77112C17.6157 8.77112 19.7718 7.6196 21.0458 6.07608ZM22.3933 9.18762C19.5268 9.18762 17.1992 10.9271 15.7047 10.9271C14.1122 10.9271 12.0297 9.28562 9.53063 9.28562C4.80206 9.28562 0 13.2057 0 20.5803C0 25.1863 1.76402 30.0374 3.96905 33.1734C5.85558 35.8195 7.4971 38 9.87363 38C12.2257 38 13.2547 36.432 16.1702 36.432C19.1348 36.432 19.7963 37.951 22.3933 37.951C24.9658 37.951 26.6809 35.599 28.2979 33.2714C30.1109 30.6009 30.8704 28.0039 30.8949 27.8814C30.7479 27.8324 25.8233 25.8233 25.8233 20.1883C25.8233 15.3127 29.6944 13.1322 29.9149 12.9607C27.3669 9.28562 23.4713 9.18762 22.3933 9.18762Z" fill="#242424"/>
                                                     </svg>
-                                                    
+
                                                 Только оригинальные товары бренда
                                             </div>
                                         </div>
@@ -212,51 +212,51 @@
                                 </div>
                             </div>
 
-                            
-                            
+
+
                         </div>
                     </div>
                 </div>
                 <section class="reviews">
                     <h2 class="section_title">
-                        Отзывы и вопросы о товаре 
+                        Отзывы и вопросы о товаре
                     </h2>
                     <div class="reviews__add">
                         <button class="btn" data-micromodal-trigger="review">Оставить отзыв</button>
                     </div>
                     <div class="reviews__content">
                         <h3 class="reviews__content_title">Фото и видео покупателей </h3>
-                        
+
                         <div class="reviews__content_list carousel" id="productReviews">
                             <div class="reviews__content_list_item carousel__slide">
-                                
+
                             </div>
                             <div class="reviews__content_list_item carousel__slide">
-                                
+
                             </div>
                             <div class="reviews__content_list_item carousel__slide">
-                                
+
                             </div>
                             <div class="reviews__content_list_item carousel__slide">
-                                
+
                             </div>
                             <div class="reviews__content_list_item carousel__slide">
-                                
+
                             </div>
                             <div class="reviews__content_list_item carousel__slide">
-                                
+
                             </div>
                             <div class="reviews__content_list_item carousel__slide">
-                                
+
                             </div>
                             <div class="reviews__content_list_item carousel__slide">
-                                
+
                             </div>
                             <div class="reviews__content_list_item carousel__slide">
-                                
+
                             </div>
                             <div class="reviews__content_list_item carousel__slide">
-                                
+
                             </div>
                         </div>
                     </div>
@@ -378,19 +378,19 @@
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, repellat quibusdam! Dicta dignissimos magni sunt culpa vel, omnis quae laboriosam. Recusandae corporis earum magnam itaque porro eius ut veritatis beatae?
                     </div>
                 </div>
-                
+
                 <section class="pop">
                     <div class="section__top">
                         <h2 class="section_title">Рекомендуем также</h2>
                         <a href="./positions.html" class="section__top_link">Показать все</a>
                     </div>
-    
+
                     <div class="product_list">
                         <div class="product">
                             <a href="./product.html" class="product_img">
                                 <picture>
                                     <source type="image/webp">
-                                    <img src="./img/iphone.png" alt="Product"> 
+                                    <img src="{% static './img/iphone.png' %}" alt="Product">
                                 </picture>
                             </a>
                             <div class="product_rate">
@@ -410,8 +410,8 @@
                                                     <svg width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <path d="M5.66261 0C5.86126 0 6.04287 0.112043 6.13171 0.289417L7.48425 2.98984L10.4583 3.42168C10.6558 3.45036 10.8199 3.58849 10.8816 3.77801C10.9433 3.96752 10.8918 4.17555 10.7489 4.31466L8.58439 6.42144L9.0713 9.39189C9.10348 9.5882 9.02144 9.78577 8.85955 9.90177C8.69767 10.0178 8.48392 10.0322 8.3079 9.93892L5.66261 8.53772L3.01733 9.93892C2.8413 10.0322 2.62755 10.0178 2.46567 9.90177C2.30379 9.78577 2.22174 9.5882 2.25392 9.39189L2.74084 6.42144L0.576304 4.31466C0.433385 4.17555 0.381956 3.96752 0.443636 3.77801C0.505317 3.58849 0.669412 3.45036 0.866942 3.42168L3.84097 2.98984L5.19352 0.289417C5.28236 0.112043 5.46396 0 5.66261 0ZM5.66261 1.69428L4.65665 3.70273C4.5799 3.85597 4.43289 3.96203 4.26305 3.98669L2.06919 4.30525L3.66865 5.86204C3.79121 5.98133 3.84775 6.15282 3.8201 6.32146L3.45987 8.51912L5.41679 7.48254C5.57052 7.40111 5.7547 7.40111 5.90844 7.48254L7.86536 8.51912L7.50512 6.32146C7.47748 6.15282 7.53401 5.98133 7.65657 5.86204L9.25604 4.30525L7.06218 3.98669C6.89234 3.96203 6.74533 3.85597 6.66857 3.70273L5.66261 1.69428Z" fill="#0047FF"/>
                                                         </svg>
-                                                                                                                                                                                                        
-                                            
+
+
                                 </div>
                                 <div class="info">
                                     4
@@ -429,7 +429,7 @@
                                     <svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M0 1.167C0 0.522484 0.522483 0 1.167 0H8.169C8.81351 0 9.336 0.522483 9.336 1.167V11.0865C9.336 11.3051 9.21384 11.5053 9.0195 11.6053C8.82515 11.7053 8.59121 11.6884 8.41335 11.5613L4.668 8.88606L0.922652 11.5613C0.744793 11.6884 0.510848 11.7053 0.316501 11.6053C0.122154 11.5053 0 11.3051 0 11.0865V1.167ZM8.169 1.167L1.167 1.167V9.95265L4.32885 7.69419C4.53173 7.54927 4.80427 7.54927 5.00715 7.69419L8.169 9.95265V1.167Z" fill="#242424"/>
                                         </svg>
-                                        
+
                                 </div>
                             </div>
                             <div class="product_ex">-19%</div>
@@ -438,7 +438,7 @@
                             <a href="./product.html" class="product_img">
                                 <picture>
                                     <source type="image/webp">
-                                    <img src="./img/iphone.png" alt="Product"> 
+                                    <img src="{% static './img/iphone.png' %}" alt="Product">
                                 </picture>
                             </a>
                             <div class="product_rate">
@@ -458,8 +458,8 @@
                                                     <svg width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <path d="M5.66261 0C5.86126 0 6.04287 0.112043 6.13171 0.289417L7.48425 2.98984L10.4583 3.42168C10.6558 3.45036 10.8199 3.58849 10.8816 3.77801C10.9433 3.96752 10.8918 4.17555 10.7489 4.31466L8.58439 6.42144L9.0713 9.39189C9.10348 9.5882 9.02144 9.78577 8.85955 9.90177C8.69767 10.0178 8.48392 10.0322 8.3079 9.93892L5.66261 8.53772L3.01733 9.93892C2.8413 10.0322 2.62755 10.0178 2.46567 9.90177C2.30379 9.78577 2.22174 9.5882 2.25392 9.39189L2.74084 6.42144L0.576304 4.31466C0.433385 4.17555 0.381956 3.96752 0.443636 3.77801C0.505317 3.58849 0.669412 3.45036 0.866942 3.42168L3.84097 2.98984L5.19352 0.289417C5.28236 0.112043 5.46396 0 5.66261 0ZM5.66261 1.69428L4.65665 3.70273C4.5799 3.85597 4.43289 3.96203 4.26305 3.98669L2.06919 4.30525L3.66865 5.86204C3.79121 5.98133 3.84775 6.15282 3.8201 6.32146L3.45987 8.51912L5.41679 7.48254C5.57052 7.40111 5.7547 7.40111 5.90844 7.48254L7.86536 8.51912L7.50512 6.32146C7.47748 6.15282 7.53401 5.98133 7.65657 5.86204L9.25604 4.30525L7.06218 3.98669C6.89234 3.96203 6.74533 3.85597 6.66857 3.70273L5.66261 1.69428Z" fill="#0047FF"/>
                                                         </svg>
-                                                                                                                                                                                                        
-                                            
+
+
                                 </div>
                                 <div class="info">
                                     4
@@ -477,14 +477,14 @@
                                     <svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M0 1.167C0 0.522484 0.522483 0 1.167 0H8.169C8.81351 0 9.336 0.522483 9.336 1.167V11.0865C9.336 11.3051 9.21384 11.5053 9.0195 11.6053C8.82515 11.7053 8.59121 11.6884 8.41335 11.5613L4.668 8.88606L0.922652 11.5613C0.744793 11.6884 0.510848 11.7053 0.316501 11.6053C0.122154 11.5053 0 11.3051 0 11.0865V1.167ZM8.169 1.167L1.167 1.167V9.95265L4.32885 7.69419C4.53173 7.54927 4.80427 7.54927 5.00715 7.69419L8.169 9.95265V1.167Z" fill="#242424"/>
                                         </svg>
-                                        
+
                                 </div>
                             </div>
                             <div class="product_ex">-19%</div>
                         </div>
-                        
-                        
-                        
+
+
+
                     </div>
                 </section>
 
@@ -500,10 +500,11 @@
         Нажимая на кнопку я подтверждаю обработку <a href="#">персональных данных</a>
     </div>
 </div>
-                    
+
                 </section>
             </div>
         </main>
+
         <div class="popup" id="login" aria-hidden="true">
 
     <div class="popup__layer" tabindex="-1" data-micromodal-close>
@@ -643,7 +644,7 @@
                 <div class="item__field_up">
                   <input id="file" type="file">
                   <label for="file">
-                    <img src="./img/file.svg" alt="">
+                    <img src="{% static './img/file.svg' %}" alt="">
                   </label>
                 </div>
               </div>
