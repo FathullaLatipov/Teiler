@@ -3,13 +3,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-from products.views import HomeTemplate, AboutTemplateView
+from products.views import HomeTemplate, AboutTemplateView, ArticleTemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('products/', include('products.urls',  namespace='product')),
     path('about/', AboutTemplateView.as_view()),
+    path('articles/', ArticleTemplateView.as_view()),
     path('', HomeTemplate.as_view())
 ]
 

@@ -28,3 +28,7 @@ class ProductDetailView(DetailView):
 
 class AboutTemplateView(TemplateView):
     template_name = 'about.html'
+
+
+class ArticleTemplateView(TemplateView):
+    template_name = 'articles.html'
