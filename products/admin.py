@@ -1,13 +1,20 @@
 from django.contrib import admin
 
-from products.models import CategoryModel, ProductModel, ProductImageModel
+from products.models import CategoryModel, ProductModel, ProductImageModel, BrandModel
 
 
 @admin.register(CategoryModel)
 class CategoryModelAdmin(admin.ModelAdmin):
-    list_display = ['pk', 'created_at']
+    list_display = ['pk', 'title', 'created_at']
     list_filter = ['created_at']
     search_fields = ['category']
+
+
+@admin.register(BrandModel)
+class BrandModelAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'brand', 'created_at']
+    list_filter = ['created_at']
+    search_fields = ['brand']
 
 
 class ProductImageModelAdmin(admin.TabularInline):
@@ -21,5 +28,3 @@ class ProductModelAdmin(admin.ModelAdmin):
     search_fields = ['title', 'sku', 'category']
     inlines = [ProductImageModelAdmin]
     readonly_fields = ['real_price']
-
-

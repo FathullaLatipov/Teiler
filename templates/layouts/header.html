@@ -14,7 +14,7 @@
                 <a href="#" class="header__top_nav_item">Контакты</a>
             </li>
             <li>
-                <a href="./positions.html" class="header__top_nav_item">Акции</a>
+                <a href="{% url 'product:products' %}" class="header__top_nav_item">Акции</a>
             </li>
             <li>
                 <a href="./articles.html" class="header__top_nav_item">Помощь</a>
@@ -23,12 +23,12 @@
                 <a href="#" class="header__top_nav_item">Гарантия</a>
             </li>
             <li>
-                <a href="./about.html" class="header__top_nav_item">О нас</a>
+                <a href="/about" class="header__top_nav_item">О нас</a>
             </li>
         </ul>
     </div>
     <div class="header__main">
-        <a href="./index.html" class="header__main_logo">
+        <a href="/" class="header__main_logo">
             <img src="{% static './img/Logo.svg' %}" alt="Logotype">
         </a>
 

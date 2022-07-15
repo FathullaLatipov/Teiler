@@ -16,6 +16,18 @@ class CategoryModel(models.Model):
         verbose_name_plural = _('categories')
 
 
+class BrandModel(models.Model):
+    brand = models.CharField(max_length=99, verbose_name=_('brands'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created_at'))
+
+    def __str__(self):
+        return self.brand
+
+    class Meta:
+        verbose_name = _('brand')
+        verbose_name_plural = _('brands')
+
+
 # Товар: имя, код, бренд, категория,
 # количество, цена, акционная цена, наличии или не в наличии,
 # описание, материал, страна производитель, сезон, цвет,
@@ -23,7 +35,7 @@ class CategoryModel(models.Model):
 class ProductModel(models.Model):
     title = models.CharField(max_length=300, verbose_name=_('title'), db_index=True)
     sku = models.IntegerField(verbose_name=_('sku'), db_index=True)
-    brand = models.CharField(max_length=200, verbose_name=_('brand'))
+    brand = models.ForeignKey(BrandModel, on_delete=models.PROTECT, verbose_name=_('brand'))
     category = models.ForeignKey(CategoryModel, on_delete=models.PROTECT, verbose_name=_('category'))
     image = models.FileField(upload_to='image', verbose_name=_('image'), null=True)
     price = models.IntegerField(verbose_name=_('price'))
