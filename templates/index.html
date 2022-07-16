@@ -6,28 +6,19 @@
             <section class="prev">
                 <div class="prev__in swiper">
                     <div class="prev__in_wrapper swiper-wrapper">
+                      {% for carousel in carousels %}
                         <div class="prev__item swiper-slide" style="background-image: url('{% static './img/prev' %}@1x.png'); height: 539px;">
                             <h2 class="prev__item_title">
-                                Samsung Jet
+                                {{ carousel.title }}
                             </h2>
                             <div class="prev__item_descr">
-                                Мгновенно чисто
+                                {{ carousel.descriptions|safe }}
                             </div>
                             <div class="prev__item_btn">
                                 <a href="./product.html" >ПОДРОБНЕЕ</a>
                             </div>
                         </div>
-                        <div class="prev__item swiper-slide" style="background-image: url('{% static './img/prev' %}@1x.png'); height: 539px;">
-                            <h2 class="prev__item_title">
-                                Samsung Jet
-                            </h2>
-                            <div class="prev__item_descr">
-                                Мгновенно чисто
-                            </div>
-                            <div class="prev__item_btn">
-                                <a href="./product.html" >ПОДРОБНЕЕ</a>
-                            </div>
-                        </div>
+                      {% endfor %}
                         <!-- <div class="prev__item swiper-slide"></div>
                         <div class="prev__item swiper-slide"></div> -->
                     </div>

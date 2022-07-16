@@ -16,6 +16,8 @@ INSTALLED_APPS = [
 
 #     django apps
     'products',
+    'carousel',
+    'help',
 ]
 
 MIDDLEWARE = [

@@ -32,7 +32,10 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
 
 #     django apps
+    'carousel',
     'products',
+    'help'
+
 ]
 
 MIDDLEWARE = [
