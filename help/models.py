@@ -16,21 +16,22 @@ class HelpCategory(models.Model):
 
 
 class HelpSubcategory(models.Model):
-    title = models.CharField(max_length=200, verbose_name=_('title'))
-    category = models.ForeignKey(HelpCategory, on_delete=models.PROTECT, verbose_name=_('category'))
+    category = models.ForeignKey(HelpCategory, on_delete=models.PROTECT, related_name='help_subcategories', verbose_name=_('category'))
+    subcategory = models.CharField(max_length=200, verbose_name=_('subcategory'), db_index=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created_at'))
 
     def __str__(self):
-        return self.title
+        return self.subcategory
 
     class Meta:
-        verbose_name = _('Help_subcategory')
-        verbose_name_plural = _('Help_subcategories')
+        verbose_name = _('subcategory')
+        verbose_name_plural = _('subcategories')
 
 
 class HelpModel(models.Model):
     title = models.CharField(max_length=200, verbose_name=_('title'))
     category = models.ForeignKey(HelpCategory, on_delete=models.PROTECT, verbose_name=_('category'))
+    subcategory = models.ForeignKey(HelpSubcategory, on_delete=models.PROTECT, verbose_name=_('subcategory'), null=True)
     descriptions = RichTextUploadingField()
     created_at = models.DateTimeField(auto_now_add=True)
 

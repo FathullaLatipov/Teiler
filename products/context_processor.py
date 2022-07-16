@@ -1,4 +1,5 @@
 from carousel.models import CarouselModel
+from help.models import HelpCategory, HelpSubcategory
 from products.models import CategoryModel, ProductModel, BrandModel
 
 
@@ -7,10 +8,16 @@ def product_categories(request):
     products = ProductModel.objects.order_by('pk')
     brands = BrandModel.objects.order_by('pk')
     carousels = CarouselModel.objects.order_by('pk')
+    help_categories = HelpCategory.objects.order_by('pk')
+    help_subcategories = HelpSubcategory.objects.order_by('pk')
+    random_products = ProductModel.objects.order_by('?')
 
     return {
         'categories': categories,
         'products': products,
         'brands': brands,
-        'carousels': carousels
+        'carousels': carousels,
+        'help_categories': help_categories,
+        'help_subcategories': help_subcategories,
+        'random_products':random_products
     }

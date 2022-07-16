@@ -12,9 +12,9 @@ class HelpCategoryModelAdmin(admin.ModelAdmin):
 
 @admin.register(HelpSubcategory)
 class HelpSubcategoryModelAdmin(admin.ModelAdmin):
-    list_display = ['title', 'category', 'created_at']
-    search_fields = ['title']
-    list_filter = ['title', 'created_at']
+    list_display = ['pk', 'subcategory', 'category', 'created_at']
+    search_fields = ['subcategory']
+    list_filter = ['subcategory', 'created_at']
 
 
 @admin.register(HelpModel)
