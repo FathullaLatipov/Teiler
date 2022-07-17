@@ -1,6 +1,8 @@
 from ckeditor_uploader.fields import RichTextUploadingField
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from star_ratings.models import Rating
 
 
 class CategoryModel(models.Model):
@@ -28,10 +30,23 @@ class BrandModel(models.Model):
         verbose_name_plural = _('brands')
 
 
+class ColorModel(models.Model):
+    code = models.CharField(max_length=10, verbose_name=_('code'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created_at'))
+
+    def __str__(self):
+        return self.code
+
+    class Meta:
+        verbose_name = _('color')
+        verbose_name_plural = _('colors')
+
+
 # Товар: имя, код, бренд, категория,
 # количество, цена, акционная цена, наличии или не в наличии,
 # описание, материал, страна производитель, сезон, цвет,
 # количество просмотров, много картин,
+
 class ProductModel(models.Model):
     title = models.CharField(max_length=300, verbose_name=_('title'), db_index=True)
     sku = models.IntegerField(verbose_name=_('sku'), db_index=True)
@@ -45,6 +60,11 @@ class ProductModel(models.Model):
     description = RichTextUploadingField(verbose_name=_('description'), null=True)
     material = models.CharField(max_length=300, verbose_name=_('material'))
     country = models.CharField(max_length=300, verbose_name=_('country'))
+    colors = models.ManyToManyField(
+        ColorModel,
+        related_name='products',
+        verbose_name=_('colors')
+    )
     season = models.CharField(max_length=200, verbose_name=_('season'))
     real_price = models.FloatField(verbose_name=_('real price'), default=0)
     is_published = models.BooleanField(default=False)

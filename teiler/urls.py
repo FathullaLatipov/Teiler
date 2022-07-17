@@ -11,6 +11,7 @@ urlpatterns = [
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('products/', include('products.urls',  namespace='product')),
     path('about/', AboutTemplateView.as_view()),
+    path('ratings/', include('star_ratings.urls', namespace='ratings')),
     path('articles/', HelpListView.as_view()),
     path('', HomeTemplate.as_view())
 ]

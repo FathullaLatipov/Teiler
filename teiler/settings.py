@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'whitenoise.runserver_nostatic',
+    'star_ratings',
 
 #     django apps
     'carousel',
@@ -134,6 +135,8 @@ CKEDITOR_CONFIGS = {
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
 
 try:
     from .settings_local import *

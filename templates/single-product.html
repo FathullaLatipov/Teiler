@@ -1,6 +1,9 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
+{% load ratings %}
 {% block content %}
+<link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
+<script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
         <main class="main">
             <div class="container">
                 <div class="path">
@@ -16,8 +19,10 @@
                     <div class="main__content">
                         <div class="prod">
                             <div class="prod__title">
-                                <div class="prod__discount">-19%</div>
-                                <h2 class="section_title">Смартфон Apple iPhone 13 128GB, темная ночь</h2>
+                                  {% if object.is_discount %}
+                                       <div class="prod__discount">-{{ object.discount }}%</div>
+                                  {% endif %}
+                                <h2 class="section_title">{{ object.title }}</h2>
                             </div>
                             <div class="prod__top">
                                 <div class="prod__top_rate product_rate">
@@ -46,14 +51,18 @@
                                     </div>
                                 </div>
                                 <div class="prod__top_info">
-                                    <div class="info">Производитель: <span>Apple</span></div>
-                                    <div class="info">Артикул товара: <span>421523523</span></div>
+                                    <div class="info">Производитель: <span>{{ object.country }}</span></div>
+                                    <div class="info">Артикул товара: <span>{{ object.pk }}</span></div>
                                 </div>
                             </div>
 
                             <div class="prod__content">
                                 <div class="prod__content_gallery">
+                                 {% if object.is_published == True %}
                                     <div class="prod__cond prod__cond_present">В наличии</div>
+                                {% else %}
+                                    <button disabled class="btn btn_dis">Нет в наличии</button>
+                                {% endif %}
                                     <div class="prod__content_gallery_body carousel" id="mainCarousel">
                                         <div class="prod__slide carousel__slide" data-fancybox="gallery" data-src="{% static './img/product.png' %}">
                                             <picture>
@@ -62,6 +71,12 @@
                                             </picture>
                                         </div>
                                         <div class="prod__slide carousel__slide" data-fancybox="gallery" data-src="{% static './img/product1.png' %}">
+                                            <picture>
+                                                <source type="image/webp" srcset="">
+                                                <img src="{% static './img/product1.png' %}" alt="Iphone 13 Pro">
+                                            </picture>
+                                        </div>
+                                         <div class="prod__slide carousel__slide" data-fancybox="gallery" data-src="{% static './img/product1.png' %}">
                                             <picture>
                                                 <source type="image/webp" srcset="">
                                                 <img src="{% static './img/product1.png' %}" alt="Iphone 13 Pro">
@@ -82,12 +97,19 @@
                                                 <source type="image/webp" srcset="">
                                                 <img class="panzoom__content" src="{% static './img/product1.png' %}" alt="Iphone 13 Pro">
                                             </picture>
-
+                                        </div>
+                                          <div class="prod__thumb carousel__slide">
+                                            <picture>
+                                                <source type="image/webp" srcset="">
+                                                <img class="panzoom__content" src="{% static './img/product1.png' %}" alt="Iphone 13 Pro">
+                                            </picture>
                                         </div>
                                     </div>
                                     <div class="prod__title">
-                                        <div class="prod__discount">-19%</div>
-                                        <h2 class="section_title">Смартфон Apple iPhone 13 128GB, темная ночь</h2>
+                                          {% if object.is_discount %}
+                                               <div class="prod__discount">-{{ object.discount }}%</div>
+                                          {% endif %}
+                                        <h2 class="section_title">{{ object.title}}</h2>
                                     </div>
 
                                 </div>
@@ -130,30 +152,15 @@
                                             <div class="custom__color">
                                                 <h3 class="form__name">Цвет:</h3>
                                                 <div class="custom__color_inputs">
-                                                    <div class="custom__color_item">
-                                                        <input id="sierra" type="radio" name="color">
-                                                        <label for="sierra">
-                                                            <div style="background-color: #BACBE3;"></div>
-                                                        </label>
-                                                    </div>
-                                                    <div class="custom__color_item">
-                                                        <input id="silver" type="radio" name="color">
-                                                        <label for="silver">
-                                                            <div style="background-color: #153562;"></div>
-                                                        </label>
-                                                    </div>
-                                                    <div class="custom__color_item">
-                                                        <input id="gold" type="radio" name="color">
-                                                        <label for="gold">
-                                                            <div style="background-color: #E4B775;"></div>
-                                                        </label>
-                                                    </div>
-                                                    <div class="custom__color_item">
-                                                        <input id="graphite" type="radio" name="color">
-                                                        <label for="graphite">
-                                                            <div style="background-color: #242424;"></div>
-                                                        </label>
-                                                    </div>
+                                                     {% for color in object.colors.all %}
+                                                        <div class="custom__color_item">
+                                                            <input id="{{ color.pk }}" type="radio" name="color">
+                                                            <label for="{{ color.pk }}">
+                                                                <div style="background-color: {{ color.code }};"></div>
+
+                                                            </label>
+                                                        </div>
+                                                    {% endfor %}
                                                 </div>
                                             </div>
 
@@ -166,20 +173,22 @@
 
                                             </ul>
                                             <a href="#descr" class="custom__link">Перейти к описанию</a>
-                                            <div class="custom__ex">
-                                                <svg width="31" height="38" viewBox="0 0 31 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M21.0458 6.07608C22.2218 4.65506 23.0548 2.71954 23.0548 0.75951C23.0548 0.490006 23.0303 0.220503 22.9813 0C21.0703 0.073501 18.7672 1.27402 17.3952 2.89104C16.3172 4.11605 15.3127 6.07608 15.3127 8.03611C15.3127 8.33011 15.3617 8.62411 15.3862 8.72211C15.5087 8.74661 15.7047 8.77112 15.9007 8.77112C17.6157 8.77112 19.7718 7.6196 21.0458 6.07608ZM22.3933 9.18762C19.5268 9.18762 17.1992 10.9271 15.7047 10.9271C14.1122 10.9271 12.0297 9.28562 9.53063 9.28562C4.80206 9.28562 0 13.2057 0 20.5803C0 25.1863 1.76402 30.0374 3.96905 33.1734C5.85558 35.8195 7.4971 38 9.87363 38C12.2257 38 13.2547 36.432 16.1702 36.432C19.1348 36.432 19.7963 37.951 22.3933 37.951C24.9658 37.951 26.6809 35.599 28.2979 33.2714C30.1109 30.6009 30.8704 28.0039 30.8949 27.8814C30.7479 27.8324 25.8233 25.8233 25.8233 20.1883C25.8233 15.3127 29.6944 13.1322 29.9149 12.9607C27.3669 9.28562 23.4713 9.18762 22.3933 9.18762Z" fill="#242424"/>
-                                                    </svg>
+<!--                                            <div class="custom__ex">-->
+<!--                                                <svg width="31" height="38" viewBox="0 0 31 38" fill="none" xmlns="http://www.w3.org/2000/svg">-->
+<!--                                                    <path d="M21.0458 6.07608C22.2218 4.65506 23.0548 2.71954 23.0548 0.75951C23.0548 0.490006 23.0303 0.220503 22.9813 0C21.0703 0.073501 18.7672 1.27402 17.3952 2.89104C16.3172 4.11605 15.3127 6.07608 15.3127 8.03611C15.3127 8.33011 15.3617 8.62411 15.3862 8.72211C15.5087 8.74661 15.7047 8.77112 15.9007 8.77112C17.6157 8.77112 19.7718 7.6196 21.0458 6.07608ZM22.3933 9.18762C19.5268 9.18762 17.1992 10.9271 15.7047 10.9271C14.1122 10.9271 12.0297 9.28562 9.53063 9.28562C4.80206 9.28562 0 13.2057 0 20.5803C0 25.1863 1.76402 30.0374 3.96905 33.1734C5.85558 35.8195 7.4971 38 9.87363 38C12.2257 38 13.2547 36.432 16.1702 36.432C19.1348 36.432 19.7963 37.951 22.3933 37.951C24.9658 37.951 26.6809 35.599 28.2979 33.2714C30.1109 30.6009 30.8704 28.0039 30.8949 27.8814C30.7479 27.8324 25.8233 25.8233 25.8233 20.1883C25.8233 15.3127 29.6944 13.1322 29.9149 12.9607C27.3669 9.28562 23.4713 9.18762 22.3933 9.18762Z" fill="#242424"/>-->
+<!--                                                    </svg>-->
 
-                                                Только оригинальные товары бренда
-                                            </div>
+<!--                                                Только оригинальные товары бренда-->
+<!--                                            </div>-->
                                         </div>
 
                                         <div class="order">
                                             <div class="order__price">
                                                 <div class="order__price_item">
-                                                    <div class="new">69 499 ₽</div>
-                                                    <div class="old">79 499 ₽</div>
+                                                    <div class="new">{{ object.real_price }} ₽</div>
+                                                    {% if object.is_discount %}
+                                                         <div class="old">{{ object.price }} ₽</div>
+                                                    {% endif %}
                                                 </div>
                                                 <div class="order__price_not">Узнать о снижении цены</div>
                                                 <button type="button" class="order__price_add btn">Добавить в корзину</button>
@@ -374,8 +383,7 @@
                         Описание товара
                     </h3>
                     <div class="descr__text">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur quibusdam molestiae assumenda necessitatibus numquam rerum eius laborum. Esse provident, magnam nihil tenetur veritatis quis quae. Quas praesentium nemo placeat soluta. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam molestiae minus illum voluptate reiciendis quae voluptatum, illo aspernatur perspiciatis sint optio. Atque sequi earum quia iusto! Quis qui impedit corrupti.
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, repellat quibusdam! Dicta dignissimos magni sunt culpa vel, omnis quae laboriosam. Recusandae corporis earum magnam itaque porro eius ut veritatis beatae?
+                       {{ object.description|safe }}
                     </div>
                 </div>
 

@@ -1,4 +1,5 @@
 from pathlib import Path
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -10,11 +11,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-#     new apps
+    #     new apps
     'ckeditor',
     'ckeditor_uploader',
+    'star_ratings',
 
-#     django apps
+    #     django apps
     'products',
     'carousel',
     'help',
@@ -31,6 +33,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -45,3 +49,27 @@ STATICFILES_DIRS = BASE_DIR / 'assets',
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+TEMPLATE_CONTEXT_PROCESSORS = [
+    'django.core.context_processors.request',
+]
+
+STAR_RATINGS_RERATE = True
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'stream': {
+            'level': 'ERROR',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['stream'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}

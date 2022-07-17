@@ -7,7 +7,7 @@
                 <div class="prev__in swiper">
                     <div class="prev__in_wrapper swiper-wrapper">
                       {% for carousel in carousels %}
-                        <div class="prev__item swiper-slide" style="background-image: url('{% static './img/prev' %}@1x.png'); height: 539px;">
+                        <div class="prev__item swiper-slide" style="background-image: url('{{ carousel.background_image.url }}'); height: 539px;">
                             <h2 class="prev__item_title">
                                 {{ carousel.title }}
                             </h2>

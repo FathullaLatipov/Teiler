@@ -12,8 +12,13 @@ class ProductTemplate(ListView):
     template_name = 'products.html'
     context_object_name = 'products'
 
+    def get_object(self, queryset=None):
+        obj, created = self.model.objects.get_or_create(bar='foo bar baz')
+        return obj
+
     def get_queryset(self):
         return ProductModel.objects.all()
+
 
 
 class ProductDetailView(DetailView):
