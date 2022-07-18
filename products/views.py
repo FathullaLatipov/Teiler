@@ -1,7 +1,10 @@
+from django.http import HttpResponse
 from django.shortcuts import render
+from django.views import View
 from django.views.generic import ListView, DetailView, TemplateView
 
-from products.models import ProductModel
+from products.forms import RatingForm
+from products.models import ProductModel, Rating
 
 
 class HomeTemplate(TemplateView):
@@ -20,7 +23,6 @@ class ProductTemplate(ListView):
         return ProductModel.objects.all()
 
 
-
 class ProductDetailView(DetailView):
     template_name = 'single-product.html'
     model = ProductModel
@@ -28,7 +30,32 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['related'] = ProductModel.objects.order_by('-pk')
+        context["star_form"] = RatingForm()
         return context
+
+
+class AddStarRating(View):
+    """Добавление рейтинга фильму"""
+
+    def get_client_ip(self, request):
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        return ip
+
+    def post(self, request):
+        form = RatingForm(request.POST)
+        if form.is_valid():
+            Rating.objects.update_or_create(
+                ip=self.get_client_ip(request),
+                movie_id=int(request.POST.get("movie")),
+                defaults={'star_id': int(request.POST.get("star"))}
+            )
+            return HttpResponse(status=201)
+        else:
+            return HttpResponse(status=400)
 
 
 class AboutTemplateView(TemplateView):

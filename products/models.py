@@ -87,6 +87,33 @@ class ProductModel(models.Model):
         ordering = ['title']
 
 
+class RatingStar(models.Model):
+    """Звезда рейтинга"""
+    value = models.SmallIntegerField("StarRating", default=0)
+
+    def __str__(self):
+        return f'{self.value}'
+
+    class Meta:
+        verbose_name = "star_rating"
+        verbose_name_plural = "star_ratings"
+        ordering = ["-value"]
+
+
+class Rating(models.Model):
+    """Рейтинг"""
+    ip = models.CharField("IP адрес", max_length=15)
+    star = models.ForeignKey(RatingStar, on_delete=models.CASCADE, verbose_name="star")
+    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, verbose_name="product", related_name="ratings")
+
+    def __str__(self):
+        return f"{self.star} - {self.product}"
+
+    class Meta:
+        verbose_name = "Рейтинг"
+        verbose_name_plural = "Рейтинги"
+
+
 class ProductImageModel(models.Model):
     product = models.ForeignKey(ProductModel, on_delete=models.PROTECT, related_name='product',
                                 verbose_name=_('product'), null=True, blank=True)
