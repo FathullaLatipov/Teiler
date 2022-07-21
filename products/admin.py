@@ -3,6 +3,7 @@ from django.utils.safestring import mark_safe
 
 from products.forms import ColorModelForm
 from products.models import CategoryModel, ProductModel, ProductImageModel, BrandModel, ColorModel, Rating, RatingStar
+from reviews.models import ReviewModel
 
 
 @admin.register(CategoryModel)
@@ -28,6 +29,11 @@ class ColorModelAdmin(admin.ModelAdmin):
 
     def visual_color(self, obj):
         return mark_safe(f'<div style="height: 20px; width: 100px; background: {obj.code}"></div>')
+
+
+@admin.register(ReviewModel)
+class ReviewModelAdmin(admin.ModelAdmin):
+    list_display = ['name', 'comments', 'email']
 
 
 class ProductImageModelAdmin(admin.TabularInline):

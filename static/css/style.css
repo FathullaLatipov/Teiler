@@ -4888,6 +4888,13 @@ html {
   display: flex;
   gap: 14px;
 }
+
+#product .main__content .prod__content_form .custom__color_inputs2 {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 14px;
+}
 #product .main__content .prod__content_form .custom__color_item input:checked ~ label {
   border-color: var(--btn);
 }

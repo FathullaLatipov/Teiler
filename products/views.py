@@ -1,10 +1,11 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView, TemplateView
 
-from products.forms import RatingForm
+from products.forms import RatingForm, ReviewForm
 from products.models import ProductModel, Rating
+from reviews.models import ReviewModel
 
 
 class HomeTemplate(TemplateView):
@@ -26,12 +27,28 @@ class ProductTemplate(ListView):
 class ProductDetailView(DetailView):
     template_name = 'single-product.html'
     model = ProductModel
+    context_object_name = 'product'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['related'] = ProductModel.objects.order_by('-pk')
         context["star_form"] = RatingForm()
         return context
+
+
+class AddReview(View):
+    def post(self, request, pk):
+        form = ReviewForm(request.POST)
+        product = ProductModel.objects.get(id=pk)
+        if form.is_valid():
+            form = form.save(commit=False)
+            form.product = product
+            form.save()
+        return redirect(product.get_absolute_url())
+
+# def add_review(request, pk):
+#     if request.POST == 'POST':
+#         form =
 
 
 class AddStarRating(View):

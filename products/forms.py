@@ -1,6 +1,7 @@
 from django import forms
 
 from products.models import ColorModel, RatingStar, Rating
+from reviews.models import ReviewModel
 
 
 class ColorModelForm(forms.ModelForm):
@@ -23,3 +24,9 @@ class RatingForm(forms.ModelForm):
     class Meta:
         model = Rating
         fields = ("star",)
+
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = ReviewModel
+        fields = ("name", "email", "comments")

@@ -115,7 +115,7 @@ class Rating(models.Model):
 
 
 class ProductImageModel(models.Model):
-    product = models.ForeignKey(ProductModel, on_delete=models.PROTECT, related_name='product',
+    product = models.ForeignKey(ProductModel, on_delete=models.PROTECT, related_name='images',
                                 verbose_name=_('product'), null=True, blank=True)
 
     image = models.FileField(upload_to='products', verbose_name=_('image'), null=True, blank=True)
