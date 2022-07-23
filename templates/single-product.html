@@ -61,7 +61,7 @@
                         {% if object.is_discount %}
                         <div class="prod__discount">-{{ object.discount }}%</div>
                         {% endif %}
-                        <h2 class="section_title">{{ object.title }}</h2>
+                        <h2 class="section_title">{{ product.title }}</h2>
                     </div>
                     <div class="prod__top">
                         <div class="prod__top_info">
@@ -152,40 +152,33 @@
                                     <div class="custom__color">
                                         <h3 class="form__name">Цвет:</h3>
 
-                                            {% for color in object.colors.all %}
-                                             <div class="custom__color_inputs">
-                                                <div class="custom__color_item">
-                                                    <input id="{{ color.pk }}" type="radio" name="color">
-                                                    <label for="{{ color.pk }}">
-                                                        <div style="background-color: {{ color.code }};"></div>
-                                                    </label>
-                                                </div>
-                                                </div>
-                                                {% if forloop.counter == 4%}
-                                                 <div class="custom__color_inputs2">
-                                                     <div class="custom__color_item">
-                                                        <input id="{{ color.pk }}" type="radio" name="color">
-                                                        <label for="{{ color.pk }}">
-                                                            <div style="background-color: {{ color.code }};"></div>
-                                                        </label>
-                                                    </div>
-                                                 </div>
-                                                {% endif %}
-                                            {% endfor %}
+<!--                                            {% for color in object.colors.all %}-->
+<!--                                             <div class="custom__color_inputs">-->
+<!--                                                <div class="custom__color_item">-->
+<!--                                                    <input id="{{ color.pk }}" type="radio" name="color">-->
+<!--                                                    <label for="{{ color.pk }}">-->
+<!--                                                        <div style="background-color: {{ color.code }};"></div>-->
+<!--                                                    </label>-->
+<!--                                                </div>-->
+<!--                                                </div>-->
+<!--                                                {% if forloop.counter == 4%}-->
+<!--                                                 <div class="custom__color_inputs2">-->
+<!--                                                     <div class="custom__color_item">-->
+<!--                                                        <input id="{{ color.pk }}" type="radio" name="color">-->
+<!--                                                        <label for="{{ color.pk }}">-->
+<!--                                                            <div style="background-color: {{ color.code }};"></div>-->
+<!--                                                        </label>-->
+<!--                                                    </div>-->
+<!--                                                 </div>-->
+<!--                                                {% endif %}-->
+<!--                                            {% endfor %}-->
 
                                     </div>
                                     <ul class="custom__descr">
-                                        <li class="custom__descr_item"><span class="name">Диагональ экрана, дюймы</span>
-                                            <span class="value">6.1</span></li>
-                                        <li class="custom__descr_item"><span class="name">Встроенная память</span> <span
-                                                class="value">128 ГБ</span></li>
-                                        <li class="custom__descr_item"><span class="name">Стандарты связи</span> <span
-                                                class="value">2G, 3G, LTE, 5G</span></li>
-                                        <li class="custom__descr_item"><span class="name">Вес товара, г</span> <span
-                                                class="value">238 г</span></li>
-                                        <li class="custom__descr_item"><span class="name">Гарантия</span> <span
-                                                class="value">1 год</span></li>
-
+                                        {% for i in object.characteristics.all %}
+                                            <li class="custom__descr_item"><span class="name">{{ i.data }}</span>
+                                                <span class="value">{{ i.number }}</span></li>
+                                        {% endfor %}
                                     </ul>
                                     <a href="#descr" class="custom__link">Перейти к описанию</a>
                                     <!--                                            <div class="custom__ex">-->
@@ -321,7 +314,8 @@
                 </div>
 
                 <div class="reviews__body_list">
-                    <div class="reviews__body_item">
+                    {% for review in product.reviewmodel_set.all %}
+                         <div class="reviews__body_item">
                         <div class="reviews__body_item_head">
                             <div class="profile">
                                 <div class="profile__img">
@@ -331,7 +325,7 @@
                                     </picture>
                                 </div>
                                 <div class="profile__descr">
-                                    <div class="profile__descr_name">Алина С.</div>
+                                    <div class="profile__descr_name">{{ review.name }}</div>
                                     <div class="profile__descr_rate">
                                         <svg width="11" height="10" viewBox="0 0 11 10" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
@@ -362,7 +356,7 @@
                                 </div>
                             </div>
                             <div class="date">
-                                25 Сентября 2021
+                                 <p>{{ review.created_at }}</p>
                             </div>
                         </div>
                         <ul class="reviews__body_item_list">
@@ -373,14 +367,12 @@
                         </ul>
                         <div class="reviews__body_item_text">
                             <p>
-                                Что изменилось в сравнении с 12? Да мало что. Но яблочники меня хорошо поймут. Каждая
-                                новая модель не смотря ни на что лучше, чем предыдущая. Чуть мощнее аккумулятор, чуть
-                                лучше фото и везде вот это «чуть» превращается в огромный ком достоинств.
+                                 {{ review.comments }}
                             </p>
                         </div>
 
                         <div class="reviews__body_item_content carousel">
-                            <div class="reviews__body_item_content_item carousel__slide"></div>
+                            <div class="reviews__body_item_content_item carousel__slide" style="padding: 0px"><img src="{{ review.image.url }}" style="width: 145px;height: 168px" alt=""></div>
                             <div class="reviews__body_item_content_item carousel__slide"></div>
                         </div>
 
@@ -399,13 +391,10 @@
                         </form>
 
                     </div>
+                    {% endfor %}
                 </div>
             </div>
         </section>
- {% for review in object.reviews.all %}
-    <p>{{ review.name }}</p>
-    <p>{{ review.email }}</p>
- {% endfor %}
         <div class="descr" id="descr">
             <h3 class="descr__title section_title">
                 Описание товара
@@ -638,7 +627,7 @@
                     Оставить отзыв
                 </div>
 
-                <form action="{% url 'product:add_review' product.pk %}" method="post" class="popup__review_form">
+                <form action="{% url 'product:add_review' product.pk %}" enctype="multipart/form-data" method="post" class="popup__review_form">
                     {% csrf_token %}
                     <div class="item">
                         <label>Ваше имя
@@ -652,28 +641,28 @@
                         </label>
                     </div>
 
-                    <!--            <div class="item stars">-->
-                    <!--              <div class="item__title">Ваша оценка</div>-->
-                    <!--              <div class="item__stars" data-total-value="0">-->
-                    <!--                &lt;!&ndash; <input type="radio">-->
-                    <!--                <input type="radio">-->
-                    <!--                <input type="radio">-->
-                    <!--                <input type="radio">-->
-                    <!--                <input type="radio"> &ndash;&gt;-->
-                    <!--                <div class="item__stars_el" data-item-value="5">	&#9733;</div>-->
-                    <!--                <div class="item__stars_el" data-item-value="4">	&#9733;</div>-->
-                    <!--                <div class="item__stars_el" data-item-value="3">	&#9733;</div>-->
-                    <!--                <div class="item__stars_el" data-item-value="2">	&#9733;</div>-->
-                    <!--                <div class="item__stars_el" data-item-value="1">	&#9733;</div>-->
-                    <!--              </div>-->
-                    <!--            </div>-->
+                                <div class="item stars">
+                                  <div class="item__title">Ваша оценка</div>
+                                  <div class="item__stars" data-total-value="0">
+                                    <!-- <input type="radio">
+                                    <input type="radio">
+                                    <input type="radio">
+                                    <input type="radio">
+                                    <input type="radio"> -->
+                                    <div class="item__stars_el" data-item-value="5">	&#9733;</div>
+                                    <div class="item__stars_el" data-item-value="4">	&#9733;</div>
+                                    <div class="item__stars_el" data-item-value="3">	&#9733;</div>
+                                    <div class="item__stars_el" data-item-value="2">	&#9733;</div>
+                                    <div class="item__stars_el" data-item-value="1">	&#9733;</div>
+                                  </div>
+                                </div>
 
                     <div class="item">
                         <div class="item__title">Расскажите подробнее</div>
                         <div class="item__field">
                             <textarea name="comments" placeholder="Поделитесь мнением о вашей покупке"></textarea>
                             <div class="item__field_up">
-                                <input id="file" type="file">
+                                <input id="file" name="image" type="file" accept="image/jpeg">
                                 <label for="file">
                                     <img src="{% static './img/file.svg' %}" alt="">
                                 </label>
@@ -691,6 +680,15 @@
         </div>
     </div>
 </div>
+<h3>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias cupiditate dolorem est et fugiat ipsam nulla, quasi quo rem veniam?</h3>
+
+{% for review in product.reviewmodel_set.all %}
+    <p>{{ review.name }}</p>
+    <p>{{ review.email }}</p>
+    {% if review.image %}
+    <img src="{{ review.image.url }}" alt="">
+    {% endif %}
+{% endfor %}
 <div class="popup" id="city" aria-hidden="true">
 
     <div class="popup__layer" tabindex="-1" data-micromodal-close>

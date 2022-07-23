@@ -2815,6 +2815,7 @@ html {
       -ms-flex-pack: justify;
           justify-content: space-between;
   padding-bottom: 12px;
+  margin-top: 15px;
   border-bottom: 1px solid rgba(36, 36, 36, 0.05);
   margin-bottom: 10px;
 }

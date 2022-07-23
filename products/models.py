@@ -87,6 +87,22 @@ class ProductModel(models.Model):
         ordering = ['title']
 
 
+class ReviewModel(models.Model):
+    name = models.CharField(max_length=100, verbose_name=_('name'))
+    email = models.EmailField(max_length=200, verbose_name=_('email'))
+    image = models.FileField(upload_to='form_images', verbose_name=_('image'), null=True, blank=True)
+    comments = models.TextField()
+    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, verbose_name=_('product'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created_at'), null=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _('review')
+        verbose_name_plural = _('reviews')
+
+
 class RatingStar(models.Model):
     """Звезда рейтинга"""
     value = models.SmallIntegerField("StarRating", default=0)
@@ -123,3 +139,16 @@ class ProductImageModel(models.Model):
     class Meta:
         verbose_name = _('product image')
         verbose_name_plural = _('product images')
+
+
+class ProductCharacteristicModel(models.Model):
+    product = models.ForeignKey(ProductModel, on_delete=models.PROTECT, related_name='characteristics',
+                                verbose_name=_('product'), null=True, blank=True)
+
+    data = models.CharField(max_length=300, verbose_name=_('data'))
+    number = models.CharField(max_length=300, verbose_name=_('number'))
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = _('product_characteristic')
+        verbose_name_plural = _('product_characteristics')

@@ -5,7 +5,6 @@ from django.views.generic import ListView, DetailView, TemplateView
 
 from products.forms import RatingForm, ReviewForm
 from products.models import ProductModel, Rating
-from reviews.models import ReviewModel
 
 
 class HomeTemplate(TemplateView):
@@ -38,17 +37,27 @@ class ProductDetailView(DetailView):
 
 class AddReview(View):
     def post(self, request, pk):
-        form = ReviewForm(request.POST)
+        form = ReviewForm(request.POST, request.FILES)
         product = ProductModel.objects.get(id=pk)
         if form.is_valid():
             form = form.save(commit=False)
             form.product = product
+            form.image = request.FILES['image']
             form.save()
-        return redirect(product.get_absolute_url())
+            print(request.POST, request.FILES['image'])
+        return redirect("/")
+
 
 # def add_review(request, pk):
-#     if request.POST == 'POST':
-#         form =
+#     if request.method == 'POST':
+#         product = ProductModel.objects.get(pk=pk)
+#         form = ReviewForm(request.POST)
+#         if form.is_valid():
+#             form.save(commit=False)
+#             form.product = product
+#             form.save()
+#     return redirect('/')
+
 
 
 class AddStarRating(View):

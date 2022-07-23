@@ -2,8 +2,8 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 
 from products.forms import ColorModelForm
-from products.models import CategoryModel, ProductModel, ProductImageModel, BrandModel, ColorModel, Rating, RatingStar
-from reviews.models import ReviewModel
+from products.models import CategoryModel, ProductModel, ProductImageModel, BrandModel, ColorModel, Rating, RatingStar, \
+    ReviewModel, ProductCharacteristicModel
 
 
 @admin.register(CategoryModel)
@@ -40,13 +40,17 @@ class ProductImageModelAdmin(admin.TabularInline):
     model = ProductImageModel
 
 
+class ProductCharacteristicModelAdmin(admin.TabularInline):
+    model = ProductCharacteristicModel
+
+
 @admin.register(ProductModel)
 class ProductModelAdmin(admin.ModelAdmin):
     list_display = ['title', 'sku', 'category', 'price', 'inbox', 'brand', 'material', 'created_at']
     list_filter = ['title', 'sku']
     search_fields = ['title', 'sku', 'category']
     autocomplete_fields = ['colors']
-    inlines = [ProductImageModelAdmin]
+    inlines = [ProductImageModelAdmin, ProductCharacteristicModelAdmin]
     readonly_fields = ['real_price']
 
 

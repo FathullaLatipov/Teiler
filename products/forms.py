@@ -1,7 +1,7 @@
 from django import forms
+from django.forms import BaseForm
 
-from products.models import ColorModel, RatingStar, Rating
-from reviews.models import ReviewModel
+from products.models import ColorModel, RatingStar, Rating, ReviewModel
 
 
 class ColorModelForm(forms.ModelForm):
@@ -29,4 +29,4 @@ class RatingForm(forms.ModelForm):
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = ReviewModel
-        fields = ("name", "email", "comments")
+        fields = ("name", "email", "comments", "image")
