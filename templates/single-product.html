@@ -252,36 +252,11 @@
                 <h3 class="reviews__content_title">Фото и видео покупателей </h3>
 
                 <div class="reviews__content_list carousel" id="productReviews">
-                    <div class="reviews__content_list_item carousel__slide">
-
-                    </div>
-                    <div class="reviews__content_list_item carousel__slide">
-
-                    </div>
-                    <div class="reviews__content_list_item carousel__slide">
-
-                    </div>
-                    <div class="reviews__content_list_item carousel__slide">
-
-                    </div>
-                    <div class="reviews__content_list_item carousel__slide">
-
-                    </div>
-                    <div class="reviews__content_list_item carousel__slide">
-
-                    </div>
-                    <div class="reviews__content_list_item carousel__slide">
-
-                    </div>
-                    <div class="reviews__content_list_item carousel__slide">
-
-                    </div>
-                    <div class="reviews__content_list_item carousel__slide">
-
-                    </div>
-                    <div class="reviews__content_list_item carousel__slide">
-
-                    </div>
+                       {% for review in product.reviewmodel_set.all %}
+                            <div class="reviews__content_list_item carousel__slide" style="padding: 0px">
+                                <img src="{{ review.image.url }}" style="width: 145px;height: 168px" alt="">
+                            </div>
+                       {% endfor %} 
                 </div>
             </div>
 
@@ -373,7 +348,6 @@
 
                         <div class="reviews__body_item_content carousel">
                             <div class="reviews__body_item_content_item carousel__slide" style="padding: 0px"><img src="{{ review.image.url }}" style="width: 145px;height: 168px" alt=""></div>
-                            <div class="reviews__body_item_content_item carousel__slide"></div>
                         </div>
 
                         <form class="reviews__body_item_question">

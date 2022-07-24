@@ -1,0 +1,86 @@
+{% extends "layouts/base.html" %}
+
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block content %}
+
+<h1>{% trans "Sign In" %}</h1>
+
+{% get_providers as socialaccount_providers %}
+
+{% if socialaccount_providers %}
+<p>{% blocktrans with site.name as site_name %}Please sign in with one
+of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
+for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
+
+<div class="socialaccount_ballot">
+
+  <ul class="socialaccount_providers">
+    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+  </ul>
+
+  <div class="login-or">{% trans 'or' %}</div>
+
+</div>
+
+{% include "socialaccount/snippets/login_extra.html" %}
+
+{% else %}
+<p>{% blocktrans %}If you have not created an account yet, then please
+<a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
+{% endif %}
+<style>
+  #id_login {
+      padding: 11px;
+      border-radius: 50px;
+  }
+
+  #id_password {
+      padding: 11px;
+      border-radius: 50px;
+  }
+</style>
+
+<div role="dialog" aria-modal="true" >
+
+        <div class="popup__auth">
+          <div class="popup__auth_hi">Здравствуйте!</div>
+          <div class="popup__auth_title">
+            Войдите в личный кабинет
+          </div>
+
+          <form class="popup__auth_form" method="POST" action="{% url 'account_login' %}">
+                  {% csrf_token %}
+              <div class="popup__auth_form_item mail">
+                  <label for="id_login">
+                    name
+                    <div class="inp">
+                      <input type="text" name="login" placeholder="e.g.: elonmusk@mars.com " id="id_login">
+                    </div>
+                  </label>
+              </div>
+
+              <div class="popup__auth_form_item pass">
+                <label for="id_password">
+                    Ваш пароль
+                  <div class="inp">
+                    <input type="password" name="password" placeholder="e.g.: X Æ A-12 " id="id_password">
+                  </div>
+                </label>
+            </div>
+
+              <div class="popup__auth_form_btn">
+                  <button class="btn" type="submit">Войти</button>
+              </div>
+          </form>
+
+          <div class="popup__auth_ex">
+            Нет аккаунта? <button id="regButton">Зарегистрироваться →</button>
+          </div>
+        </div>
+
+      </div>
+{% endblock %}

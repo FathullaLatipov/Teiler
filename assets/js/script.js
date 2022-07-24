@@ -300,10 +300,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if(sliders) {
         sliders.forEach(i => {
             noUiSlider.create(i, {
-                start: [1, 512],
+                start: [2, 512],
                 connect: true,
                 range: {
-                    'min': 1,
+                    'min': 2,
                     'max': 512,
                 },
                 step:1,

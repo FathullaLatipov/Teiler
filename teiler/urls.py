@@ -13,7 +13,7 @@ urlpatterns = [
     path('about/', AboutTemplateView.as_view()),
     path('ratings/', include('star_ratings.urls', namespace='ratings')),
     path('articles/', HelpListView.as_view()),
-    path('accounts/', include('registration.backends.default.urls')),
+    path('accounts/', include('allauth.urls')),
     path('', HomeTemplate.as_view())
 ]
 
