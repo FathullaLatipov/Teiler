@@ -239,27 +239,28 @@
             Войдите в личный кабинет
           </div>
 
-          <form class="popup__auth_form">
+          <form class="popup__auth_form" method="POST" action="{% url 'account_login' %}">
+               {% csrf_token %}
               <div class="popup__auth_form_item mail">
-                  <label>
-                    E-Mail 
+                  <label for="id_login">
+                    name
                     <div class="inp">
-                      <input type="email" placeholder="e.g.: elonmusk@mars.com ">
+                      <input type="text" name="login" placeholder="e.g.: elonmusk@mars.com" id="id_login">
                     </div>
                   </label>
               </div>
 
               <div class="popup__auth_form_item pass">
-                <label>
+                <label for="id_password">
                     Ваш пароль
                   <div class="inp">
-                    <input type="password" placeholder="e.g.: X Æ A-12 ">
+                    <input type="password" name="password" placeholder="e.g.: X Æ A-12 " id="id_password">
                   </div>
                 </label>
             </div>
 
               <div class="popup__auth_form_btn">
-                  <button class="btn">Войти</button>
+                  <button class="btn" type="submit">Войти</button>
               </div>
           </form>
 
