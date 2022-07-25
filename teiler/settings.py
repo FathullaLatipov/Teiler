@@ -139,7 +139,7 @@ CKEDITOR_CONFIGS = {
     },
 }
 
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # django_allauth
 
 AUTHENTICATION_BACKENDS = [
@@ -150,11 +150,11 @@ AUTHENTICATION_BACKENDS = [
 SITE_ID = 1
 
 LOGIN_REDIRECT_URL = '/'
-# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST = 'smtp.yandex.ru'
 # EMAIL_USE_TLS = True
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = 'fathullaxonlatipov@gmail.com'
-# EMAIL_HOST_PASSWORD = 'Fatkhulla_2002'
+# EMAIL_PORT = 465
+# EMAIL_HOST_USER = 'azizsavkatov@gmail.com'
+# EMAIL_HOST_PASSWORD = 'Fathulla_2002'
 # DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

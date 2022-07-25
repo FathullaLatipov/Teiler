@@ -14,6 +14,7 @@ urlpatterns = [
     path('ratings/', include('star_ratings.urls', namespace='ratings')),
     path('articles/', HelpListView.as_view()),
     path('accounts/', include('allauth.urls')),
+    path('profile/', include('allauth.urls')),
     path('', HomeTemplate.as_view())
 ]
 

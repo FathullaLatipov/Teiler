@@ -1,0 +1,116 @@
+{% load static %}
+    <div class="popup" id="login" aria-hidden="true">
+
+    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+      <!-- [3] -->
+      <div role="dialog" aria-modal="true" >
+
+        <div class="popup__auth">
+          <div class="popup__auth_hi">Здравствуйте!</div>
+          <div class="popup__auth_title">
+            Войдите в личный кабинет
+          </div>
+
+          <form class="popup__auth_form" method="POST" action="{% url 'account_login' %}">
+               {% csrf_token %}
+              <div class="popup__auth_form_item mail">
+                  <label for="id_login">
+                    name
+                    <div class="inp">
+                      <input type="text" name="login" placeholder="e.g.: elonmusk@mars.com" id="id_login">
+                    </div>
+                  </label>
+              </div>
+              <div class="popup__auth_form_item pass">
+                <label for="id_password">
+                    Ваш пароль
+                  <div class="inp">
+                    <input type="password" name="password" placeholder="e.g.: X Æ A-12 " id="id_password">
+                  </div>
+                </label>
+            </div>
+
+              <div class="popup__auth_form_btn">
+                  <button class="btn" type="submit">Войти</button>
+              </div>
+          </form>
+
+          <div class="popup__auth_ex">
+            Нет аккаунта? <button id="regButton">Зарегистрироваться →</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+     <div class="popup" id="signin" aria-hidden="true">
+
+    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+      <!-- [3] -->
+      <div role="dialog" aria-modal="true" >
+
+        <div class="popup__auth">
+          <div class="popup__auth_hi">Здравствуйте!</div>
+          <div class="popup__auth_title">
+            Зарегистрируйтесь,что бы войти в личный кабинет
+          </div>
+
+          <form class="popup__auth_form" id="signup_form" method="POST" action="{% url 'account_signup' %}">
+             {% csrf_token %}
+              <div class="popup__auth_form_item mail">
+                  <label for="id_username">
+                    name
+                    <div class="inp">
+                      <input type="text" name="username" placeholder="e.g.: elonmusk@mars.com " autocomplete="username" id="id_username">
+                    </div>
+                  </label>
+              </div>
+
+              <div class="popup__auth_form_item pass">
+                <label for="id_email">
+                    Ваш email
+                  <div class="inp">
+                    <input type="email" name="email" placeholder="e.g.: X Æ A-12 " autocomplete="email" id="id_email">
+                  </div>
+                </label>
+            </div>
+              <div class="popup__auth_form_item pass">
+                <label for="id_number">
+                    Ваш number
+                  <div class="inp">
+                    <input type="text" name="number" placeholder="e.g.: X Æ A-12 " autocomplete="number" id="id_number">
+                  </div>
+                </label>
+            </div>
+               <div class="popup__auth_form_item pass">
+                <label for="id_password1">
+                    Ваш пароль
+                  <div class="inp">
+                    <input type="password" name="password1" placeholder="e.g.: X Æ A-12 " autocomplete="new-password" id="id_password1">
+                  </div>
+                </label>
+            </div>
+               <div class="popup__auth_form_item pass">
+                <label for="id_password2">
+                    Ваш пароль2
+                  <div class="inp">
+                    <input type="password" name="password2" placeholder="e.g.: X Æ A-12 " autocomplete="new-password" id="id_password2">
+                  </div>
+                </label>
+            </div>
+
+              <div class="popup__auth_form_btn">
+                  <button class="btn" type="submit">Зарегистрироваться</button>
+              </div>
+          </form>
+
+          <div class="popup__auth_ex">
+            Есть аккаунт? <button id="logButton">Войти →</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
