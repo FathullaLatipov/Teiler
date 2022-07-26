@@ -78,6 +78,11 @@ class ProductModel(models.Model):
             return self.price - self.price * self.discount / 100
         return self.price
 
+    @staticmethod
+    def get_from_wishlist(request):
+        wishlist = request.session.get('wishlist', [])
+        return ProductModel.objects.filter(pk__in=wishlist)
+
     def __str__(self):
         return self.title
 

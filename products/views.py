@@ -2,9 +2,12 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView, TemplateView
-from django.db.models import Max, Min
+from django.db.models import Max, Min, Q
+from django.http import JsonResponse
+from rest_framework.response import Response
 from products.forms import RatingForm, ReviewForm
-from products.models import ProductModel, Rating
+from products.models import ProductModel
+from products.utils import get_wishlist_data
 
 
 class HomeTemplate(TemplateView):
@@ -15,13 +18,24 @@ class ProductTemplate(ListView):
     template_name = 'products.html'
     context_object_name = 'products'
 
-
     def get_object(self, queryset=None):
         obj, created = self.model.objects.get_or_create(bar='foo bar baz')
         return obj
 
     def get_queryset(self):
-        return ProductModel.objects.all()
+        q = self.request.GET.get('q', '')
+        price = self.request.GET.get('price')
+        filters = {}
+
+        if q:
+            filters['title__contains'] = q
+
+        if price:
+            price_from, price_to = price.split(';')
+            filters['price__gte'] = price_from
+            filters['price__lte'] = price_to
+
+        return ProductModel.objects.filter(**filters).order_by('pk')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -69,28 +83,12 @@ class AddReview(View):
 #     return redirect('/')
 
 
-class AddStarRating(View):
-    """Добавление рейтинга фильму"""
+class WishlistModelListView(ListView):
+    template_name = 'favs.html'
+    paginate_by = 7
 
-    def get_client_ip(self, request):
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            ip = x_forwarded_for.split(',')[0]
-        else:
-            ip = request.META.get('REMOTE_ADDR')
-        return ip
-
-    def post(self, request):
-        form = RatingForm(request.POST)
-        if form.is_valid():
-            Rating.objects.update_or_create(
-                ip=self.get_client_ip(request),
-                movie_id=int(request.POST.get("movie")),
-                defaults={'star_id': int(request.POST.get("star"))}
-            )
-            return HttpResponse(status=201)
-        else:
-            return HttpResponse(status=400)
+    def get_queryset(self):
+        return ProductModel.get_from_wishlist(self.request)
 
 
 class AboutTemplateView(TemplateView):
@@ -99,3 +97,23 @@ class AboutTemplateView(TemplateView):
 
 class ArticleTemplateView(TemplateView):
     template_name = 'articles.html'
+
+
+def add_to_wishlist(request, pk):
+    try:
+        product = ProductModel.objects.get(pk=pk)
+    except ProductModel.DoesNotExist:
+        return Response(data={'status': False})
+        # if not wishlist:
+        #     wishlist = []
+    wishlist = request.session.get('wishlist', [])
+    if product.pk in wishlist:
+        wishlist.remove(product.pk)
+        data = {'status': True, 'added': False}
+    else:
+        wishlist.append(product.pk)
+        data = {'status': True, 'added': True}
+    request.session['wishlist'] = wishlist
+
+    data['wishlist_len'] = get_wishlist_data(wishlist)
+    return JsonResponse(data)
