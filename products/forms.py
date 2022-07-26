@@ -29,4 +29,4 @@ class RatingForm(forms.ModelForm):
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = ReviewModel
-        fields = ("name", "email", "comments", "image")
+        fields = ("name", "email", "comments", "image", "rating")

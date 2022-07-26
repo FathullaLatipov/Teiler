@@ -320,11 +320,11 @@ document.addEventListener('DOMContentLoaded', () => {
             })
 
             i.noUiSlider.on('update', function(values, handle = 0) {
-                valueBlock.innerHTML = `от ${values[0]}`
+                valueBlock.innerHTML = `оssт ${values[0]}`
             })
 
             i.noUiSlider.on('update', function(values, handle = 1) {
-                valueBlock1.innerHTML = `до ${values[1]}`
+                valueBlock1.innerHTML = `дssо ${values[1]}`
             }) 
         })
 

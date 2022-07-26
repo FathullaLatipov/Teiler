@@ -91,6 +91,7 @@ class ReviewModel(models.Model):
     name = models.CharField(max_length=100, verbose_name=_('name'))
     email = models.EmailField(max_length=200, verbose_name=_('email'))
     image = models.FileField(upload_to='form_images', verbose_name=_('image'), null=True, blank=True)
+    rating = models.PositiveSmallIntegerField(default=0, null=True, blank=True)
     comments = models.TextField()
     product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, verbose_name=_('product'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created_at'), null=True)

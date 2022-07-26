@@ -1,7 +1,14 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 {% load ratings %}
+{% load new_tags %}
 {% block content %}
+<style>
+    .irs-bar {
+        background-color:yellow
+    }
+</style>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css"/>
 <link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
 <script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
         <main class="main">
@@ -82,17 +89,7 @@
                                 </div>
                                 <div class="range_block">
                                     <h3 class="filter_title">Встроенная память, ГБ</h3>
-                                    <div class="range_wr">
-                                        <div class="range" id="rangeSlider">
-
-                                        </div>
-                                        
-                                    </div>
-                                    <div class="range_values">
-                                        <div id="valueBlock"></div>
-                                        <div id="valueBlock1"></div>
-                                        
-                                    </div>
+                                    <input type="text" class="js-range-slider" />
                                 </div>
                                 <div class="filter_hidden">
                                     <div class="filter_hidden_list">
@@ -372,4 +369,31 @@
       </div>
     </div>
   </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
+    <script>
+        function addUrlParameter(name, value) {
+            let searchParams = new URLSearchParams(window.location.search)
+            if (['category',].includes(name)) {
+                searchParams.delete('?');
+            }
+            if (searchParams.has(name) && searchParams.get(name) === value) {
+                searchParams.delete(name);
+            } else {
+                searchParams.set(name, value)
+            }
+            window.location.search = searchParams.toString()
+        }
+    </script>
+ <script>
+        $(".js-range-slider").ionRangeSlider({
+            type: "double",
+            grid: true,
+            min: {{ min_price|cut:"," }},
+            max: {{ max_price|cut:"," }},
+            from: {% get_price request 0 %},
+            to: {% get_price request 1 %},
+            prefix: "$",
+        });
+</script>
 {% endblock %}

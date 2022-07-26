@@ -23,13 +23,14 @@ class ProductTemplate(ListView):
     def get_queryset(self):
         return ProductModel.objects.all()
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-            context = super().get_context_data(**kwargs)
-            context['min_price'], context['max_price'] = ProductModel.objects.aggregate(
-                Min('real_price'),
-                Max('real_price')
-            ).values()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['min_price'], context['max_price'] = ProductModel.objects.aggregate(
+            Min('real_price'),
+            Max('real_price')
+        ).values()
 
+        return context
 
 
 class ProductDetailView(DetailView):
@@ -53,7 +54,7 @@ class AddReview(View):
             form.product = product
             form.image = request.FILES['image']
             form.save()
-            print(request.POST, request.FILES['image'])
+            print(request.POST)
         return redirect("/")
 
 
@@ -66,7 +67,6 @@ class AddReview(View):
 #             form.product = product
 #             form.save()
 #     return redirect('/')
-
 
 
 class AddStarRating(View):
