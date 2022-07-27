@@ -41,8 +41,6 @@ INSTALLED_APPS = [
     'carousel',
     'products',
     'help',
-    'reviews',
-
 ]
 
 MIDDLEWARE = [

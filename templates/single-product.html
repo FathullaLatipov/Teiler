@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 {% load ratings %}
-{% load templatetags %}
+{% load new_tags %}
 {% block content %}
 <style>
     @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
@@ -159,28 +159,16 @@ h1 { font-size: 1.5em; margin: 10px; }
                                     </style>
                                     <div class="custom__color">
                                         <h3 class="form__name">Цвет:</h3>
-
-<!--                                            {% for color in object.colors.all %}-->
-<!--                                             <div class="custom__color_inputs">-->
-<!--                                                <div class="custom__color_item">-->
-<!--                                                    <input id="{{ color.pk }}" type="radio" name="color">-->
-<!--                                                    <label for="{{ color.pk }}">-->
-<!--                                                        <div style="background-color: {{ color.code }};"></div>-->
-<!--                                                    </label>-->
-<!--                                                </div>-->
-<!--                                                </div>-->
-<!--                                                {% if forloop.counter == 4%}-->
-<!--                                                 <div class="custom__color_inputs2">-->
-<!--                                                     <div class="custom__color_item">-->
-<!--                                                        <input id="{{ color.pk }}" type="radio" name="color">-->
-<!--                                                        <label for="{{ color.pk }}">-->
-<!--                                                            <div style="background-color: {{ color.code }};"></div>-->
-<!--                                                        </label>-->
-<!--                                                    </div>-->
-<!--                                                 </div>-->
-<!--                                                {% endif %}-->
-<!--                                            {% endfor %}-->
-
+                                          <div class="custom__color_inputs">
+                                            {% for color in object.colors.all|slice:':4' %}
+                                                <div class="custom__color_item">
+                                                    <input id="{{ color.pk }}" type="radio" name="color">
+                                                    <label for="{{ color.pk }}">
+                                                        <div style="background-color: {{ color.code }};"></div>
+                                                    </label>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
                                     </div>
                                     <ul class="custom__descr">
                                         {% for i in object.characteristics.all %}
@@ -696,15 +684,6 @@ h1 { font-size: 1.5em; margin: 10px; }
         </div>
     </div>
 </div>
-<h3>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias cupiditate dolorem est et fugiat ipsam nulla, quasi quo rem veniam?</h3>
-
-{% for review in product.reviewmodel_set.all %}
-    <p>{{ review.name }}</p>
-    <p>{{ review.email }}</p>
-    {% if review.image %}
-    <img src="{{ review.image.url }}" alt="">
-    {% endif %}
-{% endfor %}
 <div class="popup" id="city" aria-hidden="true">
 
     <div class="popup__layer" tabindex="-1" data-micromodal-close>

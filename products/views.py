@@ -7,7 +7,7 @@ from django.http import JsonResponse
 from rest_framework.response import Response
 from products.forms import RatingForm, ReviewForm
 from products.models import ProductModel
-from products.utils import get_wishlist_data
+from products.utils import get_wishlist_data, get_cart_data
 
 
 class HomeTemplate(TemplateView):
@@ -91,21 +91,11 @@ class WishlistModelListView(ListView):
         return ProductModel.get_from_wishlist(self.request)
 
 
-class AboutTemplateView(TemplateView):
-    template_name = 'about.html'
-
-
-class ArticleTemplateView(TemplateView):
-    template_name = 'articles.html'
-
-
 def add_to_wishlist(request, pk):
     try:
         product = ProductModel.objects.get(pk=pk)
     except ProductModel.DoesNotExist:
         return Response(data={'status': False})
-        # if not wishlist:
-        #     wishlist = []
     wishlist = request.session.get('wishlist', [])
     if product.pk in wishlist:
         wishlist.remove(product.pk)
@@ -117,3 +107,37 @@ def add_to_wishlist(request, pk):
 
     data['wishlist_len'] = get_wishlist_data(wishlist)
     return JsonResponse(data)
+
+
+class CartModelListView(ListView):
+    template_name = 'basket.html'
+    paginate_by = 7
+
+    def get_queryset(self):
+        return ProductModel.get_from_cart(self.request)
+
+
+def add_to_cart(request, pk):
+    try:
+        product = ProductModel.objects.get(pk=pk)
+    except ProductModel.DoesNotExist:
+        return Response(data={'status': False})
+    cart = request.session.get('cart', [])
+    if product.pk in cart:
+        cart.remove(product.pk)
+        data = {'status': True, 'added': False}
+    else:
+        cart.append(product.pk)
+        data = {'status': True, 'added': True}
+    request.session['cart'] = cart
+
+    data['cart_len'] = get_cart_data(cart)
+    return JsonResponse(data)
+
+
+class AboutTemplateView(TemplateView):
+    template_name = 'about.html'
+
+
+class ArticleTemplateView(TemplateView):
+    template_name = 'articles.html'

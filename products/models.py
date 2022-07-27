@@ -83,6 +83,11 @@ class ProductModel(models.Model):
         wishlist = request.session.get('wishlist', [])
         return ProductModel.objects.filter(pk__in=wishlist)
 
+    @staticmethod
+    def get_from_cart(request):
+        cart = request.session.get('cart', [])
+        return ProductModel.objects.filter(pk__in=cart)
+
     def __str__(self):
         return self.title
 
