@@ -1,11 +1,11 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
-from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic import ListView, DetailView, TemplateView, CreateView
 from django.db.models import Max, Min, Q
 from django.http import JsonResponse
 from rest_framework.response import Response
-from products.forms import RatingForm, ReviewForm
+from products.forms import ReviewForm
 from products.models import ProductModel
 from products.utils import get_wishlist_data, get_cart_data
 
@@ -55,7 +55,6 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['related'] = ProductModel.objects.order_by('-pk')
-        context["star_form"] = RatingForm()
         return context
 
 
@@ -141,3 +140,4 @@ class AboutTemplateView(TemplateView):
 
 class ArticleTemplateView(TemplateView):
     template_name = 'articles.html'
+

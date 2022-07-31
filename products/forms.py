@@ -1,7 +1,6 @@
 from django import forms
 from django.forms import BaseForm
-
-from products.models import ColorModel, RatingStar, Rating, ReviewModel
+from products.models import ColorModel, RatingStar, ReviewModel, RegisterForm
 
 
 class ColorModelForm(forms.ModelForm):
@@ -13,17 +12,6 @@ class ColorModelForm(forms.ModelForm):
                 attrs={'type': 'color'}
             )
         }
-
-
-class RatingForm(forms.ModelForm):
-    """Форма добавления рейтинга"""
-    star = forms.ModelChoiceField(
-        queryset=RatingStar.objects.all(), widget=forms.RadioSelect(), empty_label=None
-    )
-
-    class Meta:
-        model = Rating
-        fields = ("star",)
 
 
 class ReviewForm(forms.ModelForm):

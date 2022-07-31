@@ -12,11 +12,10 @@
                                         <img src="" alt="">
                                     </div>
                                     <div class="lk__profile_name">
-                                        Иван
-                                        Валеев
+                                        {{ user.username }}
                                     </div>
                                     <div class="lk__profile_action">
-                                        <!-- <button>Изменить профиль</button> -->
+<!--                                         <button>Изменить профиль</button>-->
                                         <a href="./index.html">Выйти</a>
                                     </div>
 
@@ -39,11 +38,11 @@
                                             <div class="person">
                                                 <div class="person__item">
                                                     <div class="person__item_top">
-                                                        <div class="name">ФИО</div>
+                                                        <div class="name">Имя</div>
                                                         <button class="edit">Изменить</button>
                                                     </div>
                                                     <div class="person__item_value">
-                                                        Валеев Иван Иванович
+                                                        {{ user.username }}
                                                     </div>
                                                 </div>
                                                 <div class="person__item">
@@ -70,8 +69,11 @@
                                                         <button class="edit">Изменить</button>
                                                     </div>
                                                     <div class="person__item_value">
-                                                        
-                                                        7 (901) 993 31 51
+                                                        {% if user.phone %}
+                                                            {{ user.phone }}
+                                                        {% else %}
+                                                             Не указан
+                                                        {% endif %}
                                                     </div>
                                                 </div>
                                                 <div class="person__item">
@@ -80,8 +82,11 @@
                                                         <button class="edit">Изменить</button>
                                                     </div>
                                                     <div class="person__item_value">
-                                                        
-                                                        Не указана
+                                                        {% if user.email %}
+                                                             {{ user.email }}
+                                                        {% else %}
+                                                              Не указан
+                                                        {% endif %}
                                                     </div>
                                                 </div>
 
@@ -158,10 +163,10 @@
             <div class="popup" id="login" aria-hidden="true">
 
     <div class="popup__layer" tabindex="-1" data-micromodal-close>
-  
+
       <!-- [3] -->
       <div role="dialog" aria-modal="true" >
-        
+
         <div class="popup__auth">
           <div class="popup__auth_hi">Здравствуйте!</div>
           <div class="popup__auth_title">
@@ -171,7 +176,7 @@
           <form class="popup__auth_form">
               <div class="popup__auth_form_item mail">
                   <label>
-                    E-Mail 
+                    E-Mail
                     <div class="inp">
                       <input type="email" placeholder="e.g.: elonmusk@mars.com ">
                     </div>
@@ -196,17 +201,17 @@
             Нет аккаунта? <button id="regButton">Зарегистрироваться →</button>
           </div>
         </div>
-  
+
       </div>
     </div>
   </div>
             <div class="popup" id="signin" aria-hidden="true">
 
     <div class="popup__layer" tabindex="-1" data-micromodal-close>
-  
+
       <!-- [3] -->
       <div role="dialog" aria-modal="true" >
-        
+
         <div class="popup__auth">
           <div class="popup__auth_hi">Здравствуйте!</div>
           <div class="popup__auth_title">
@@ -216,7 +221,7 @@
           <form class="popup__auth_form">
               <div class="popup__auth_form_item mail">
                   <label>
-                    E-Mail 
+                    E-Mail
                     <div class="inp">
                       <input type="email" placeholder="e.g.: elonmusk@mars.com ">
                     </div>
@@ -241,7 +246,7 @@
             Есть аккаунт? <button id="logButton">Войти →</button>
           </div>
         </div>
-  
+
       </div>
     </div>
   </div>
@@ -381,20 +386,26 @@
           <h2 class="popup__pass-edit_title">
             Изменить пароль
           </h2>
-          <form class="popup__pass-edit_form">
+          <form class="popup__pass-edit_form" method="POST">
+              {% csrf_token %}
             <div class="popup__pass-edit_form_item">
-              <label> Старый пароль
-                <input type="password">
+              <label for="id_old_password"> Старый пароль
+                <input type="password" name="old_password" autocomplete="current-password" id="id_old_password">
               </label>
             </div>
             <div class="popup__pass-edit_form_item">
-              <label> Новый пароль
-                <input type="password">
+              <label for="id_new_password1"> Новый пароль
+                <input type="password" name="new_password1" autocomplete="new-password" id="id_new_password1">
+              </label>
+            </div>
+              <div class="popup__pass-edit_form_item">
+              <label for="id_new_password2"> Подтвердите пароль
+                <input type="password" name="new_password2" autocomplete="new-password" id="id_new_password2">
               </label>
             </div>
             <button type="button" class="popup__pass-edit_form_ex" id="backpassButton">Восстановить пароль</button>
 
-            <button class="popup__pass-edit_form_btn">
+            <button class="popup__pass-edit_form_btn" type="submit">
               Сохранить
             </button>
 

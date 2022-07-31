@@ -21,7 +21,6 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'modeltranslation',
-    'registration',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -31,16 +30,15 @@ INSTALLED_APPS = [
 #     new apps
     'ckeditor',
     'ckeditor_uploader',
+    'crispy_forms',
     'whitenoise.runserver_nostatic',
     'star_ratings',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
 
-#     django apps
+    #     django apps
     'carousel',
     'products',
     'help',
+    'user',
 ]
 
 MIDDLEWARE = [
@@ -138,16 +136,13 @@ CKEDITOR_CONFIGS = {
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# http://localhost:8000/accounts/password_reset/
+AUTH_USER_MODEL = 'user.CustomUser'
 # django_allauth
-
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
-]
-
-SITE_ID = 1
-
+# ACCOUNT_ACTIVATION_DAYS = 7
+#
 LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 # EMAIL_HOST = 'smtp.yandex.ru'
 # EMAIL_USE_TLS = True
 # EMAIL_PORT = 465

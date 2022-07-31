@@ -3570,6 +3570,7 @@ html {
 @media (max-width: 500px) {
   .popup__layer {
     padding: 10px 10px;
+    margin-top: 30%;
   }
   .popup__review {
     padding: 20px;

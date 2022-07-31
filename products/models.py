@@ -1,8 +1,6 @@
 from ckeditor_uploader.fields import RichTextUploadingField
-from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from star_ratings.models import Rating
 
 
 class CategoryModel(models.Model):
@@ -127,20 +125,6 @@ class RatingStar(models.Model):
         ordering = ["-value"]
 
 
-class Rating(models.Model):
-    """Рейтинг"""
-    ip = models.CharField("IP адрес", max_length=15)
-    star = models.ForeignKey(RatingStar, on_delete=models.CASCADE, verbose_name="star")
-    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, verbose_name="product", related_name="ratings")
-
-    def __str__(self):
-        return f"{self.star} - {self.product}"
-
-    class Meta:
-        verbose_name = "Рейтинг"
-        verbose_name_plural = "Рейтинги"
-
-
 class ProductImageModel(models.Model):
     product = models.ForeignKey(ProductModel, on_delete=models.PROTECT, related_name='images',
                                 verbose_name=_('product'), null=True, blank=True)
@@ -163,3 +147,20 @@ class ProductCharacteristicModel(models.Model):
     class Meta:
         verbose_name = _('product_characteristic')
         verbose_name_plural = _('product_characteristics')
+
+
+class RegisterForm(models.Model):
+    name = models.CharField(max_length=30, null=True, blank=True)
+    email = models.EmailField(null=True)
+    phone = models.PositiveSmallIntegerField()
+    password = models.CharField(max_length=100, null=True)
+    confirm_password = models.CharField(max_length=100, null=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _('register')
+        verbose_name_plural = _('registers')
+
+

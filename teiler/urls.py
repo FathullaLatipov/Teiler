@@ -5,16 +5,17 @@ from django.urls import path, include
 
 from help.views import HelpListView
 from products.views import HomeTemplate, AboutTemplateView
+from user.views import ProfileView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('products/', include('products.urls',  namespace='product')),
     path('about/', AboutTemplateView.as_view()),
-    path('ratings/', include('star_ratings.urls', namespace='ratings')),
     path('articles/', HelpListView.as_view()),
-    path('accounts/', include('allauth.urls')),
-    path('profile/', include('allauth.urls')),
+    path('accounts/', include('user.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('profile', ProfileView.as_view(), name='profile'),
     path('', HomeTemplate.as_view())
 ]
 

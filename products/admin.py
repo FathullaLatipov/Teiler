@@ -1,8 +1,7 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
-
 from products.forms import ColorModelForm
-from products.models import CategoryModel, ProductModel, ProductImageModel, BrandModel, ColorModel, Rating, RatingStar, \
+from products.models import CategoryModel, ProductModel, ProductImageModel, BrandModel, ColorModel, \
     ReviewModel, ProductCharacteristicModel
 
 
@@ -54,12 +53,4 @@ class ProductModelAdmin(admin.ModelAdmin):
     readonly_fields = ['real_price']
 
 
-@admin.register(RatingStar)
-class RatingsAdmin(admin.ModelAdmin):
-    """Рейтинг"""
 
-
-@admin.register(Rating)
-class RatingAdmin(admin.ModelAdmin):
-    """Рейтинг"""
-    list_display = ("star", "product", "ip")

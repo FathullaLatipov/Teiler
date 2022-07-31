@@ -1,0 +1,50 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+<div>
+        <div class="popup__auth" style="margin: auto">
+          <div class="popup__auth_hi">Здравствуйте!</div>
+          <div class="popup__auth_title">
+            Войдите в личный кабинет
+          </div>
+
+          <form class="popup__auth_form" method="POST">
+               {% csrf_token %}
+              {{ form.errors }}
+              <div class="popup__auth_form_item mail">
+                  <label for="id_username">
+                    name
+                    <div class="inp">
+                      <input type="text" name="username" placeholder="e.g.: elonmusk@mars.com" id="id_username">
+                    </div>
+                  </label>
+              </div>
+              <div class="popup__auth_form_item pass">
+                <label for="id_password">
+                    Ваш пароль
+                  <div class="inp">
+                    <input type="password" name="password" placeholder="e.g.: X Æ A-12 " id="id_password">
+                  </div>
+                </label>
+            </div>
+
+              <div class="popup__auth_form_btn">
+                  <button class="btn" type="submit">Войти</button>
+              </div>
+          </form>
+
+          <div class="popup__auth_ex">
+            Нет аккаунта?<a href="{% url 'signup' %}" style="margin-left: 10px;"><button id="regButton">Зарегистрироваться →</button></a>
+          </div>
+        </div>
+   </div>
+    </div>
+
+<!--<form method="POST">-->
+<!--    {% csrf_token %}-->
+<!--    {{ form.as_p }}-->
+<!--    <button type="submit">send</button>-->
+<!--    <a href="{% url 'password_reset' %}" class="btn" role="button">Reset password</a>-->
+<!--</form>-->
+{% endblock %}
