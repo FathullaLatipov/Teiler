@@ -1,8 +1,10 @@
-from django.shortcuts import render
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, TemplateView
-
-from user.forms import CustomUserCreationForm
+from django.conf import settings
+from user.forms import CustomUserCreationForm, CustomUserChangeForm
+from user.models import CustomUser
 
 
 class SignupView(CreateView):
@@ -13,3 +15,37 @@ class SignupView(CreateView):
 
 class ProfileView(TemplateView):
     template_name = 'lk.html'
+
+
+def edit_account_view(request, *args, **kwargs):
+    if not request.user.is_authenticated:
+        return redirect("login")
+    user_id = kwargs.get("user_id")
+    edit_user = CustomUser.objects.get(pk=user_id)
+    if edit_user.pk != request.user.pk:
+        return HttpResponse("You cannot edit someone elses profile.")
+    context = {}
+    if request.POST:
+        form = CustomUserChangeForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect("/", user_id=edit_user.pk)
+        else:
+            form = CustomUserChangeForm(request.POST, instance=request.user,
+                                        initial={
+                                            "id": edit_user.pk,
+                                            "phone": edit_user.phone,
+                                            "username": edit_user.username,
+                                        }
+                                        )
+            context['form'] = form
+    else:
+        form = CustomUserChangeForm(
+            initial={
+                "id": edit_user.pk,
+                "phone": edit_user.phone,
+                "username": edit_user.username,
+            }
+        )
+        context['form'] = form
+    return render(request, "edit_all.html", context)

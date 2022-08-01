@@ -51,6 +51,8 @@ class ProductModelAdmin(admin.ModelAdmin):
     autocomplete_fields = ['colors']
     inlines = [ProductImageModelAdmin, ProductCharacteristicModelAdmin]
     readonly_fields = ['real_price']
+    save_as = True
+    save_on_top = True
 
 
 

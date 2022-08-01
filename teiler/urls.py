@@ -5,7 +5,7 @@ from django.urls import path, include
 
 from help.views import HelpListView
 from products.views import HomeTemplate, AboutTemplateView
-from user.views import ProfileView
+from user.views import ProfileView, edit_account_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -15,7 +15,8 @@ urlpatterns = [
     path('articles/', HelpListView.as_view()),
     path('accounts/', include('user.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('profile', ProfileView.as_view(), name='profile'),
+    path('profile/<int:pk>', ProfileView.as_view(), name='profile'),
+    path('profilw_edit/<user_id>/edit/', edit_account_view, name='edit'),
     path('', HomeTemplate.as_view())
 ]
 
