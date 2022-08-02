@@ -2,12 +2,19 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 from products.forms import ColorModelForm
 from products.models import CategoryModel, ProductModel, ProductImageModel, BrandModel, ColorModel, \
-    ReviewModel, ProductCharacteristicModel
+    ReviewModel, ProductCharacteristicModel, SubCategoryModel
 
 
 @admin.register(CategoryModel)
 class CategoryModelAdmin(admin.ModelAdmin):
     list_display = ['pk', 'title', 'created_at']
+    list_filter = ['created_at']
+    search_fields = ['category']
+
+
+@admin.register(SubCategoryModel)
+class SubCategoryModelAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'category', 'subcategory', 'created_at']
     list_filter = ['created_at']
     search_fields = ['category']
 
@@ -53,6 +60,3 @@ class ProductModelAdmin(admin.ModelAdmin):
     readonly_fields = ['real_price']
     save_as = True
     save_on_top = True
-
-
-

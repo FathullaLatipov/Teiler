@@ -16,6 +16,19 @@ class CategoryModel(models.Model):
         verbose_name_plural = _('categories')
 
 
+class SubCategoryModel(models.Model):
+    category = models.ForeignKey(CategoryModel, on_delete=models.PROTECT, verbose_name=_('category'), related_name='subcategories')
+    subcategory = models.CharField(max_length=100, verbose_name=_('subcategory'))
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.subcategory
+
+    class Meta:
+        verbose_name = _('subcategory')
+        verbose_name_plural = _('subcategories')
+
+
 class BrandModel(models.Model):
     brand = models.CharField(max_length=99, verbose_name=_('brands'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created_at'))
@@ -50,6 +63,7 @@ class ProductModel(models.Model):
     sku = models.IntegerField(verbose_name=_('sku'), db_index=True)
     brand = models.ForeignKey(BrandModel, on_delete=models.PROTECT, verbose_name=_('brand'))
     category = models.ForeignKey(CategoryModel, on_delete=models.PROTECT, verbose_name=_('category'))
+    subcategory = models.ForeignKey(SubCategoryModel, on_delete=models.CASCADE, verbose_name=_('subcategory'), null=True,)
     image = models.FileField(upload_to='image', verbose_name=_('image'), null=True)
     price = models.IntegerField(verbose_name=_('price'))
     discount = models.DecimalField(default=0, max_digits=9, decimal_places=0, verbose_name=_('discount'))
