@@ -1,4 +1,6 @@
 from django import template
+from django.db.models import Sum
+
 from products.models import ProductModel
 
 register = template.Library()
@@ -20,6 +22,19 @@ def get_wishlist_count(request):
 @register.filter()
 def in_cart(cart, request):
     return cart.pk in request.session.get('cart', [])
+
+
+@register.simple_tag
+def get_cart_sum(request):
+    cart = request.session.get('cart')
+    if not cart:
+        return 0
+
+    return ProductModel.get_from_cart(
+        request
+    ).aggregate(
+        Sum('real_price')
+    )['real_price__sum']
 
 
 @register.simple_tag

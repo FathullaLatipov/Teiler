@@ -4,15 +4,16 @@ from django.contrib import admin
 from django.urls import path, include
 
 from help.views import HelpListView
-from products.views import HomeTemplate, AboutTemplateView
+from products.views import HomeTemplate, AboutTemplateView, ContactTemplateView
 from user.views import ProfileView, edit_account_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('products/', include('products.urls',  namespace='product')),
-    path('about/', AboutTemplateView.as_view()),
-    path('articles/', HelpListView.as_view()),
+    path('about/', AboutTemplateView.as_view(), name='abouts'),
+    path('contacts/', ContactTemplateView.as_view(), name='contacts'),
+    path('articles/', HelpListView.as_view(), name='articles'),
     path('accounts/', include('user.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('profile/<int:pk>', ProfileView.as_view(), name='profile'),

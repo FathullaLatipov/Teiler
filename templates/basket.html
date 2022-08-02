@@ -1,5 +1,6 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
+{% load new_tags %}
 {% block content %}
         <main class="main">
             <div class="container">
@@ -15,6 +16,7 @@
                                     <button class="basket__body_top_item" type="button">Удалить выбранные</button>
                                 </div>
                                 <ul class="basket__body_list">
+                                 {% for product in object_list %}
                                     <li class="basket__body_item">
                                         <div class="item__main">
                                             <div class="item__main_input">
@@ -23,7 +25,7 @@
                                             <div class="item__main_img">
                                                 <picture>
                                                     <source srcset="" type="image/webp">
-                                                    <img src="./img/product.png" alt="">
+                                                    <img src="{{ product.image.url }}" alt="">
                                                 </picture>
                                             </div>
                                             
@@ -31,11 +33,13 @@
                                         <div class="item__action">
                                             <div class="item__main_descr">
                                                 <div class="top">
+                                                   {% if product.is_discount %}
                                                     <div class="discount">
-                                                        -19%
+                                                          -{{ product.discount }}%
                                                     </div>
-                                                    <a href="./product.html" class="name">Смартфон Apple iPhone 13 128GB, темная ночь</a>
-                                                    <div class="props">цвет черный, темная ночь, 332 гр</div>
+                                                    {% endif %}
+                                                    <a href="./product.html" class="name">{{ product.title }}</a>
+<!--                                                    <div class="props">цвет черный, темная ночь, 332 гр</div>-->
                                                 
                                                 </div>
                                                 <div class="bottom">
@@ -44,8 +48,10 @@
                                                 </div>
                                             </div>
                                             <div class="item__action_price">
-                                                <div class="new">69 499 ₽</div>
-                                                <div class="old">79 499 ₽</div>
+                                                <div class="new">{{ product.real_price }} ₽</div>
+                                               {% if product.is_discount %}
+                                                 <div class="old">{{ product.price }} ₽</div>
+                                            {% endif %}
                                             </div>
                                             <div class="item__action_count">
                                                 <button class="item__action_count_btn" data-direction="minus">-</button>
@@ -55,7 +61,7 @@
                                         </div>
                                         
                                     </li>
-
+                                 {% endfor %}
                                     <!-- <li class="basket__body_item">
                                         <div class="item__main">
                                             <div class="item__main_input">
@@ -100,21 +106,28 @@
                             </div>
                             <div class="basket__info">
                                 <div class="basket__info_total">
-                                    <div class="new">70 249 ₽ </div>
-                                    <div class="old">81098 ₽</div>
+                                    <div class="new">{% get_cart_sum request %} ₽ </div>
+<!--                                    <div class="old">81098 ₽</div>-->
                                 </div>
                                 <ul class="basket__info_list">
                                     <li class="basket__info_item basket__info_item_basket">
                                         <div class="name">Ваша корзина</div>
-                                        <div class="value">2 товара • 357 гр</div>
+                                        <div class="value">{{ products.count }} товара • 357 гр</div>
                                     </li>
                                     <li class="basket__info_item basket__info_item_prods">
                                         <div class="name">Товары <span>(2)</span></div>
-                                        <div class="value">81 841 ₽</div>
+                                        <div class="value">{% get_cart_sum request %} ₽</div>
                                     </li>
                                     <li class="basket__info_item basket__info_item_discount">
                                         <div class="name">Скидка</div>
-                                        <div class="value">-1094 ₽</div>
+                                        {% if is_discount %}
+                                         {% if product.is_discount %}
+                                             <div class="value">-{{ product.price }} ₽</div>
+                                         {% endif %}
+                                        {% else %}
+                                             <div class="value">-0 ₽</div>
+                                        {% endif %}
+
                                     </li>
                                 </ul>
                                 <div class="basket__info_btn">

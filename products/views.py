@@ -138,6 +138,10 @@ class AboutTemplateView(TemplateView):
     template_name = 'about.html'
 
 
+class ContactTemplateView(TemplateView):
+    template_name = 'contacts.html'
+
+
 class ArticleTemplateView(TemplateView):
     template_name = 'articles.html'
 
