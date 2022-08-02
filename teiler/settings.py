@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'whitenoise.runserver_nostatic',
     'star_ratings',
+    'widget_tweaks',
 
     #     django apps
     'carousel',
