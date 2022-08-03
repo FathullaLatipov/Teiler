@@ -142,6 +142,12 @@ class ContactTemplateView(TemplateView):
     template_name = 'contacts.html'
 
 
+class OrderTemplateView(ListView):
+    template_name = 'order.html'
+
+    def get_queryset(self):
+        return ProductModel.get_from_cart(self.request)
+
+
 class ArticleTemplateView(TemplateView):
     template_name = 'articles.html'
-

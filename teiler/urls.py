@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from help.views import HelpListView
-from products.views import HomeTemplate, AboutTemplateView, ContactTemplateView
+from products.views import HomeTemplate, AboutTemplateView, ContactTemplateView, OrderTemplateView
 from user.views import ProfileView, edit_account_view
 
 urlpatterns = [
@@ -14,6 +14,7 @@ urlpatterns = [
     path('about/', AboutTemplateView.as_view(), name='abouts'),
     path('contacts/', ContactTemplateView.as_view(), name='contacts'),
     path('articles/', HelpListView.as_view(), name='articles'),
+    path('order/', OrderTemplateView.as_view(), name='order'),
     path('accounts/', include('user.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('profile/<int:pk>', ProfileView.as_view(), name='profile'),

@@ -1,5 +1,6 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
+{% load new_tags %}
 {% block content %}
     <main class="main">
         <div class="container">
@@ -9,7 +10,7 @@
                     <div class="order">
                         <div class="order__title">
                             <h2 class="section_title">Оформление заказа</h2>
-                            <a href="./basket.html" class="order__link">Вернутся в корзину</a>
+                            <a href="{% url 'product:cart' %}" class="order__link">Вернутся в корзину</a>
                         </div>
 
 
@@ -139,7 +140,7 @@
                                             Удалить выбранные
                                         </button>
                                     </div>
-
+                                {% for product in object_list  %}
                                     <div class="ordered__list">
                                         <div class="ordered__list_item">
                                             <button class="close">
@@ -154,22 +155,22 @@
                                             <input type="checkbox">
                                             <div class="body">
                                                 <div class="body__img">
-                                                    <img src="./img/iphone.png">
+                                                    <img src="{{ product.image.url }}">
                                                 </div>
 
-                                                <div class="body__descr">
+                                                <div class="body__descr p-2">
                                                     <div class="body__descr_item">Можно забрать с 9 декабря с 17:00
                                                     </div>
                                                     <div class="body__descr_item gray">Склад (Ростовская обл.) • 1 товар
                                                         • 25 гр</div>
                                                     <div class="body__descr_price">
                                                         <div class="new">
-                                                            69 499 ₽
+                                                            {{ product.real_price }} ₽
                                                         </div>
 
-                                                        <div class="old">
-                                                            79 499 ₽
-                                                        </div>
+                                                         {% if product.is_discount %}
+                                                            <div class="old">{{ product.price }} ₽</div>
+                                                        {% endif %}
                                                     </div>
 
                                                     <div class="body__descr_ex">
@@ -183,6 +184,7 @@
                                         </div>
 
                                     </div>
+                                {% endfor %}
                                 </div>
                             </div>
                             <div class="order__content_action">
@@ -197,13 +199,13 @@
                                             <div class="all">
                                                 Ваш заказ
                                             </div>
-                                            <div class="all_value">2 товара • 357 гр</div>
+                                            <div class="all_value">{{ products.count }} товара • {% get_cart_sum request %} гр</div>
                                         </div>
                                         <div class="action__panel_list_item">
                                             <div class="price">
-                                                Товары <span>(2)</span>
+                                                Товары <span>({{ products.count }})</span>
                                             </div>
-                                            <div class="price_value">81 841 ₽</div>
+                                            <div class="price_value">{% get_cart_sum request %} ₽</div>
                                         </div>
 
                                         <div class="action__panel_list_item">
@@ -225,8 +227,8 @@
                                     <div class="action__panel_total">
                                         <div class="name">Итого</div>
                                         <div class="price">
-                                            <div class="new">70 249 ₽ </div>
-                                            <div class="old">81098 ₽</div>
+                                            <div class="new">{% get_cart_sum request %} ₽ </div>
+<!--                                            <div class="old">81098 ₽</div>-->
                                         </div>
                                     </div>
                                 </div>
@@ -248,9 +250,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-
 
 
                     </div>
