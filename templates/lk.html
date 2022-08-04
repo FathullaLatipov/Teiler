@@ -66,7 +66,7 @@
                                                 <div class="person__item">
                                                     <div class="person__item_top">
                                                         <div class="name">Телефон</div>
-                                                        <button class="edit">Изменить</button>
+                                                        <button class="edit" data-micromodal-trigger="phone-edit">Изменить</button>
                                                     </div>
                                                     <div class="person__item_value">
                                                         {% if user.phone %}
@@ -375,6 +375,65 @@
       </div>
     </div>
   </div>
+     <div class="popup" id="phone-edit" aria-hidden="true">
+
+    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+      <!-- [3] -->
+      <div role="dialog" aria-modal="true" >
+
+        <div class="popup__pass-edit">
+          <h2 class="popup__pass-edit_title">
+            Изменить пароль
+          </h2>
+          <form class="popup__pass-edit_form" method="POST" action="{% url 'edit' user_id=pk %}">
+              {% csrf_token %}
+<!--            <div class="popup__pass-edit_form_item">-->
+<!--              <label for="id_old_password"> Старый пароль-->
+<!--                <input type="password" name="old_password" autocomplete="current-password" id="id_old_password">-->
+<!--              </label>-->
+<!--            </div>-->
+<!--            <div class="popup__pass-edit_form_item">-->
+<!--              <label for="id_new_password1"> Новый пароль-->
+<!--                <input type="password" name="new_password1" autocomplete="new-password" id="id_new_password1">-->
+<!--              </label>-->
+<!--            </div>-->
+<!--              <div class="popup__pass-edit_form_item">-->
+<!--              <label for="id_new_password2"> Подтвердите пароль-->
+<!--                <input type="password" name="new_password2" autocomplete="new-password" id="id_new_password2">-->
+<!--              </label>-->
+<!--            </div>-->
+<!--            <button type="button" class="popup__pass-edit_form_ex" id="backpassButton">Восстановить пароль</button>-->
+                  <input class="d-none" type="file" name="profile_image" id="id_profile_image" onchange="readURL(this)">
+			  		<h6 class="mt-4 field-heading">Phone</h6>
+			  		<input type="text" name="phone" id="id_phone" class="form-control" placeholder="phone" required
+					value="{{ user.phone }}">
+					{% for field in form %}
+					<p>
+					{% for error in field.errors %}
+					<p style="color: red">{{ error }}</p>
+					{% endfor %}
+					</p>
+					{% endfor %}
+					{% if form.non_field_errors %}
+					<div style="color: red">
+					<p>{{form.non_field_errors}}</p>
+					</div>
+
+					{% endif %}
+            <button class="popup__pass-edit_form_btn" type="submit">
+              Сохранить
+            </button>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
             <div class="popup" id="pass-edit" aria-hidden="true">
 
     <div class="popup__layer" tabindex="-1" data-micromodal-close>

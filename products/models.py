@@ -121,6 +121,9 @@ class ReviewModel(models.Model):
     def __str__(self):
         return self.name
 
+    def rating_range(self):
+        return range(1, self.rating + 1)
+
     class Meta:
         verbose_name = _('review')
         verbose_name_plural = _('reviews')
