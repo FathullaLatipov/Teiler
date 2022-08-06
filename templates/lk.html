@@ -386,7 +386,7 @@
           <h2 class="popup__pass-edit_title">
             Изменить пароль
           </h2>
-          <form class="popup__pass-edit_form" method="POST" action="{% url 'edit' user_id=pk %}">
+          <form class="popup__pass-edit_form" method="POST">
               {% csrf_token %}
 <!--            <div class="popup__pass-edit_form_item">-->
 <!--              <label for="id_old_password"> Старый пароль-->
@@ -404,9 +404,8 @@
 <!--              </label>-->
 <!--            </div>-->
 <!--            <button type="button" class="popup__pass-edit_form_ex" id="backpassButton">Восстановить пароль</button>-->
-                  <input class="d-none" type="file" name="profile_image" id="id_profile_image" onchange="readURL(this)">
 			  		<h6 class="mt-4 field-heading">Phone</h6>
-			  		<input type="text" name="phone" id="id_phone" class="form-control" placeholder="phone" required
+			  		<input type="number" name="phone" id="id_phone" class="form-control" placeholder="phone" required
 					value="{{ user.phone }}">
 					{% for field in form %}
 					<p>
@@ -443,9 +442,9 @@
 
         <div class="popup__pass-edit">
           <h2 class="popup__pass-edit_title">
-            Изменить пароль
+            Изменить username
           </h2>
-          <form class="popup__pass-edit_form" method="POST" action="{% url 'edit' user_id=pk %}">
+          <form class="popup__pass-edit_form" method="POST" action="{% url 'update_username' user_id=user.pk %}">
               {% csrf_token %}
 <!--            <div class="popup__pass-edit_form_item">-->
 <!--              <label for="id_old_password"> Старый пароль-->
@@ -630,5 +629,5 @@
     </div>
   </div>
 <h3>EDIT</h3>
-<a href="{%  url 'edit' user_id=pk %}">EDIT</a>
+<a href="">EDIT</a>
 {% endblock %}

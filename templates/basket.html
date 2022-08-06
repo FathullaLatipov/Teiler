@@ -2,6 +2,27 @@
 {% load static %}
 {% load new_tags %}
 {% block content %}
+
+<h2>Basket</h2>
+{% if formset %}
+<p>You can adjust the quantities below.</p>
+<form method="POST">
+      {% csrf_token %}
+      {{ formset.management_form }}
+      {% for form in formset %}
+        <p>
+             {{ form.instance.product.title }}
+             {{ form }}
+        </p>
+{% endfor %}
+<button type="submit" class="btn btn-default">Update basket</button>
+</form>
+{% endif %}
+{% if not request.basket %}
+<p>You have no items in the basket</p>
+{% elif request.basket %}
+<p>You have items in the basket: {{basket.count}}</p>
+{%endif%}
         <main class="main">
             <div class="container">
                 <div id="basket">
@@ -59,7 +80,7 @@
                                                 <button class="item__action_count_btn" data-direction="plus">+</button>
                                             </div>
                                         </div>
-                                        
+
                                     </li>
                                  {% endfor %}
                                     <!-- <li class="basket__body_item">
@@ -460,4 +481,11 @@
       </div>
     </div>
   </div>
+<script>
+    let delete_product = document.getElementById("product.pk")
+    let num =delete delete_product[product.pk]
+
+
+
+</script>
 {% endblock %}

@@ -1,5 +1,7 @@
 from django import forms
-from django.forms import BaseForm
+from django.forms import BaseForm, inlineformset_factory
+
+from products import models
 from products.models import ColorModel, RatingStar, ReviewModel, RegisterForm
 
 
@@ -18,3 +20,11 @@ class ReviewForm(forms.ModelForm):
     class Meta:
         model = ReviewModel
         fields = ("name", "email", "comments", "image", "rating")
+
+
+BasketLineFormSet = inlineformset_factory(
+    models.BasketModel,
+    models.BasketLine,
+    fields=("quantity",),
+    extra=0,
+)

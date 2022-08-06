@@ -1,4 +1,6 @@
 from ckeditor_uploader.fields import RichTextUploadingField
+from django.conf import settings
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -17,7 +19,8 @@ class CategoryModel(models.Model):
 
 
 class SubCategoryModel(models.Model):
-    category = models.ForeignKey(CategoryModel, on_delete=models.PROTECT, verbose_name=_('category'), related_name='subcategories')
+    category = models.ForeignKey(CategoryModel, on_delete=models.PROTECT, verbose_name=_('category'),
+                                 related_name='subcategories')
     subcategory = models.CharField(max_length=100, verbose_name=_('subcategory'))
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -63,7 +66,8 @@ class ProductModel(models.Model):
     sku = models.IntegerField(verbose_name=_('sku'), db_index=True)
     brand = models.ForeignKey(BrandModel, on_delete=models.PROTECT, verbose_name=_('brand'))
     category = models.ForeignKey(CategoryModel, on_delete=models.PROTECT, verbose_name=_('category'))
-    subcategory = models.ForeignKey(SubCategoryModel, on_delete=models.CASCADE, verbose_name=_('subcategory'), null=True,)
+    subcategory = models.ForeignKey(SubCategoryModel, on_delete=models.CASCADE, verbose_name=_('subcategory'),
+                                    null=True, )
     image = models.FileField(upload_to='image', verbose_name=_('image'), null=True)
     price = models.IntegerField(verbose_name=_('price'))
     discount = models.DecimalField(default=0, max_digits=9, decimal_places=0, verbose_name=_('discount'))
@@ -80,6 +84,7 @@ class ProductModel(models.Model):
     season = models.CharField(max_length=200, verbose_name=_('season'))
     real_price = models.FloatField(verbose_name=_('real price'), default=0)
     is_published = models.BooleanField(default=False)
+    is_buy = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created_at'))
 
     def is_discount(self):
@@ -181,3 +186,19 @@ class RegisterForm(models.Model):
         verbose_name_plural = _('registers')
 
 
+class BasketModel(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True
+    )
+
+    def is_empty(self):
+        return self.basketline_set.all().count() == 0
+
+    def count(self):
+        return sum(i.quantity for i in self.basketline_set.all())
+
+
+class BasketLine(models.Model):
+        basket = models.ForeignKey(BasketModel, on_delete=models.CASCADE)
+        product = models.ForeignKey(ProductModel, on_delete=models.CASCADE)
+        quantity = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)])

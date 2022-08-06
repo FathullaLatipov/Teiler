@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 from products.forms import ColorModelForm
 from products.models import CategoryModel, ProductModel, ProductImageModel, BrandModel, ColorModel, \
-    ReviewModel, ProductCharacteristicModel, SubCategoryModel
+    ReviewModel, ProductCharacteristicModel, SubCategoryModel, BasketModel, BasketLine
 
 
 @admin.register(CategoryModel)
@@ -60,3 +60,13 @@ class ProductModelAdmin(admin.ModelAdmin):
     readonly_fields = ['real_price']
     save_as = True
     save_on_top = True
+
+
+@admin.register(BasketModel)
+class BasketModel(admin.ModelAdmin):
+    list_display = ['pk']
+
+
+@admin.register(BasketLine)
+class BasketLine(admin.ModelAdmin):
+    list_display = ['pk']

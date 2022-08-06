@@ -5,7 +5,7 @@ from django.urls import path, include
 
 from help.views import HelpListView
 from products.views import HomeTemplate, AboutTemplateView, ContactTemplateView, OrderTemplateView
-from user.views import ProfileView, edit_account_view
+from user.views import ProfileView, edit_account_view, update_username
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -19,6 +19,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('profile/<int:pk>', ProfileView.as_view(), name='profile'),
     path('profilw_edit/<user_id>/edit/', edit_account_view, name='edit'),
+    path('change_username/<user_id>/edit/', update_username, name='update_username'),
     path('', HomeTemplate.as_view())
 ]
 

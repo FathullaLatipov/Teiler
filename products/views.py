@@ -1,10 +1,15 @@
-from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseRedirect, request
 from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404
+from django.urls import reverse
 from django.views import View
-from django.views.generic import ListView, DetailView, TemplateView, CreateView
+from django.views.generic import ListView, DetailView, TemplateView, CreateView, DeleteView
 from django.db.models import Max, Min, Q
 from django.http import JsonResponse
 from rest_framework.response import Response
+
+from products import models, forms
 from products.forms import ReviewForm
 from products.models import ProductModel
 from products.utils import get_wishlist_data, get_cart_data
@@ -47,6 +52,52 @@ class ProductTemplate(ListView):
         return context
 
 
+def add_to_basket(request):
+    product = get_object_or_404(
+        models.ProductModel, pk=request.GET.get("product_id")
+    )
+    basket = request.basket
+    if not request.basket:
+        if request.user.is_authenticated:
+            user = request.user
+        else:
+            user = None
+        basket = models.BasketModel.objects.create(user=user)
+        request.session["basket_id"] = basket.id
+
+    basketline, created = models.BasketLine.objects.get_or_create(
+        basket=basket, product=product
+    )
+
+    if not created:
+        basketline.quantity += 1
+        basketline.save()
+    return HttpResponseRedirect(
+        reverse('product:products')
+    )
+
+
+def manage_basket(request):
+    if not request.basket:
+        return render(request, 'basket.html', {"formset": None})
+
+    if request.method == "POST":
+        formset = forms.BasketLineFormSet(
+            request.POST, instance=request.basket
+        )
+        if formset.is_valid():
+            formset.save()
+    else:
+        formset = forms.BasketLineFormSet(
+            instance=request.basket
+        )
+
+    if request.basket.is_empty():
+        return render(request, "basket.html", {"formset": None})
+
+    return render(request, "basket.html", {"formset": formset})
+
+
 class ProductDetailView(DetailView):
     template_name = 'single-product.html'
     model = ProductModel
@@ -56,6 +107,29 @@ class ProductDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['related'] = ProductModel.objects.order_by('-pk')
         return context
+
+    def add_to_object(request, pk):
+        try:
+            object = ProductModel.objects.get(pk=pk)
+        except ProductModel.DoesNotExist:
+            return Response(data={'status': False})
+        cart = request.session.get('cart', [])
+        if object.pk in cart:
+            cart.remove(object.pk)
+            data = {'status': True, 'added': False}
+        else:
+            cart.append(object.pk)
+            data = {'status': True, 'added': True}
+        request.session['cart'] = cart
+
+        data['cart_len'] = get_cart_data(cart)
+        return JsonResponse(data)
+
+
+class ProductDeleteView(DeleteView):
+    model = ProductModel
+    success_url = "/"
+    template_name = "basket.html"
 
 
 class AddReview(View):

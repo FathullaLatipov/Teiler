@@ -215,6 +215,7 @@
                                             {% else %}
                                                   <button disabled class="btn btn_dis">Нет в наличии</button>
                                             {% endif %}
+                                            <a href="{% url 'product:add_to_basket' %}?product_id={{ product.id }}"> Add to basket</a>
 
                                                  <a onclick="add_to_wishlist(this, {{ product.pk }})">
                                                          <div class="fav2">
