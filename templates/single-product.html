@@ -148,11 +148,6 @@ h1 { font-size: 1.5em; margin: 10px; }
                                             </div>
                                         </div>
                                     </div>
-                                    <style>
-                                        .breal {
-                                            background: red;
-                                        }
-                                    </style>
                                     <div class="custom__color">
                                         <h3 class="form__name">Цвет:</h3>
                                           <div class="custom__color_inputs">
@@ -208,7 +203,9 @@ h1 { font-size: 1.5em; margin: 10px; }
                                     </div>
 
                                     <div class="order__buy">
-                                        <a href=""> <button type="submit">Купить в один клик</button></a>
+                                        <a href="{% url 'product:create-carts' pk=object.pk %}">
+                                                 <button type="submit">Купить в один клик</button>
+                                        </a>
                                     </div>
                                     <div class="order__info">
                                         <h3 class="order__info_title">Информация о доставке</h3>

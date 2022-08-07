@@ -2,7 +2,7 @@ from django.urls import path, include
 
 from products import views
 from products.views import ProductTemplate, ProductDetailView, AddReview, WishlistModelListView, add_to_wishlist, \
-    CartModelListView, add_to_cart
+    CartModelListView, add_to_cart, create_carts
 
 app_name = 'product'
 
@@ -15,5 +15,6 @@ urlpatterns = [
     # path('cart/', CartModelListView.as_view(), name='cart'),
     path('cart/', views.manage_basket, name='cart'),
     path('cart/<int:pk>/', add_to_cart, name='add-cart'),
+    path('carts/<int:pk>/', create_carts, name='create-carts'),
     path('add_to_basket/', views.add_to_basket, name="add_to_basket")
 ]

@@ -216,6 +216,20 @@ def add_to_cart(request, pk):
     data['cart_len'] = get_cart_data(cart)
     return JsonResponse(data)
 
+@login_required
+def create_carts(request, pk):
+    product = get_object_or_404(ProductModel, pk=pk)
+    cart = request.session.get('cart', [])
+
+    if request.user in product.cart.all():
+        product.cart.remove(request.user)
+    else:
+        product.cart.add(request.user)
+
+    product.save()
+
+    return redirect('order')
+
 
 class AboutTemplateView(TemplateView):
     template_name = 'about.html'

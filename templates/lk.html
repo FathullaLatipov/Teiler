@@ -176,6 +176,7 @@
         </div>
     </div>
 </main>
+<a href="{% url 'password_change' %}">sss</a>
 <div class="popup" id="login" aria-hidden="true">
 
     <div class="popup__layer" tabindex="-1" data-micromodal-close>
@@ -423,6 +424,46 @@
     </div>
 </div>
 
+
+<div class="popup" id="pass-edit" aria-hidden="true">
+    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+      <!-- [3] -->
+      <div role="dialog" aria-modal="true" >
+
+        <div class="popup__pass-edit">
+          <h2 class="popup__pass-edit_title">
+            Изменить пароль
+          </h2>
+          <form class="popup__pass-edit_form" method="POST" action="{% url 'password_change' %}">
+              {% csrf_token %}
+            <div class="popup__pass-edit_form_item">
+              <label for="id_old_password"> Старый пароль
+                <input type="password" name="old_password" id="id_old_password" autocomplete="current-password" autofocus required>
+              </label>
+            </div>
+            <div class="popup__pass-edit_form_item">
+              <label for="id_new_password1"> Новый пароль
+                <input type="password" name="new_password1" autocomplete="new-password" id="id_new_password1">
+              </label>
+            </div>
+               <div class="popup__pass-edit_form_item">
+              <label for="id_new_password2"> Новый пароль
+                <input type="password" name="new_password2" autocomplete="new-password" id="id_new_password2">
+              </label>
+            </div>
+            <button type="button" class="popup__pass-edit_form_ex" id="backpassButton">Восстановить пароль</button>
+
+            <button class="popup__pass-edit_form_btn" type="submit">
+              Сохранить
+            </button>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+</div>
 
 <div class="popup" id="email-edit" aria-hidden="true">
 

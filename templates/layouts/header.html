@@ -21,9 +21,6 @@
                 <a href="{% url 'articles' %}" class="header__top_nav_item">Помощь</a>
             </li>
             <li>
-                <a href="#" class="header__top_nav_item">Гарантия</a>
-            </li>
-            <li>
                 <a href="{% url 'abouts' %}" class="header__top_nav_item">О нас</a>
             </li>
         </ul>
@@ -96,7 +93,6 @@
 
                 <span>Корзина</span>
                 <span class="ind" id="cart_count">{% get_cart_count request %}</span>
-                ss
                 {% if request.basket %}
                     <div>
                              {{ request.basket.count }}
