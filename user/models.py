@@ -9,7 +9,7 @@ class CustomUser(AbstractUser):
         ("Женщина", "Женщина"),
     )
     phone = models.PositiveIntegerField(null=True, blank=True)
-    date_birth = models.PositiveIntegerField(null=True, blank=True)
+    date_birth = models.DateField(null=True, blank=True)
     male = models.CharField(
         max_length=30,
         choices=MALE_CHOIСES,

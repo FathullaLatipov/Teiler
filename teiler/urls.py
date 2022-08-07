@@ -5,7 +5,8 @@ from django.urls import path, include
 
 from help.views import HelpListView
 from products.views import HomeTemplate, AboutTemplateView, ContactTemplateView, OrderTemplateView
-from user.views import ProfileView, edit_account_view, update_username
+from user.views import ProfileView, edit_account_view, update_username, update_phone, update_email, update_date, \
+    update_male
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -20,6 +21,10 @@ urlpatterns = [
     path('profile/<int:pk>', ProfileView.as_view(), name='profile'),
     path('profilw_edit/<user_id>/edit/', edit_account_view, name='edit'),
     path('change_username/<user_id>/edit/', update_username, name='update_username'),
+    path('change_phone/<user_id>/edit/', update_phone, name='update_phone'),
+    path('change_email/<user_id>/edit/', update_email, name='update_email'),
+    path('change_date/<user_id>/edit/', update_date, name='update_date'),
+    path('change_male/<user_id>/edit/', update_male, name='update_male'),
     path('', HomeTemplate.as_view())
 ]
 

@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import BaseForm, inlineformset_factory
 
-from products import models
+from products import models, widgets
 from products.models import ColorModel, RatingStar, ReviewModel, RegisterForm
 
 
@@ -27,4 +27,5 @@ BasketLineFormSet = inlineformset_factory(
     models.BasketLine,
     fields=("quantity",),
     extra=0,
+    widgets={"quantity": widgets.PlusMinusNumberInput()},
 )

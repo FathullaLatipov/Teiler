@@ -30,10 +30,19 @@ class ProductTemplate(ListView):
     def get_queryset(self):
         q = self.request.GET.get('q', '')
         price = self.request.GET.get('price')
+        category = self.request.GET.get('category')
+        subcategory = self.request.GET.get('subcategory')
+
         filters = {}
 
         if q:
             filters['title__contains'] = q
+
+        if category:
+            filters['category_id'] = category
+
+        if subcategory:
+            filters['subcategory_id'] = subcategory
 
         if price:
             price_from, price_to = price.split(';')

@@ -51,15 +51,11 @@ h1 { font-size: 1.5em; margin: 10px; }
     <div class="container">
         <div class="path">
             <ul class="path_list">
-                <li class="path_item"><a href="#">Электроника</a></li>
+                <li class="path_item"><a href="#">{{ object.category }}</a></li>
                 >
-                <li class="path_item"><a href="#">Телефоны и смарт-часы</a></li>
+                <li class="path_item"><a href="#">{{ object.subcategory }}</a></li>
                 >
-                <li class="path_item"><a href="#">Смартфоны</a></li>
-                >
-                <li class="path_item"><a href="#">Apple</a></li>
-                >
-                <li class="path_item path_item_current"><a href="#">Акции</a></li>
+                <li class="path_item path_item_current"><a href="#">{{ object.title }}</a></li>
             </ul>
         </div>
         <div id="product">
@@ -212,7 +208,7 @@ h1 { font-size: 1.5em; margin: 10px; }
                                     </div>
 
                                     <div class="order__buy">
-                                        <a href="{% url 'product:create-cart' pk=object.pk %}"> <button type="submit">Купить в один клик</button></a>
+                                        <a href=""> <button type="submit">Купить в один клик</button></a>
                                     </div>
                                     <div class="order__info">
                                         <h3 class="order__info_title">Информация о доставке</h3>

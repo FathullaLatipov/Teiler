@@ -1,633 +1,694 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 {% block content %}
-            <main class="main">
-                <div class="container">
-                    
-                    <div id="lk">
-                        <div class="main__content">
-                            <div class="lk">
-                                <div class="lk__profile">
-                                    <div class="lk__profile_img">
-                                        <img src="" alt="">
-                                    </div>
-                                    <div class="lk__profile_name">
-                                        {{ user.username }}
-                                    </div>
-                                    <div class="lk__profile_action">
-<!--                                         <button>Изменить профиль</button>-->
-                                        <a href="/accounts/logout">Выйти</a>
-                                    </div>
+<main class="main">
+    <div class="container">
 
+        <div id="lk">
+            <div class="main__content">
+                <div class="lk">
+                    <div class="lk__profile">
+                        <div class="lk__profile_img">
+                            <img src="" alt="">
+                        </div>
+                        <div class="lk__profile_name">
+                            {{ user.username }}
+                        </div>
+                        <div class="lk__profile_action">
+                            <!--                                         <button>Изменить профиль</button>-->
+                            <a href="/accounts/logout">Выйти</a>
+                        </div>
+
+                    </div>
+                    {{ form.as_p }}
+                    <div class="lk__body">
+                        <div class="lk__body_drop">
+                            <div class="lk__body_drop_head" data-drophead>
+                                Личные данные
+                                <svg data-drophead width="14" height="8" viewBox="0 0 14 8" fill="none"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path data-drophead
+                                          d="M13.7071 7.70711C13.3166 8.09763 12.6834 8.09763 12.2929 7.70711L7 2.41421L1.70711 7.70711C1.31658 8.09763 0.683417 8.09763 0.292893 7.70711C-0.0976315 7.31658 -0.0976315 6.68342 0.292893 6.29289L6.29289 0.292893C6.68342 -0.0976315 7.31658 -0.0976315 7.70711 0.292893L13.7071 6.29289C14.0976 6.68342 14.0976 7.31658 13.7071 7.70711Z"
+                                          fill="#3D5165"/>
+                                </svg>
+                            </div>
+                            <div class="lk__body_drop_content">
+                                <div class="info">
+                                    Вы можете менять свои личные данные, подтверждать почту, управлять аккаунтом и
+                                    настройками безопасности в защищённом сервисе Talier
                                 </div>
-                                <div class="lk__body">
-                                    <div class="lk__body_drop">
-                                        <div class="lk__body_drop_head" data-drophead>
-                                            Личные данные
-                                            <svg data-drophead width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path data-drophead d="M13.7071 7.70711C13.3166 8.09763 12.6834 8.09763 12.2929 7.70711L7 2.41421L1.70711 7.70711C1.31658 8.09763 0.683417 8.09763 0.292893 7.70711C-0.0976315 7.31658 -0.0976315 6.68342 0.292893 6.29289L6.29289 0.292893C6.68342 -0.0976315 7.31658 -0.0976315 7.70711 0.292893L13.7071 6.29289C14.0976 6.68342 14.0976 7.31658 13.7071 7.70711Z" fill="#3D5165"/>
-                                            </svg>
+                                <div class="note">
+                                    Укажите недостающие данные, чтобы защитить свой аккаунт
+                                </div>
+                                <div class="person">
+                                    <div class="person__item">
+                                        <div class="person__item_top">
+                                            <div class="name">Имя</div>
+                                            <button class="edit" data-micromodal-trigger="username-edit">Изменить</button>
                                         </div>
-                                        <div class="lk__body_drop_content">
-                                            <div class="info">
-                                                Вы можете менять свои личные данные, подтверждать почту, управлять аккаунтом и настройками безопасности в защищённом сервисе Talier
-                                            </div>
-                                            <div class="note">
-                                                Укажите недостающие данные, чтобы защитить свой аккаунт
-                                            </div>
-                                            <div class="person">
-                                                <div class="person__item">
-                                                    <div class="person__item_top">
-                                                        <div class="name">Имя</div>
-                                                        <button class="edit">Изменить</button>
-                                                    </div>
-                                                    <div class="person__item_value">
-                                                        {{ user.username }}
-                                                    </div>
-                                                </div>
-                                                <div class="person__item">
-                                                    <div class="person__item_top">
-                                                        <div class="name">Дата рождения</div>
-                                                        <button class="edit">Изменить</button>
-                                                    </div>
-                                                    <div class="person__item_value">
-                                                        Не указана (19.02.2004)
-                                                    </div>
-                                                </div>
-                                                <div class="person__item">
-                                                    <div class="person__item_top">
-                                                        <div class="name">Пол</div>
-                                                        <button class="edit">Изменить</button>
-                                                    </div>
-                                                    <div class="person__item_value">
-                                                        Не указан (Мужской)
-                                                    </div>
-                                                </div>
-                                                <div class="person__item">
-                                                    <div class="person__item_top">
-                                                        <div class="name">Телефон</div>
-                                                        <button class="edit" data-micromodal-trigger="phone-edit">Изменить</button>
-                                                    </div>
-                                                    <div class="person__item_value">
-                                                        {% if user.phone %}
-                                                            {{ user.phone }}
-                                                        {% else %}
-                                                             Не указан
-                                                        {% endif %}
-                                                    </div>
-                                                </div>
-                                                <div class="person__item">
-                                                    <div class="person__item_top">
-                                                        <div class="name">Почта</div>
-                                                        <button class="edit">Изменить</button>
-                                                    </div>
-                                                    <div class="person__item_value">
-                                                        {% if user.email %}
-                                                             {{ user.email }}
-                                                        {% else %}
-                                                              Не указан
-                                                        {% endif %}
-                                                    </div>
-                                                </div>
-
-                                                <div class="person__item">
-                                                    <div class="person__item_top">
-                                                        <div class="name">Пароль</div>
-                                                        <button class="edit" data-micromodal-trigger="pass-edit">Изменить</button>
-                                                    </div>
-                                                    <div class="person__item_value">
-                                                        ••••••••••••••
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <div class="person__item_value">
+                                            {{ user.username }}
                                         </div>
                                     </div>
-                                    <div class="lk__body_drop">
-                                        <div class="lk__body_drop_head" data-drophead>
-                                            Адреса доставки
-                                            <svg data-drophead width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path data-drophead d="M13.7071 7.70711C13.3166 8.09763 12.6834 8.09763 12.2929 7.70711L7 2.41421L1.70711 7.70711C1.31658 8.09763 0.683417 8.09763 0.292893 7.70711C-0.0976315 7.31658 -0.0976315 6.68342 0.292893 6.29289L6.29289 0.292893C6.68342 -0.0976315 7.31658 -0.0976315 7.70711 0.292893L13.7071 6.29289C14.0976 6.68342 14.0976 7.31658 13.7071 7.70711Z" fill="#3D5165"/>
-                                            </svg>
-                                            <div class="edit_wr">
-                                                <button data-micromodal-trigger="map-p">Добавить адрес</button>
-                                            </div>
+                                    <div class="person__item">
+                                        <div class="person__item_top">
+                                            <div class="name">Дата рождения</div>
+                                            <button class="edit" data-micromodal-trigger="date-edit">Изменить</button>
                                         </div>
-                                        <div class="lk__body_drop_content">
-                                            <div class="info">
-                                                Вы можете менять свои личные данные, подтверждать почту, управлять аккаунтом и настройками безопасности в защищённом сервисе Talier
-                                            </div>
-                                            <div class="adress_item">
-                                                <div class="adress">
-                                                    <svg width="20" height="20" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M0.5 1.50012C0.5 0.947837 0.947715 0.500122 1.5 0.500122H8.5C9.05229 0.500122 9.5 0.947837 9.5 1.50012V8.50012C9.5 9.05241 9.05229 9.50012 8.5 9.50012H1.5C0.947715 9.50012 0.5 9.05241 0.5 8.50012V1.50012ZM1.5 6.00012V8.50012H8.5V6.00012H7.36038L6.97434 7.15824C6.90628 7.36241 6.71522 7.50012 6.5 7.50012H3.5C3.28478 7.50012 3.09372 7.36241 3.02566 7.15824L2.63962 6.00012H1.5ZM8.5 5.00012V1.50012H1.5V5.00012H2.63962C3.07005 5.00012 3.45219 5.27555 3.5883 5.68389L3.86038 6.50012H6.13962L6.4117 5.68389C6.54781 5.27555 6.92995 5.00012 7.36038 5.00012H8.5Z" fill="#3D5165"/>
-                                                    </svg>
-                                                    Отеделение Почты России №41532643
-                                                    обл. Омская, г. Омск, ул. 70 лет Октября, д. 19
-                                                    
-                                                </div>
-                                                <div class="edit_wr">
-                                                    <button data-micromodal-trigger="map-p">Изменить</button>
-                                                </div>
-                                            </div>
-                                            
+                                        <div class="person__item_value">
+                                           {{ user.date_birth }}
                                         </div>
                                     </div>
-                                    
-
-                                    <div class="lk__body_drop">
-                                        <div class="lk__body_drop_head" data-drophead>
-                                            Баллы Talier
-                                            <svg data-drophead width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path data-drophead d="M13.7071 7.70711C13.3166 8.09763 12.6834 8.09763 12.2929 7.70711L7 2.41421L1.70711 7.70711C1.31658 8.09763 0.683417 8.09763 0.292893 7.70711C-0.0976315 7.31658 -0.0976315 6.68342 0.292893 6.29289L6.29289 0.292893C6.68342 -0.0976315 7.31658 -0.0976315 7.70711 0.292893L13.7071 6.29289C14.0976 6.68342 14.0976 7.31658 13.7071 7.70711Z" fill="#3D5165"/>
-                                            </svg>
+                                    <div class="person__item">
+                                        <div class="person__item_top">
+                                            <div class="name">Пол</div>
+                                            <button class="edit" data-micromodal-trigger="male-edit">Изменить</button>
                                         </div>
-                                        <div class="lk__body_drop_content">
-                                            <div class="balls">
-                                                <div class="value">
-                                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M2.5 3C2.5 3.01277 2.50511 3.08479 2.64604 3.20974C2.78639 3.33417 3.01801 3.46907 3.34713 3.5925C4.0017 3.83796 4.93951 4 6 4C7.06049 4 7.9983 3.83796 8.65287 3.5925C8.98199 3.46907 9.21361 3.33417 9.35396 3.20974C9.49489 3.08479 9.5 3.01277 9.5 3C9.5 2.98723 9.49489 2.91521 9.35396 2.79026C9.21361 2.66583 8.98199 2.53093 8.65287 2.4075C7.9983 2.16204 7.06049 2 6 2C4.93951 2 4.0017 2.16204 3.34713 2.4075C3.01801 2.53093 2.78639 2.66583 2.64604 2.79026C2.50511 2.91521 2.5 2.98723 2.5 3ZM1.5 3C1.5 2.59855 1.71875 2.27597 1.98264 2.042C2.24711 1.80752 2.60128 1.6192 2.99601 1.47118C3.78916 1.17374 4.85135 1 6 1C7.14865 1 8.21084 1.17374 9.00399 1.47118C9.39872 1.6192 9.75289 1.80752 10.0174 2.042C10.2813 2.27597 10.5 2.59855 10.5 3V5V7V9C10.5 9.40145 10.2813 9.72403 10.0174 9.958C9.75289 10.1925 9.39872 10.3808 9.00399 10.5288C8.21084 10.8263 7.14865 11 6 11C4.85135 11 3.78916 10.8263 2.99601 10.5288C2.60128 10.3808 2.24711 10.1925 1.98264 9.958C1.71875 9.72403 1.5 9.40145 1.5 9V7V5V3ZM2.5 5C2.5 5.01277 2.50511 5.08479 2.64604 5.20974C2.78639 5.33417 3.01801 5.46907 3.34713 5.59249C4.0017 5.83796 4.93951 6 6 6C7.06049 6 7.9983 5.83796 8.65287 5.59249C8.98199 5.46907 9.21361 5.33417 9.35396 5.20974C9.49489 5.08479 9.5 5.01277 9.5 5V4.3081C9.34545 4.3899 9.17869 4.46331 9.00399 4.52882C8.21084 4.82626 7.14865 5 6 5C4.85135 5 3.78916 4.82626 2.99601 4.52882C2.82131 4.46331 2.65455 4.3899 2.5 4.3081V5ZM2.5 6.3081V7C2.5 7.01277 2.50511 7.08479 2.64604 7.20974C2.78639 7.33417 3.01801 7.46907 3.34713 7.59249C4.0017 7.83796 4.93951 8 6 8C7.06049 8 7.9983 7.83796 8.65287 7.59249C8.98199 7.46907 9.21361 7.33417 9.35396 7.20974C9.49489 7.08479 9.5 7.01277 9.5 7V6.3081C9.34545 6.3899 9.17869 6.46331 9.00399 6.52882C8.21084 6.82626 7.14865 7 6 7C4.85135 7 3.78916 6.82626 2.99601 6.52882C2.82131 6.46331 2.65455 6.3899 2.5 6.3081ZM2.5 8.30809V9C2.5 9.01277 2.50511 9.08479 2.64604 9.20974C2.78639 9.33417 3.01801 9.46907 3.34713 9.59249C4.0017 9.83796 4.93951 10 6 10C7.06049 10 7.9983 9.83796 8.65287 9.59249C8.98199 9.46907 9.21361 9.33417 9.35396 9.20974C9.49489 9.08479 9.5 9.01277 9.5 9V8.30809C9.34545 8.3899 9.17869 8.46331 9.00399 8.52882C8.21084 8.82626 7.14865 9 6 9C4.85135 9 3.78916 8.82626 2.99601 8.52882C2.82131 8.46331 2.65455 8.3899 2.5 8.30809Z" fill="#0047FF"/>
-</svg>
+                                        <div class="person__item_value">
+                                            {{ user.male }}
+                                        </div>
+                                    </div>
+                                    <div class="person__item">
+                                        <div class="person__item_top">
+                                            <div class="name">Телефон</div>
+                                            <button class="edit" data-micromodal-trigger="phone-edit">Изменить</button>
+                                        </div>
+                                        <div class="person__item_value">
+                                            {% if user.phone %}
+                                            {{ user.phone }}
+                                            {% else %}
+                                            Не указан
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="person__item">
+                                        <div class="person__item_top">
+                                            <div class="name">Почта</div>
+                                            <button class="edit" data-micromodal-trigger="email-edit">Изменить</button>
+                                        </div>
+                                        <div class="person__item_value">
+                                            {% if user.email %}
+                                            {{ user.email }}
+                                            {% else %}
+                                            Не указан
+                                            {% endif %}
+                                        </div>
+                                    </div>
 
-                                                    199 Б
-                                                </div>
-                                                <a href="#" class="link">Потратить баллы</a>
-                                            </div>
+                                    <div class="person__item">
+                                        <div class="person__item_top">
+                                            <div class="name">Пароль</div>
+                                            <button class="edit" data-micromodal-trigger="pass-edit">Изменить</button>
+                                        </div>
+                                        <div class="person__item_value">
+                                            ••••••••••••••
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="lk__body_drop">
+                            <div class="lk__body_drop_head" data-drophead>
+                                Адреса доставки
+                                <svg data-drophead width="14" height="8" viewBox="0 0 14 8" fill="none"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path data-drophead
+                                          d="M13.7071 7.70711C13.3166 8.09763 12.6834 8.09763 12.2929 7.70711L7 2.41421L1.70711 7.70711C1.31658 8.09763 0.683417 8.09763 0.292893 7.70711C-0.0976315 7.31658 -0.0976315 6.68342 0.292893 6.29289L6.29289 0.292893C6.68342 -0.0976315 7.31658 -0.0976315 7.70711 0.292893L13.7071 6.29289C14.0976 6.68342 14.0976 7.31658 13.7071 7.70711Z"
+                                          fill="#3D5165"/>
+                                </svg>
+                                <div class="edit_wr">
+                                    <button data-micromodal-trigger="map-p">Добавить адрес</button>
+                                </div>
+                            </div>
+                            <div class="lk__body_drop_content">
+                                <div class="info">
+                                    Вы можете менять свои личные данные, подтверждать почту, управлять аккаунтом и
+                                    настройками безопасности в защищённом сервисе Talier
+                                </div>
+                                <div class="adress_item">
+                                    <div class="adress">
+                                        <svg width="20" height="20" viewBox="0 0 10 10" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M0.5 1.50012C0.5 0.947837 0.947715 0.500122 1.5 0.500122H8.5C9.05229 0.500122 9.5 0.947837 9.5 1.50012V8.50012C9.5 9.05241 9.05229 9.50012 8.5 9.50012H1.5C0.947715 9.50012 0.5 9.05241 0.5 8.50012V1.50012ZM1.5 6.00012V8.50012H8.5V6.00012H7.36038L6.97434 7.15824C6.90628 7.36241 6.71522 7.50012 6.5 7.50012H3.5C3.28478 7.50012 3.09372 7.36241 3.02566 7.15824L2.63962 6.00012H1.5ZM8.5 5.00012V1.50012H1.5V5.00012H2.63962C3.07005 5.00012 3.45219 5.27555 3.5883 5.68389L3.86038 6.50012H6.13962L6.4117 5.68389C6.54781 5.27555 6.92995 5.00012 7.36038 5.00012H8.5Z"
+                                                  fill="#3D5165"/>
+                                        </svg>
+                                        Отеделение Почты России №41532643
+                                        обл. Омская, г. Омск, ул. 70 лет Октября, д. 19
+
+                                    </div>
+                                    <div class="edit_wr">
+                                        <button data-micromodal-trigger="map-p">Изменить</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="lk__body_drop">
+                            <div class="lk__body_drop_head" data-drophead>
+                                Баллы Talier
+                                <svg data-drophead width="14" height="8" viewBox="0 0 14 8" fill="none"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path data-drophead
+                                          d="M13.7071 7.70711C13.3166 8.09763 12.6834 8.09763 12.2929 7.70711L7 2.41421L1.70711 7.70711C1.31658 8.09763 0.683417 8.09763 0.292893 7.70711C-0.0976315 7.31658 -0.0976315 6.68342 0.292893 6.29289L6.29289 0.292893C6.68342 -0.0976315 7.31658 -0.0976315 7.70711 0.292893L13.7071 6.29289C14.0976 6.68342 14.0976 7.31658 13.7071 7.70711Z"
+                                          fill="#3D5165"/>
+                                </svg>
+                            </div>
+                            <div class="lk__body_drop_content">
+                                <div class="balls">
+                                    <div class="value">
+                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M2.5 3C2.5 3.01277 2.50511 3.08479 2.64604 3.20974C2.78639 3.33417 3.01801 3.46907 3.34713 3.5925C4.0017 3.83796 4.93951 4 6 4C7.06049 4 7.9983 3.83796 8.65287 3.5925C8.98199 3.46907 9.21361 3.33417 9.35396 3.20974C9.49489 3.08479 9.5 3.01277 9.5 3C9.5 2.98723 9.49489 2.91521 9.35396 2.79026C9.21361 2.66583 8.98199 2.53093 8.65287 2.4075C7.9983 2.16204 7.06049 2 6 2C4.93951 2 4.0017 2.16204 3.34713 2.4075C3.01801 2.53093 2.78639 2.66583 2.64604 2.79026C2.50511 2.91521 2.5 2.98723 2.5 3ZM1.5 3C1.5 2.59855 1.71875 2.27597 1.98264 2.042C2.24711 1.80752 2.60128 1.6192 2.99601 1.47118C3.78916 1.17374 4.85135 1 6 1C7.14865 1 8.21084 1.17374 9.00399 1.47118C9.39872 1.6192 9.75289 1.80752 10.0174 2.042C10.2813 2.27597 10.5 2.59855 10.5 3V5V7V9C10.5 9.40145 10.2813 9.72403 10.0174 9.958C9.75289 10.1925 9.39872 10.3808 9.00399 10.5288C8.21084 10.8263 7.14865 11 6 11C4.85135 11 3.78916 10.8263 2.99601 10.5288C2.60128 10.3808 2.24711 10.1925 1.98264 9.958C1.71875 9.72403 1.5 9.40145 1.5 9V7V5V3ZM2.5 5C2.5 5.01277 2.50511 5.08479 2.64604 5.20974C2.78639 5.33417 3.01801 5.46907 3.34713 5.59249C4.0017 5.83796 4.93951 6 6 6C7.06049 6 7.9983 5.83796 8.65287 5.59249C8.98199 5.46907 9.21361 5.33417 9.35396 5.20974C9.49489 5.08479 9.5 5.01277 9.5 5V4.3081C9.34545 4.3899 9.17869 4.46331 9.00399 4.52882C8.21084 4.82626 7.14865 5 6 5C4.85135 5 3.78916 4.82626 2.99601 4.52882C2.82131 4.46331 2.65455 4.3899 2.5 4.3081V5ZM2.5 6.3081V7C2.5 7.01277 2.50511 7.08479 2.64604 7.20974C2.78639 7.33417 3.01801 7.46907 3.34713 7.59249C4.0017 7.83796 4.93951 8 6 8C7.06049 8 7.9983 7.83796 8.65287 7.59249C8.98199 7.46907 9.21361 7.33417 9.35396 7.20974C9.49489 7.08479 9.5 7.01277 9.5 7V6.3081C9.34545 6.3899 9.17869 6.46331 9.00399 6.52882C8.21084 6.82626 7.14865 7 6 7C4.85135 7 3.78916 6.82626 2.99601 6.52882C2.82131 6.46331 2.65455 6.3899 2.5 6.3081ZM2.5 8.30809V9C2.5 9.01277 2.50511 9.08479 2.64604 9.20974C2.78639 9.33417 3.01801 9.46907 3.34713 9.59249C4.0017 9.83796 4.93951 10 6 10C7.06049 10 7.9983 9.83796 8.65287 9.59249C8.98199 9.46907 9.21361 9.33417 9.35396 9.20974C9.49489 9.08479 9.5 9.01277 9.5 9V8.30809C9.34545 8.3899 9.17869 8.46331 9.00399 8.52882C8.21084 8.82626 7.14865 9 6 9C4.85135 9 3.78916 8.82626 2.99601 8.52882C2.82131 8.46331 2.65455 8.3899 2.5 8.30809Z"
+                                                  fill="#0047FF"/>
+                                        </svg>
+
+                                        199 Б
+                                    </div>
+                                    <a href="#" class="link">Потратить баллы</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </main>
-            <div class="popup" id="login" aria-hidden="true">
+            </div>
+        </div>
+    </div>
+</main>
+<div class="popup" id="login" aria-hidden="true">
 
     <div class="popup__layer" tabindex="-1" data-micromodal-close>
 
-      <!-- [3] -->
-      <div role="dialog" aria-modal="true" >
+        <!-- [3] -->
+        <div role="dialog" aria-modal="true">
 
-        <div class="popup__auth">
-          <div class="popup__auth_hi">Здравствуйте!</div>
-          <div class="popup__auth_title">
-            Войдите в личный кабинет
-          </div>
+            <div class="popup__auth">
+                <div class="popup__auth_hi">Здравствуйте!</div>
+                <div class="popup__auth_title">
+                    Войдите в личный кабинет
+                </div>
 
-          <form class="popup__auth_form">
-              <div class="popup__auth_form_item mail">
-                  <label>
-                    E-Mail
-                    <div class="inp">
-                      <input type="email" placeholder="e.g.: elonmusk@mars.com ">
+                <form class="popup__auth_form">
+                    <div class="popup__auth_form_item mail">
+                        <label>
+                            E-Mail
+                            <div class="inp">
+                                <input type="email" placeholder="e.g.: elonmusk@mars.com ">
+                            </div>
+                        </label>
                     </div>
-                  </label>
-              </div>
 
-              <div class="popup__auth_form_item pass">
-                <label>
-                    Ваш пароль
-                  <div class="inp">
-                    <input type="password" placeholder="e.g.: X Æ A-12 ">
-                  </div>
-                </label>
-            </div>
-
-              <div class="popup__auth_form_btn">
-                  <button class="btn">Войти</button>
-              </div>
-          </form>
-
-          <div class="popup__auth_ex">
-            Нет аккаунта? <button id="regButton">Зарегистрироваться →</button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-            <div class="popup" id="signin" aria-hidden="true">
-
-    <div class="popup__layer" tabindex="-1" data-micromodal-close>
-
-      <!-- [3] -->
-      <div role="dialog" aria-modal="true" >
-
-        <div class="popup__auth">
-          <div class="popup__auth_hi">Здравствуйте!</div>
-          <div class="popup__auth_title">
-            Зарегистрируйтесь,что бы войти в личный кабинет
-          </div>
-
-          <form class="popup__auth_form">
-              <div class="popup__auth_form_item mail">
-                  <label>
-                    E-Mail
-                    <div class="inp">
-                      <input type="email" placeholder="e.g.: elonmusk@mars.com ">
+                    <div class="popup__auth_form_item pass">
+                        <label>
+                            Ваш пароль
+                            <div class="inp">
+                                <input type="password" placeholder="e.g.: X Æ A-12 ">
+                            </div>
+                        </label>
                     </div>
-                  </label>
-              </div>
 
-              <div class="popup__auth_form_item pass">
-                <label>
-                    Ваш пароль
-                  <div class="inp">
-                    <input type="password" placeholder="e.g.: X Æ A-12 ">
-                  </div>
-                </label>
-            </div>
-
-              <div class="popup__auth_form_btn">
-                  <button class="btn">Зарегистрироваться</button>
-              </div>
-          </form>
-
-          <div class="popup__auth_ex">
-            Есть аккаунт? <button id="logButton">Войти →</button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-            <div class="popup" id="city" aria-hidden="true">
-
-    <div class="popup__layer" tabindex="-1" data-micromodal-close>
-  
-      <!-- [3] -->
-      <div role="dialog" aria-modal="true" >
-        
-        <div class="popup__city">
-          <h2 class="popup__city_title">
-            Выберите город
-          </h2>
-          <form class="popup__city_form">
-            <div class="popup__city_search">
-              <select class="popup__city_search_select">
-                <option value="Москва">Москва</option>
-                <option value="Санкт-Петербург">Санкт-Петербург</option>
-                <option value="Екатеринбург">Екатеринбург</option>
-              </select>
-            </div>
-            <button class="popup__city_btn">Сохранить</button>
-          </form>
-          
-        </div>
-  
-      </div>
-    </div>
-  </div>
-            <div class="popup" id="deliv" aria-hidden="true">
-
-    <div class="popup__layer" tabindex="-1" data-micromodal-close>
-  
-      <!-- [3] -->
-      <div role="dialog" aria-modal="true" >
-        
-        <div class="popup__deliv">
-
-          <div class="popup__deliv_title">
-            Сохраненные адреса
-          </div>
-
-          
-
-          <div class="popup__deliv_body">
-             <div class="popup__deliv_body_item" data-micromodal-close>
-               Отеделение Почты России №41532643
-обл. Омская, г. Омск, ул. 70 лет Октября, д. 19
-
-             </div> 
-             <div class="popup__deliv_body_item" data-micromodal-close>
-               Отеделение Почты России №41532643
-обл. Омская, г. Омск, ул. 70 лет Октября, д. 19
-
-             </div> 
-             <div class="popup__deliv_body_item" data-micromodal-close>
-               Отеделение Почты России №41532643
-обл. Омская, г. Омск, ул. 70 лет Октября, д. 19
-
-             </div> 
-          </div>
-
-          <button class="popup__deliv_btn" id="delivBtn">
-              Выбрать адрес доставки
-          </button>
-
-        </div>
-  
-      </div>
-    </div>
-  </div>
-            <div class="popup" id="adress" aria-hidden="true">
-
-    <div class="popup__layer" tabindex="-1" data-micromodal-close>
-  
-      <!-- [3] -->
-      <div role="dialog" aria-modal="true" >
-        
-        <div class="popup__adress">
-
-          <div class="popup__adress_head">
-            Улица, 1 , 1
-          </div>
-
-          <div class="popup__adress_scdr">Санкт-Петербург, Россия</div>
-
-          <form class="popup__adress_form">
-              <div class="popup__adress_form_main">
-                <div class="popup__adress_form_main_head">
-                  <div class="name">Квартира/Офис</div>
-                  <label>
-                    <input type="checkbox">
-                    Частный дом
-                  </label>
-                </div>
-                <div class="popup__adress_form_main_input">
-                  <input type="text">
-                </div>
-              </div>
-
-              <div class="popup__adress_form_ex">
-                <div class="popup__adress_form_ex_head">
-                  Укажите дополнительную информацию для курьера
-                </div>
-                <div class="popup__adress_form_ex_wr">
-                  <div class="item">
-                    <input type="text" placeholder="Укажите подъезд">
-                  </div>
-                  <div class="item">
-                    <input type="text" placeholder="Домофон">
-                  </div>
-                  <div class="item">
-                    <input type="text" placeholder="Этаж">
-                  </div>
-                </div>
-              </div>
-
-              <div class="popup__adress_form_btn">
-                <button>Выбрать</button>
-              </div>
-          </form>
-
-        </div>
-  
-      </div>
-    </div>
-  </div>
-     <div class="popup" id="phone-edit" aria-hidden="true">
-
-    <div class="popup__layer" tabindex="-1" data-micromodal-close>
-
-      <!-- [3] -->
-      <div role="dialog" aria-modal="true" >
-
-        <div class="popup__pass-edit">
-          <h2 class="popup__pass-edit_title">
-            Изменить пароль
-          </h2>
-          <form class="popup__pass-edit_form" method="POST">
-              {% csrf_token %}
-<!--            <div class="popup__pass-edit_form_item">-->
-<!--              <label for="id_old_password"> Старый пароль-->
-<!--                <input type="password" name="old_password" autocomplete="current-password" id="id_old_password">-->
-<!--              </label>-->
-<!--            </div>-->
-<!--            <div class="popup__pass-edit_form_item">-->
-<!--              <label for="id_new_password1"> Новый пароль-->
-<!--                <input type="password" name="new_password1" autocomplete="new-password" id="id_new_password1">-->
-<!--              </label>-->
-<!--            </div>-->
-<!--              <div class="popup__pass-edit_form_item">-->
-<!--              <label for="id_new_password2"> Подтвердите пароль-->
-<!--                <input type="password" name="new_password2" autocomplete="new-password" id="id_new_password2">-->
-<!--              </label>-->
-<!--            </div>-->
-<!--            <button type="button" class="popup__pass-edit_form_ex" id="backpassButton">Восстановить пароль</button>-->
-			  		<h6 class="mt-4 field-heading">Phone</h6>
-			  		<input type="number" name="phone" id="id_phone" class="form-control" placeholder="phone" required
-					value="{{ user.phone }}">
-					{% for field in form %}
-					<p>
-					{% for error in field.errors %}
-					<p style="color: red">{{ error }}</p>
-					{% endfor %}
-					</p>
-					{% endfor %}
-					{% if form.non_field_errors %}
-					<div style="color: red">
-					<p>{{form.non_field_errors}}</p>
-					</div>
-
-					{% endif %}
-            <button class="popup__pass-edit_form_btn" type="submit">
-              Сохранить
-            </button>
-
-          </form>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-
-
-            <div class="popup" id="pass-edit" aria-hidden="true">
-
-    <div class="popup__layer" tabindex="-1" data-micromodal-close>
-
-      <!-- [3] -->
-      <div role="dialog" aria-modal="true" >
-
-        <div class="popup__pass-edit">
-          <h2 class="popup__pass-edit_title">
-            Изменить username
-          </h2>
-          <form class="popup__pass-edit_form" method="POST" action="{% url 'update_username' user_id=user.pk %}">
-              {% csrf_token %}
-<!--            <div class="popup__pass-edit_form_item">-->
-<!--              <label for="id_old_password"> Старый пароль-->
-<!--                <input type="password" name="old_password" autocomplete="current-password" id="id_old_password">-->
-<!--              </label>-->
-<!--            </div>-->
-<!--            <div class="popup__pass-edit_form_item">-->
-<!--              <label for="id_new_password1"> Новый пароль-->
-<!--                <input type="password" name="new_password1" autocomplete="new-password" id="id_new_password1">-->
-<!--              </label>-->
-<!--            </div>-->
-<!--              <div class="popup__pass-edit_form_item">-->
-<!--              <label for="id_new_password2"> Подтвердите пароль-->
-<!--                <input type="password" name="new_password2" autocomplete="new-password" id="id_new_password2">-->
-<!--              </label>-->
-<!--            </div>-->
-<!--            <button type="button" class="popup__pass-edit_form_ex" id="backpassButton">Восстановить пароль</button>-->
-            <input class="d-none" type="file" name="profile_image" id="id_profile_image" onchange="readURL(this)">
-
-			  		<h6 class="mt-4 field-heading">Username</h6>
-			  		<input type="text" name="username" id="id_input_username" class="form-control" placeholder="Username" required
-					value="{{ user.username }}">
-
-					{% for field in form %}
-					<p>
-					{% for error in field.errors %}
-					<p style="color: red">{{ error }}</p>
-					{% endfor %}
-					</p>
-					{% endfor %}
-					{% if form.non_field_errors %}
-					<div style="color: red">
-					<p>{{form.non_field_errors}}</p>
-					</div>
-
-					{% endif %}
-            <button class="popup__pass-edit_form_btn" type="submit">
-              Сохранить
-            </button>
-
-          </form>
-        </div>
-
-      </div>
-    </div>
-  </div>
-            <div class="popup" id="pass-reset" aria-hidden="true">
-
-    <div class="popup__layer" tabindex="-1" data-micromodal-close>
-  
-      <!-- [3] -->
-      <div role="dialog" aria-modal="true" >
-        
-        <div class="popup__pass-edit">
-          <h2 class="popup__pass-edit_title">
-            Восстановить пароль
-          </h2>
-          <form class="popup__pass-edit_form">
-            <div class="popup__pass-edit_form_item">
-              <label> Ваша электронная почта
-                <input type="text">
-              </label>
-            </div>
-
-            <button class="popup__pass-edit_form_btn">
-              Отправить код
-            </button>
-
-          </form>
-        </div>
-  
-      </div>
-    </div>
-  </div>
-            <div class="popup" id="pass-new" aria-hidden="true">
-
-    <div class="popup__layer" tabindex="-1" data-micromodal-close>
-  
-      <!-- [3] -->
-      <div role="dialog" aria-modal="true" >
-        
-        <div class="popup__pass-edit">
-          <h2 class="popup__pass-edit_title">
-            Новый пароль
-          </h2>
-          <form class="popup__pass-edit_form">
-            <div class="popup__pass-edit_form_item">
-              <label> Новый пароль
-                <input required type="password">
-              </label>
-            </div>
-            <div class="popup__pass-edit_form_item">
-              <label> Подтвердить пароль
-                <input required type="password">
-              </label>
-            </div>
-
-            <button class="popup__pass-edit_form_btn">
-              Сохранить
-            </button>
-
-          </form>
-        </div>
-
-      </div>
-    </div>
-  </div>
-            <div class="popup" id="map-p" aria-hidden="true">
-
-    <div class="popup__layer" tabindex="-1" data-micromodal-close>
-  
-      <!-- [3] -->
-      <div role="dialog" aria-modal="true" >
-        
-        <div class="map">
-            <div class="map_wr">
-                <h2 class="map__head">
-                    Введите адрес
-                </h2>
-                <form class="map__form">
-                    <div class="map__form_search">
-                        <input required class="map__form_search_input" type="text" id="suggest">
-                        <button type="button" class="map__form_search_btn" type="submit" id="button">Найти</button>
-                    </div>
-                    <p class="map__form_notice" id="notice">Адрес не найден</p>
-                    <div class="map__form_map" id="map">
-    
+                    <div class="popup__auth_form_btn">
+                        <button class="btn">Войти</button>
                     </div>
                 </form>
+
+                <div class="popup__auth_ex">
+                    Нет аккаунта?
+                    <button id="regButton">Зарегистрироваться →</button>
+                </div>
             </div>
+
+        </div>
+    </div>
+</div>
+<div class="popup" id="signin" aria-hidden="true">
+
+    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+        <!-- [3] -->
+        <div role="dialog" aria-modal="true">
+
+            <div class="popup__auth">
+                <div class="popup__auth_hi">Здравствуйте!</div>
+                <div class="popup__auth_title">
+                    Зарегистрируйтесь,что бы войти в личный кабинет
+                </div>
+
+                <form class="popup__auth_form">
+                    <div class="popup__auth_form_item mail">
+                        <label>
+                            E-Mail
+                            <div class="inp">
+                                <input type="email" placeholder="e.g.: elonmusk@mars.com ">
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="popup__auth_form_item pass">
+                        <label>
+                            Ваш пароль
+                            <div class="inp">
+                                <input type="password" placeholder="e.g.: X Æ A-12 ">
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="popup__auth_form_btn">
+                        <button class="btn">Зарегистрироваться</button>
+                    </div>
+                </form>
+
+                <div class="popup__auth_ex">
+                    Есть аккаунт?
+                    <button id="logButton">Войти →</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="popup" id="city" aria-hidden="true">
+
+    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+        <!-- [3] -->
+        <div role="dialog" aria-modal="true">
+
+            <div class="popup__city">
+                <h2 class="popup__city_title">
+                    Выберите город
+                </h2>
+                <form class="popup__city_form">
+                    <div class="popup__city_search">
+                        <select class="popup__city_search_select">
+                            <option value="Москва">Москва</option>
+                            <option value="Санкт-Петербург">Санкт-Петербург</option>
+                            <option value="Екатеринбург">Екатеринбург</option>
+                        </select>
+                    </div>
+                    <button class="popup__city_btn">Сохранить</button>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="popup" id="deliv" aria-hidden="true">
+
+    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+        <!-- [3] -->
+        <div role="dialog" aria-modal="true">
+
+            <div class="popup__deliv">
+
+                <div class="popup__deliv_title">
+                    Сохраненные адреса
+                </div>
+
+
+                <div class="popup__deliv_body">
+                    <div class="popup__deliv_body_item" data-micromodal-close>
+                        Отеделение Почты России №41532643
+                        обл. Омская, г. Омск, ул. 70 лет Октября, д. 19
+
+                    </div>
+                    <div class="popup__deliv_body_item" data-micromodal-close>
+                        Отеделение Почты России №41532643
+                        обл. Омская, г. Омск, ул. 70 лет Октября, д. 19
+
+                    </div>
+                    <div class="popup__deliv_body_item" data-micromodal-close>
+                        Отеделение Почты России №41532643
+                        обл. Омская, г. Омск, ул. 70 лет Октября, д. 19
+
+                    </div>
+                </div>
+
+                <button class="popup__deliv_btn" id="delivBtn">
+                    Выбрать адрес доставки
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="popup" id="adress" aria-hidden="true">
+
+    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+        <!-- [3] -->
+        <div role="dialog" aria-modal="true">
 
             <div class="popup__adress">
 
-                <div id="street-point" class="popup__adress_head dsbl">
-                  Улица
+                <div class="popup__adress_head">
+                    Улица, 1 , 1
                 </div>
-      
-                <div class="popup__adress_scdr dsbl"><span id="city-point">Город</span>, <span id="country-point">Страна</span></div>
-      
-                <form id="mapForm" class="popup__adress_form">
+
+                <div class="popup__adress_scdr">Санкт-Петербург, Россия</div>
+
+                <form class="popup__adress_form">
                     <div class="popup__adress_form_main">
-                      <div class="popup__adress_form_main_head">
-                        <div class="name">Квартира/Офис</div>
-                        <label>
-                          <input disabled type="checkbox" class="mapInput">
-                          Частный дом
-                        </label>
-                      </div>
-                      <div class="popup__adress_form_main_input">
-                        <input disabled required type="text" class="mapInput">
-                      </div>
+                        <div class="popup__adress_form_main_head">
+                            <div class="name">Квартира/Офис</div>
+                            <label>
+                                <input type="checkbox">
+                                Частный дом
+                            </label>
+                        </div>
+                        <div class="popup__adress_form_main_input">
+                            <input type="text">
+                        </div>
                     </div>
-      
+
                     <div class="popup__adress_form_ex">
-                      <div class="popup__adress_form_ex_head">
-                        Укажите дополнительную информацию для курьера
-                      </div>
-                      <div class="popup__adress_form_ex_wr">
-                        <div class="item">
-                          <input disabled required type="text" placeholder="Укажите подъезд" class="mapInput">
+                        <div class="popup__adress_form_ex_head">
+                            Укажите дополнительную информацию для курьера
                         </div>
-                        <div class="item">
-                          <input disabled required type="text" placeholder="Домофон" class="mapInput">
+                        <div class="popup__adress_form_ex_wr">
+                            <div class="item">
+                                <input type="text" placeholder="Укажите подъезд">
+                            </div>
+                            <div class="item">
+                                <input type="text" placeholder="Домофон">
+                            </div>
+                            <div class="item">
+                                <input type="text" placeholder="Этаж">
+                            </div>
                         </div>
-                        <div class="item">
-                          <input disabled required type="text" placeholder="Этаж" class="mapInput">
-                        </div>
-                      </div>
                     </div>
-      
+
                     <div class="popup__adress_form_btn">
-                      <button disabled>Выбрать</button>
+                        <button>Выбрать</button>
                     </div>
                 </form>
-      
-              </div>
-        </div>
 
-        
-  
-      </div>
+            </div>
+
+        </div>
     </div>
-  </div>
+</div>
+<div class="popup" id="phone-edit" aria-hidden="true">
+
+    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+        <!-- [3] -->
+        <div role="dialog" aria-modal="true">
+
+            <div class="popup__pass-edit">
+                <h2 class="popup__pass-edit_title">
+                    Изменить номер
+                </h2>
+                <form class="popup__pass-edit_form" method="POST" action="{% url 'update_phone' user_id=user.pk %}">
+                    {% csrf_token %}
+                    <div class="popup__pass-edit_form_item">
+                        <label for="id_phone">Измените номер
+                            <input type="number" name="phone" id="id_phone" class="form-control" placeholder="phone"
+                                   required
+                                   value="{{ user.phone }}">
+                        </label>
+                    </div>
+                    <button class="popup__pass-edit_form_btn" type="submit">
+                        Сохранить
+                    </button>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="popup" id="email-edit" aria-hidden="true">
+
+    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+        <!-- [3] -->
+        <div role="dialog" aria-modal="true">
+
+            <div class="popup__pass-edit">
+                <h2 class="popup__pass-edit_title">
+                    Изменить email
+                </h2>
+                <form class="popup__pass-edit_form" method="POST" action="{% url 'update_email' user_id=user.pk %}">
+                    {% csrf_token %}
+                    <div class="popup__pass-edit_form_item">
+                        <label for="id_email">
+                            <input type="email" name="email" id="id_email" class="form-control"
+                                   placeholder="Username" required
+                                   value="{{ user.email }}">
+                        </label>
+                    </div>
+                    <button class="popup__pass-edit_form_btn" type="submit">
+                        Сохранить
+                    </button>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="popup" id="date-edit" aria-hidden="true">
+
+    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+        <!-- [3] -->
+        <div role="dialog" aria-modal="true">
+
+            <div class="popup__pass-edit">
+                <h2 class="popup__pass-edit_title">
+                    Изменить date
+                </h2>
+                <form class="popup__pass-edit_form" method="POST" action="{% url 'update_date' user_id=user.pk %}">
+                    {% csrf_token %}
+                    <div class="popup__pass-edit_form_item">
+                        <label for="id_date_birth">
+                            <input type="text" name="date_birth" id="id_date_birth" class="form-control"
+                                   placeholder="12.06.1998"
+                                   value="{{ user.date_birth }}">
+                        </label>
+                    </div>
+                    <button class="popup__pass-edit_form_btn" type="submit">
+                        Сохранить
+                    </button>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="popup" id="male-edit" aria-hidden="true">
+
+    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+        <!-- [3] -->
+        <div role="dialog" aria-modal="true">
+
+            <div class="popup__pass-edit">
+                <h2 class="popup__pass-edit_title">
+                    Изменить male
+                </h2>
+                <form class="popup__pass-edit_form" method="POST" action="{% url 'update_male' user_id=user.pk %}">
+                    {% csrf_token %}
+                    <div class="popup__pass-edit_form_item">
+                        <label for="id_male">
+                            <select name="male" id="id_male">
+                                  <option value=""></option>
+
+                                  <option value="Мужчина">Мужчина</option>
+
+                                  <option value="Женщина">Женщина</option>
+
+                                </select>
+                        </label>
+                    </div>
+                    <button class="popup__pass-edit_form_btn" type="submit">
+                        Сохранить
+                    </button>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="popup" id="username-edit" aria-hidden="true">
+
+    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+        <!-- [3] -->
+        <div role="dialog" aria-modal="true">
+
+            <div class="popup__pass-edit">
+                <h2 class="popup__pass-edit_title">
+                    Изменить имю
+                </h2>
+                <form class="popup__pass-edit_form" method="POST" action="{% url 'update_username' user_id=user.pk %}">
+                    {% csrf_token %}
+                    <div class="popup__pass-edit_form_item">
+                        <label for="id_input_username">
+                            <input type="text" name="username" id="id_input_username" class="form-control"
+                                   placeholder="Username" required
+                                   value="{{ user.username }}">
+                        </label>
+                    </div>
+                    <button class="popup__pass-edit_form_btn" type="submit">
+                        Сохранить
+                    </button>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="popup" id="pass-reset" aria-hidden="true">
+
+    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+        <!-- [3] -->
+        <div role="dialog" aria-modal="true">
+
+            <div class="popup__pass-edit">
+                <h2 class="popup__pass-edit_title">
+                    Восстановить пароль
+                </h2>
+                <form class="popup__pass-edit_form">
+                    <div class="popup__pass-edit_form_item">
+                        <label> Ваша электронная почта
+                            <input type="text">
+                        </label>
+                    </div>
+
+                    <button class="popup__pass-edit_form_btn">
+                        Отправить код
+                    </button>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="popup" id="pass-new" aria-hidden="true">
+
+    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+        <!-- [3] -->
+        <div role="dialog" aria-modal="true">
+
+            <div class="popup__pass-edit">
+                <h2 class="popup__pass-edit_title">
+                    Новый пароль
+                </h2>
+                <form class="popup__pass-edit_form">
+                    <div class="popup__pass-edit_form_item">
+                        <label> Новый пароль
+                            <input required type="password">
+                        </label>
+                    </div>
+                    <div class="popup__pass-edit_form_item">
+                        <label> Подтвердить пароль
+                            <input required type="password">
+                        </label>
+                    </div>
+
+                    <button class="popup__pass-edit_form_btn">
+                        Сохранить
+                    </button>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="popup" id="map-p" aria-hidden="true">
+
+    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+        <!-- [3] -->
+        <div role="dialog" aria-modal="true">
+
+            <div class="map">
+                <div class="map_wr">
+                    <h2 class="map__head">
+                        Введите адрес
+                    </h2>
+                    <form class="map__form">
+                        <div class="map__form_search">
+                            <input required class="map__form_search_input" type="text" id="suggest">
+                            <button type="button" class="map__form_search_btn" type="submit" id="button">Найти</button>
+                        </div>
+                        <p class="map__form_notice" id="notice">Адрес не найден</p>
+                        <div class="map__form_map" id="map">
+
+                        </div>
+                    </form>
+                </div>
+
+                <div class="popup__adress">
+
+                    <div id="street-point" class="popup__adress_head dsbl">
+                        Улица
+                    </div>
+
+                    <div class="popup__adress_scdr dsbl"><span id="city-point">Город</span>, <span id="country-point">Страна</span>
+                    </div>
+
+                    <form id="mapForm" class="popup__adress_form">
+                        <div class="popup__adress_form_main">
+                            <div class="popup__adress_form_main_head">
+                                <div class="name">Квартира/Офис</div>
+                                <label>
+                                    <input disabled type="checkbox" class="mapInput">
+                                    Частный дом
+                                </label>
+                            </div>
+                            <div class="popup__adress_form_main_input">
+                                <input disabled required type="text" class="mapInput">
+                            </div>
+                        </div>
+
+                        <div class="popup__adress_form_ex">
+                            <div class="popup__adress_form_ex_head">
+                                Укажите дополнительную информацию для курьера
+                            </div>
+                            <div class="popup__adress_form_ex_wr">
+                                <div class="item">
+                                    <input disabled required type="text" placeholder="Укажите подъезд" class="mapInput">
+                                </div>
+                                <div class="item">
+                                    <input disabled required type="text" placeholder="Домофон" class="mapInput">
+                                </div>
+                                <div class="item">
+                                    <input disabled required type="text" placeholder="Этаж" class="mapInput">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="popup__adress_form_btn">
+                            <button disabled>Выбрать</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
 <h3>EDIT</h3>
 <a href="">EDIT</a>
 {% endblock %}

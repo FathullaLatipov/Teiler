@@ -18,9 +18,14 @@ def merge_basket_if_found(sender, user, request, **kwargs):
     anonymous_basket = getattr(request, "basket", None)
     if anonymous_basket:
         try:
+            loggedin_basket = BasketModel.objects.get(
+                user=user
+            )
             for line in anonymous_basket.basketline_set.all():
+                line.basket = loggedin_basket
                 line.save()
             anonymous_basket.delete()
+            request.basket = loggedin_basket
 
         except BasketModel.DoesNotExist:
             anonymous_basket.user = user

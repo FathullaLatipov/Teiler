@@ -481,11 +481,9 @@
       </div>
     </div>
   </div>
-<script>
-    let delete_product = document.getElementById("product.pk")
-    let num =delete delete_product[product.pk]
-
-
-
-</script>
 {% endblock %}
+{% block extra_js %}
+  {% if formset %}
+    {{ formset.media }}
+  {% endif %}
+{% endblock extra_js %}
