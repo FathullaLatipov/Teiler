@@ -93,12 +93,6 @@
 
                 <span>Корзина</span>
                 <span class="ind" id="cart_count">{% get_cart_count request %}</span>
-                {% if request.basket %}
-                    <div>
-                             {{ request.basket.count }}
-                             items in basket
-                    </div>
-                {% endif %}
             </a>
             <a href="{% url 'product:wishlist' %}" class="main_btn favourite">
                 <svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">

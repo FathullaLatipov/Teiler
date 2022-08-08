@@ -2,9 +2,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, request
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView, TemplateView, CreateView, DeleteView
+from django.views.generic import ListView, DetailView, TemplateView, CreateView, DeleteView, FormView
 from django.db.models import Max, Min, Q
 from django.http import JsonResponse
 from rest_framework.response import Response
@@ -216,6 +216,7 @@ def add_to_cart(request, pk):
     data['cart_len'] = get_cart_data(cart)
     return JsonResponse(data)
 
+
 @login_required
 def create_carts(request, pk):
     product = get_object_or_404(ProductModel, pk=pk)
@@ -248,3 +249,23 @@ class OrderTemplateView(ListView):
 
 class ArticleTemplateView(TemplateView):
     template_name = 'articles.html'
+
+
+class AddressSelectionView(FormView):
+    template_name = "address_select.html"
+    form_class = forms.AddressSelectionForm
+    success_url = reverse_lazy('checkout_done')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        del self.request.session['basket_id']
+        basket = self.request.basket
+        basket.create_order(
+            form.cleaned_data['billing_address'],
+            form.cleaned_data['shipping_address']
+        )
+        return super().form_valid(form)

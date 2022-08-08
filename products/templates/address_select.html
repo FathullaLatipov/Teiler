@@ -1,0 +1,9 @@
+{% block content %}
+<h1>Select the billing/shipping addresses</h1>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">submit</button>
+    <a class="btn btn-primary" href="{% url "address_create" %}">Add a new one</a>
+</form>
+{% endblock %}

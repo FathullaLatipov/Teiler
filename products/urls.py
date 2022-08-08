@@ -1,4 +1,5 @@
 from django.urls import path, include
+from django.views.generic import TemplateView
 
 from products import views
 from products.views import ProductTemplate, ProductDetailView, AddReview, WishlistModelListView, add_to_wishlist, \
@@ -16,5 +17,7 @@ urlpatterns = [
     path('cart/', views.manage_basket, name='cart'),
     path('cart/<int:pk>/', add_to_cart, name='add-cart'),
     path('carts/<int:pk>/', create_carts, name='create-carts'),
-    path('add_to_basket/', views.add_to_basket, name="add_to_basket")
+    path('add_to_basket/', views.add_to_basket, name="add_to_basket"),
+    path("order/done/", TemplateView.as_view(template_name='order_done.html'), name="checkout_done",),
+    path("order/address_select/", views.AddressSelectionView.as_view(), name="address_select")
 ]
