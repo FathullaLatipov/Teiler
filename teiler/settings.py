@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'products',
     'help',
     'user',
+    'cart',
+    'orders',
 ]
 
 MIDDLEWARE = [
@@ -51,7 +53,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'products.middlewares.basket_middleware',
 ]
 
 ROOT_URLCONF = 'teiler.urls'
@@ -70,6 +71,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'products.context_processor.product_categories',
+                'cart.context_processor.cart',
             ],
         },
     },
@@ -140,6 +142,7 @@ CKEDITOR_CONFIGS = {
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # http://localhost:8000/accounts/password_reset/
 AUTH_USER_MODEL = 'user.CustomUser'
+CART_SESSION_ID = 'cart'
 # django_allauth
 # ACCOUNT_ACTIVATION_DAYS = 7
 #

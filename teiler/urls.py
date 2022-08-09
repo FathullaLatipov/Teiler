@@ -18,6 +18,7 @@ urlpatterns = [
     path('order/', OrderTemplateView.as_view(), name='order'),
     path('accounts/', include('user.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('cart/', include('cart.urls', namespace='cart')),
     path('profile/<int:pk>', ProfileView.as_view(), name='profile'),
     path('profilw_edit/<user_id>/edit/', edit_account_view, name='edit'),
     path('change_username/<user_id>/edit/', update_username, name='update_username'),

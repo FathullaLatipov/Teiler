@@ -215,7 +215,11 @@
                                             {% else %}
                                                   <button disabled class="btn btn_dis">Нет в наличии</button>
                                             {% endif %}
-                                            <a href="{% url 'product:add_to_basket' %}?product_id={{ product.id }}"> Add to basket</a>
+                                          <form action="{% url "cart:cart_add" product.id %}" method="post">
+                                             <p style="display: none"> {{ cart_product_form }}</p>
+                                                {% csrf_token %}
+                                                <input type="submit" value="Add to cart">
+                                                </form>
 
                                                  <a onclick="add_to_wishlist(this, {{ product.pk }})">
                                                          <div class="fav2">

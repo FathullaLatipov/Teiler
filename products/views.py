@@ -2,13 +2,13 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, request
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
-from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, DeleteView, FormView
-from django.db.models import Max, Min, Q
+from django.db.models import Max, Min
 from django.http import JsonResponse
 from rest_framework.response import Response
 
+from cart.forms import CartAddProductForm
 from products import models, forms
 from products.forms import ReviewForm
 from products.models import ProductModel
@@ -53,6 +53,7 @@ class ProductTemplate(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['cart_product_form'] = CartAddProductForm()
         context['min_price'], context['max_price'] = ProductModel.objects.aggregate(
             Min('real_price'),
             Max('real_price')
@@ -61,50 +62,15 @@ class ProductTemplate(ListView):
         return context
 
 
-def add_to_basket(request):
-    product = get_object_or_404(
-        models.ProductModel, pk=request.GET.get("product_id")
-    )
-    basket = request.basket
-    if not request.basket:
-        if request.user.is_authenticated:
-            user = request.user
-        else:
-            user = None
-        basket = models.BasketModel.objects.create(user=user)
-        request.session["basket_id"] = basket.id
+def product_detail(request, id):
+    product = get_object_or_404(ProductModel, id=id, available=True)
+    cart_product_form = CartAddProductForm()
+    context = {
+        'product': product,
+        'cart_product_form': cart_product_form
+    }
 
-    basketline, created = models.BasketLine.objects.get_or_create(
-        basket=basket, product=product
-    )
-
-    if not created:
-        basketline.quantity += 1
-        basketline.save()
-    return HttpResponseRedirect(
-        reverse('product:products')
-    )
-
-
-def manage_basket(request):
-    if not request.basket:
-        return render(request, 'basket.html', {"formset": None})
-
-    if request.method == "POST":
-        formset = forms.BasketLineFormSet(
-            request.POST, instance=request.basket
-        )
-        if formset.is_valid():
-            formset.save()
-    else:
-        formset = forms.BasketLineFormSet(
-            instance=request.basket
-        )
-
-    if request.basket.is_empty():
-        return render(request, "basket.html", {"formset": None})
-
-    return render(request, "basket.html", {"formset": formset})
+    return render(request, 'shop/product/detail.html', context)
 
 
 class ProductDetailView(DetailView):
@@ -249,23 +215,3 @@ class OrderTemplateView(ListView):
 
 class ArticleTemplateView(TemplateView):
     template_name = 'articles.html'
-
-
-class AddressSelectionView(FormView):
-    template_name = "address_select.html"
-    form_class = forms.AddressSelectionForm
-    success_url = reverse_lazy('checkout_done')
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user
-        return kwargs
-
-    def form_valid(self, form):
-        del self.request.session['basket_id']
-        basket = self.request.basket
-        basket.create_order(
-            form.cleaned_data['billing_address'],
-            form.cleaned_data['shipping_address']
-        )
-        return super().form_valid(form)

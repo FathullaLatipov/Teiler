@@ -2,34 +2,6 @@
 {% load static %}
 {% load new_tags %}
 {% block content %}
-    <h2>Basket</h2>
-    {% if formset %}
-        <p>You can adjust the quantities below.</p>
-        <form method="POST">
-            {% csrf_token %}
-            {{ formset.management_form }}
-            {% for form in formset %}
-                <p>
-                    {{ form.instance.product.title }}
-                    {{ form.instance.product.pk }}pk
-                    {{ form.instance.product.price }}
-                    <img src="{{ form.instance.product.image.url }}" alt="">
-                    {{ form }}
-                </p>
-            {% endfor %}
-            <button type="submit" class="btn btn-default">Update basket</button>
-            {% if user.is_authenticated %}
-                <a href="{% url "product:address_select" %}" class="btn">Place order</a>
-            {% else %}
-                <a href="{% url "signup" %}?next={% url "product:address_select" %}" class="btn">Signup</a>
-                <a href="{% url "login" %}?next={% url "product:address_select" %}" class="btn">Login</a>
-            {% endif %}
-        </form>
-    {% else %}
-        <p>You have no itemas in the basket.</p>
-    {% endif %}
-
-
     <main class="main">
         <div class="container">
             <div id="basket">
@@ -44,18 +16,7 @@
                                 <button class="basket__body_top_item" type="button">Удалить выбранные</button>
                             </div>
                             <ul class="basket__body_list">
-                                {% if formset %}
-                                    <form method="POST">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="basketline_set-TOTAL_FORMS" value="2"
-                                               id="id_basketline_set-TOTAL_FORMS">
-                                        <input type="hidden" name="basketline_set-INITIAL_FORMS" value="2"
-                                               id="id_basketline_set-INITIAL_FORMS">
-                                        <input type="hidden" name="basketline_set-MIN_NUM_FORMS" value="0"
-                                               id="id_basketline_set-MIN_NUM_FORMS">
-                                        <input type="hidden" name="basketline_set-MAX_NUM_FORMS" value="1000"
-                                               id="id_basketline_set-MAX_NUM_FORMS">
-                                        {% for form in formset %}
+                                        {% for product in object_list %}
                                             <li class="basket__body_item">
                                                 <div class="item__main">
                                                     <div class="item__main_input">
@@ -64,7 +25,7 @@
                                                     <div class="item__main_img">
                                                         <picture>
                                                             <source srcset="" type="image/webp">
-                                                            <img src="{{ form.instance.product.image.url }}" alt="">
+                                                            <img src="{{ product.image.url }}" alt="">
                                                         </picture>
                                                     </div>
 
@@ -72,28 +33,25 @@
                                                 <div class="item__action">
                                                     <div class="item__main_descr">
                                                         <div class="top">
-                                                            {% if form.instance.product.is_discount %}
+                                                            {% if product.is_discount %}
                                                                 <div class="discount">
-                                                                    -{{ form.instance.product.discount }}%
+                                                                    -{{ product.discount }}%
                                                                 </div>
                                                             {% endif %}
                                                             <a href="./product.html"
-                                                               class="name">{{ form.instance.product.title }}</a>
+                                                               class="name">{{ product.title }}</a>
                                                             <!--                                                    <div class="props">цвет черный, темная ночь, 332 гр</div>-->
 
                                                         </div>
                                                         <div class="bottom">
                                                             <button>В избранное</button>
-
-                                                            <input type="checkbox" name="basketline_set-0-DELETE" id="id_basketline_set-0-DELETE">
-                                                            <input type="hidden" name="basketline_set-0-id" value="46" id="id_basketline_set-0-id">
-                                                            <input type="hidden" name="basketline_set-0-basket" value="12" id="id_basketline_set-0-basket">
+                                                            <button>Удалить</button>
                                                         </div>
                                                     </div>
                                                     <div class="item__action_price">
-                                                        <div class="new">{{ form.instance.product.real_price }} ₽</div>
-                                                        {% if form.instance.product.is_discount %}
-                                                            <div class="old">{{ form.instance.product.price }} ₽</div>
+                                                        <div class="new">{{ product.real_price }} ₽</div>
+                                                        {% if product.is_discount %}
+                                                            <div class="old">{{ product.price }} ₽</div>
                                                         {% endif %}
                                                     </div>
                                                     <div class="item__action_count">
@@ -111,11 +69,8 @@
                                                         </button>
                                                     </div>
                                                 </div>
-
                                             </li>
                                         {% endfor %}
-                                    </form>
-                                {% endif %}
                                 <!-- <li class="basket__body_item">
                                     <div class="item__main">
                                         <div class="item__main_input">
@@ -160,16 +115,7 @@
                         </div>
                         <div class="basket__info">
                             <div class="basket__info_total">
-                                {% if formset %}
-                                    <form method="POST">
-                                        {% csrf_token %}
-                                        {% for form in formset %}
-                                            <div class="new">{% get_cart_sum request %} {{ form.instance.product.get_cart_sum }}
-                                                ₽
-                                            </div>
-                                        {% endfor %}
-                                    </form>
-                                {% endif %}
+                                            <div class="new">{% get_cart_sum request %} ₽</div>
                                 <!--                                    <div class="old">81098 ₽</div>-->
                             </div>
                             <ul class="basket__info_list">
@@ -535,9 +481,52 @@
             </div>
         </div>
     </div>
+
+  <h1>Your shopping cart</h1>
+  <table class="cart">
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Remove</th>
+        <th>Unit price</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in cart %}
+        {% with product=item.product %}
+          <tr>
+            <td>
+                <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
+            </td>
+            <td>{{ product.title }}</td>
+            <td>
+              <form action="{% url "cart:cart_add" product.id %}" method="POST">
+                {{ item.update_quantity_form.quantity }}
+                {{ item.update_quantity_form.update }}
+                <input type="submit" value="Update">
+                {% csrf_token %}
+              </form>
+            </td>
+            <td><a href="{% url "cart:cart_remove" product.id %}">Remove</a></td>
+            <td class="num">${{ item.price }}</td>
+            <td class="num">${{ item.total_price }}</td>
+          </tr>
+        {% endwith %}
+      {% endfor %}
+      <tr class="total">
+        <td>Total</td>
+        <td colspan="4"></td>
+        <td class="num">${{ cart.get_total_price }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="text-right">
+    <a href="{% url "product:products" %}" class="button light">Continue shopping</a>
+    <a href="#" class="button">
+      Checkout
+    </a>
+  </p>
 {% endblock %}
-{% block extra_js %}
-    {% if formset %}
-        {{ formset.media }}
-    {% endif %}
-{% endblock extra_js %}

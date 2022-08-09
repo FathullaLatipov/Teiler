@@ -13,11 +13,7 @@ urlpatterns = [
     path('products/<int:pk>/', AddReview.as_view(), name='add_review'),
     path('wishlist/', WishlistModelListView.as_view(), name='wishlist'),
     path('wishlist/<int:pk>/', add_to_wishlist, name='add-wishlist'),
-    # path('cart/', CartModelListView.as_view(), name='cart'),
-    path('cart/', views.manage_basket, name='cart'),
+    path('cart/', CartModelListView.as_view(), name='cart'),
     path('cart/<int:pk>/', add_to_cart, name='add-cart'),
     path('carts/<int:pk>/', create_carts, name='create-carts'),
-    path('add_to_basket/', views.add_to_basket, name="add_to_basket"),
-    path("order/done/", TemplateView.as_view(template_name='order_done.html'), name="checkout_done",),
-    path("order/address_select/", views.AddressSelectionView.as_view(), name="address_select")
 ]

@@ -2,12 +2,8 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-import logging
-
-from products import exceptions
-
-logger = logging.getLogger(__name__)
 
 
 class CategoryModel(models.Model):
@@ -113,6 +109,8 @@ class ProductModel(models.Model):
     def __str__(self):
         return self.title
 
+
+
     class Meta:
         verbose_name = _('product')
         verbose_name_plural = _('products')
@@ -189,165 +187,3 @@ class RegisterForm(models.Model):
     class Meta:
         verbose_name = _('register')
         verbose_name_plural = _('registers')
-
-
-class BasketModel(models.Model):
-    OPEN = 10
-    SUBMITTED = 20
-    STATUSES = ((OPEN, "Open"), (SUBMITTED, "Submitted"))
-
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True
-    )
-
-    status = models.IntegerField(choices=STATUSES, default=OPEN)
-
-    def is_empty(self):
-        return self.basketline_set.all().count() == 0
-
-    def count(self):
-        return sum(i.quantity for i in self.basketline_set.all())
-
-    def create_order(self, billing_address, shipping_address):
-        if not self.user:
-            raise exceptions.BasketException(
-                "Cannot create order without user"
-            )
-        logger.info(
-            "Creating order for basket_id=%d"",shipping_address_id=%d,billing_address_id=%d",
-            self.pk,
-            shipping_address.pk,
-            billing_address.pk,
-        )
-
-        order_data = {
-            "user": self.user,
-            "billing_name": billing_address.name,
-            "billing_address1": billing_address.address1,
-            "billing_address2": billing_address.address2,
-            "billing_zip_code": billing_address.zip_code,
-            "billing_city": billing_address.city,
-            "billing_country": billing_address.country,
-            "shipping_name": shipping_address.name,
-            "shipping_address1": shipping_address.address1,
-            "shipping_address2": shipping_address.address2,
-            "shipping_zip_code": shipping_address.zip_code,
-            "shipping_city": shipping_address.city,
-            "shipping_country": shipping_address.country,
-        }
-
-        order = OrderModel.objects.create(**order_data)
-        c = 0
-        for line in self.basketline_set.all():
-            for item in range(line.quantity):
-                order_line_data = {
-                    "order": order,
-                    "product": line.product,
-                }
-                order_line = OrderLine.objects.create(
-                    **order_line_data
-                )
-                c += 1
-        logger.info(
-            "Created order with id=%d and lines_count=%d", order.pk, c,
-        )
-
-        self.status = BasketModel.SUBMITTED
-        self.save()
-        return order
-
-
-class AddressModel(models.Model):
-
-    SUPPORTED_COUNTRIES = (
-        ("uk", "United Kingdom"),
-        ("us", "United States of America"),
-    )
-
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
-    name = models.CharField(max_length=60)
-    address1 = models.CharField("Address line 1", max_length=60)
-    address2 = models.CharField(
-        "Address line 2", max_length=60, blank=True
-    )
-    zip_code = models.CharField(
-        "ZIP / Postal code", max_length=12
-    )
-    city = models.CharField(max_length=60)
-    country = models.CharField(
-        max_length=3, choices=SUPPORTED_COUNTRIES
-    )
-
-    def __str__(self):
-        return ", ".join(
-            [
-                self.name,
-                self.address1,
-                self.address2,
-                self.zip_code,
-                self.city,
-                self.country,
-            ]
-        )
-
-
-class BasketLine(models.Model):
-    basket = models.ForeignKey(BasketModel, on_delete=models.CASCADE)
-    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)])
-
-
-class OrderModel(models.Model):
-    NEW = 10
-    PAID = 20
-    DONE = 30
-    CANCELLED = 40
-    STATUS = (
-        (NEW, "New"),
-        (PAID, "Paid"),
-        (DONE, "Done"),
-    )
-
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE
-    )
-
-    status = models.IntegerField(choices=STATUS, default=NEW)
-
-    billing_name = models.CharField(max_length=60)
-    billing_address1 = models.CharField(max_length=60)
-    billing_address2 = models.CharField(max_length=60, blank=True)
-    billing_zip_code = models.CharField(max_length=12)
-    billing_city = models.CharField(max_length=60)
-    billing_country = models.CharField(max_length=4)
-
-    shipping_name = models.CharField(max_length=60)
-    shipping_address1 = models.CharField(max_length=60)
-    shipping_address2 = models.CharField(max_length=60, blank=True)
-
-    shipping_zip_code = models.CharField(max_length=20)
-    shipping_city = models.CharField(max_length=60)
-    shipping_country = models.CharField(max_length=60)
-
-    updated_at = models.DateTimeField(auto_now=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-
-class OrderLine(models.Model):
-    NEW = 10
-    PROCESSING = 20
-    SENT = 30
-    CANCELLED = 40
-    STATUS = (
-        (NEW, "New"),
-        (PROCESSING, "Processing"),
-        (SENT, "Sent"),
-        (CANCELLED, 'Cancelled')
-    )
-    order = models.ForeignKey(
-        OrderModel, on_delete=models.CASCADE, related_name="lines"
-    )
-    product = models.ForeignKey(
-        ProductModel, on_delete=models.PROTECT
-    )
-    status = models.IntegerField(choices=STATUS, default=NEW)
