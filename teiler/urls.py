@@ -3,6 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+from cart import views
 from help.views import HelpListView
 from products.views import HomeTemplate, AboutTemplateView, ContactTemplateView, OrderTemplateView
 from user.views import ProfileView, edit_account_view, update_username, update_phone, update_email, update_date, \
@@ -27,6 +28,8 @@ urlpatterns = [
     path('change_email/<user_id>/edit/', update_email, name='update_email'),
     path('change_date/<user_id>/edit/', update_date, name='update_date'),
     path('change_male/<user_id>/edit/', update_male, name='update_male'),
+    path('add/<int:product_id>/', views.cart_add, name='cart_add'),
+    path('remove/<int:product_id>/', views.cart_remove, name='cart_remove'),
     path('', HomeTemplate.as_view())
 ]
 

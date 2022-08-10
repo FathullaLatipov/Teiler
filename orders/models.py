@@ -7,6 +7,29 @@ class OrderModel(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField()
+    Online_choices = (
+        ("online", "Картой онлайн"),
+        ("chache", "Оплата при получении"),
+    )
+    online = models.CharField(
+        max_length=50,
+        choices=Online_choices,
+        null=True,
+        blank=True
+    )
+
+    Receiving_choices = (
+        ("email", "Получить почтой"),
+        ("deliver", "Доставить курьером"),
+        ("ru_mail", "Получить из почтамата"),
+    )
+
+    upon_receipt = models.CharField(
+        max_length=100,
+        choices=Receiving_choices,
+        null=True,
+        blank=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     paid = models.BooleanField(default=False)

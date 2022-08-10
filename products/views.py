@@ -18,6 +18,16 @@ from products.utils import get_wishlist_data, get_cart_data
 class HomeTemplate(TemplateView):
     template_name = 'index.html'
 
+    def get_object(self, queryset=None):
+        obj, created = self.model.objects.get_or_create(bar='foo bar baz')
+        return obj
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cart_product_form'] = CartAddProductForm()
+
+        return context
+
 
 class ProductTemplate(ListView):
     template_name = 'products.html'
@@ -60,17 +70,6 @@ class ProductTemplate(ListView):
         ).values()
 
         return context
-
-
-def product_detail(request, id):
-    product = get_object_or_404(ProductModel, id=id, available=True)
-    cart_product_form = CartAddProductForm()
-    context = {
-        'product': product,
-        'cart_product_form': cart_product_form
-    }
-
-    return render(request, 'shop/product/detail.html', context)
 
 
 class ProductDetailView(DetailView):

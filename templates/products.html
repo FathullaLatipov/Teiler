@@ -42,14 +42,14 @@
                         <li class="path_item path_item_current"><a href="#">Акции</a></li>
                     </ul>
                 </div>
-                
+
                 <div id="products">
                     <div class="main_content" id="products">
                         <h2 class="section_title">Товары по акции</h2>
                         <div class="main_content_wr">
-                            
-    
-    
+
+
+
                             <aside class="filter">
                                 <div class="filter_close">
                                     <button>
@@ -107,7 +107,7 @@
                                             </div>
                                         </div>
                                         <div class="toggler" data-change = "1" data-drophead>Показать все</div>
-                                        
+
                                     </form>
                                 </div>
                                 <div class="range_block">
@@ -162,18 +162,18 @@
                                                 <!-- <div class="toggler" data-drophead>Показать все</div>
                                                  -->
                                             </form>
-    
+
                                         </div>
-                                        
+
                                     </div>
                                     <div class="filter_more">
                                             <button class="filter_more_btn" data-change="2" data-dropheadall>Все фильры</button>
                                         </div>
-    
-                                    
+
+
                                 </div>
                                 </div>
-                                
+
                             </aside>
                             <section class="list">
                                 <button class="filter_btn">
@@ -182,59 +182,8 @@
                                 <div class="product_list">
                                     {% for product in products %}
                                          <div class="product">
-                                        <a href="{% url 'product:single' pk=product.pk %}" class="product_img">
-                                            <picture>
-                                                <source type="image/webp">
-                                                <img src="{{ product.image.url }}" style="width: 137px;height: 158px" alt="Product">
-                                            </picture>
-                                        </a>
-                                        <div class="product_rate">
-
-                                            <div class="info">
-                                                4
-                                                <span>(13)</span>
-                                            </div>
-                                        </div>
-                                        <a href="{% url 'product:single' pk=product.pk %}" class="product_name">{{ product.title }}</a>
-                                        <div class="product_price">
-                                            <div class="actual">{{ product.real_price }} ₽</div>
-                                           {% if product.is_discount %}
-                                                 <div class="old">{{ product.price }} ₽</div>
-                                            {% endif %}
-                                        </div>
-                                        <div class="product_btn">
-                                           {% if product.is_published == True %}
-                                             <a onclick="add_to_cart(this, {{ product.pk }})" style="width: 100%">
-                                                     {% if product|in_cart:request %}
-                                                            <button class="btn orange-1" type="submit">В корзине</button>
-                                                      {% else %}
-                                                            <button class="btn" type="submit">В корзину</button>
-                                                      {% endif %}
-                                                </a>
-
-                                            {% else %}
-                                                  <button disabled class="btn btn_dis">Нет в наличии</button>
-                                            {% endif %}
-                                          <form action="{% url "cart:cart_add" product.id %}" method="post">
-                                             <p style="display: none"> {{ cart_product_form }}</p>
-                                                {% csrf_token %}
-                                                <input type="submit" value="Add to cart">
-                                                </form>
-
-                                                 <a onclick="add_to_wishlist(this, {{ product.pk }})">
-                                                         <div class="fav2">
-                                                             {% if product|in_wishlist:request %}
-                                                                  <svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.323242 1.167C0.323242 0.522484 0.846628 0 1.49226 0H8.50635C9.15198 0 9.67537 0.522483 9.67537 1.167V11.0865C9.67537 11.3051 9.553 11.5053 9.35832 11.6053C9.16364 11.7053 8.92929 11.6884 8.75112 11.5613L4.9993 8.88606L1.24749 11.5613C1.06932 11.6884 0.834973 11.7053 0.64029 11.6053C0.445607 11.5053 0.323242 11.3051 0.323242 11.0865V1.167ZM8.50635 1.167L4.65957 7.69419C4.8628 7.54927 5.13581 7.54927 5.33904 7.69419L2 8L8.50635 1.167Z" fill="#FF9700"/></svg>
-                                                              {% else %}
-                                                                  <svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 1.167C0 0.522484 0.522483 0 1.167 0H8.169C8.81351 0 9.336 0.522483 9.336 1.167V11.0865C9.336 11.3051 9.21384 11.5053 9.0195 11.6053C8.82515 11.7053 8.59121 11.6884 8.41335 11.5613L4.668 8.88606L0.922652 11.5613C0.744793 11.6884 0.510848 11.7053 0.316501 11.6053C0.122154 11.5053 0 11.3051 0 11.0865V1.167ZM8.169 1.167L1.167 1.167V9.95265L4.32885 7.69419C4.53173 7.54927 4.80427 7.54927 5.00715 7.69419L8.169 9.95265V1.167Z" fill="#242424"/></svg>
-                                                              {% endif %}
-                                                          </div>
-                                                </a>
-                                        </div>
-                                          {% if product.is_discount %}
-                                              <div class="product_ex">-{{ product.discount }}%</div>
-                                        {% endif %}
-                                    </div>
+                                            {% include 'layouts/product-block.html' %}
+                                         </div>
                                     {% endfor %}
                                 </div>
                                 <div class="list_more">
@@ -242,7 +191,7 @@
                                 </div>
                             </section>
                         </div>
-                        
+
                     </div>
                 </div>
                 <section class="reg">
@@ -257,7 +206,7 @@
         Нажимая на кнопку я подтверждаю обработку <a href="#">персональных данных</a>
     </div>
 </div>
-                    
+
                 </section>
             </div>
         </main>
@@ -265,10 +214,10 @@
         <div class="popup" id="city" aria-hidden="true">
 
     <div class="popup__layer" tabindex="-1" data-micromodal-close>
-  
+
       <!-- [3] -->
       <div role="dialog" aria-modal="true" >
-        
+
         <div class="popup__city">
           <h2 class="popup__city_title">
             Выберите город
@@ -283,19 +232,19 @@
             </div>
             <button class="popup__city_btn">Сохранить</button>
           </form>
-          
+
         </div>
-  
+
       </div>
     </div>
   </div>
         <div class="popup" id="map-p" aria-hidden="true">
 
     <div class="popup__layer" tabindex="-1" data-micromodal-close>
-  
+
       <!-- [3] -->
       <div role="dialog" aria-modal="true" >
-        
+
         <div class="map">
             <div class="map_wr">
                 <h2 class="map__head">
@@ -308,7 +257,7 @@
                     </div>
                     <p class="map__form_notice" id="notice">Адрес не найден</p>
                     <div class="map__form_map" id="map">
-    
+
                     </div>
                 </form>
             </div>
@@ -318,9 +267,9 @@
                 <div id="street-point" class="popup__adress_head dsbl">
                   Улица
                 </div>
-      
+
                 <div class="popup__adress_scdr dsbl"><span id="city-point">Город</span>, <span id="country-point">Страна</span></div>
-      
+
                 <form id="mapForm" class="popup__adress_form">
                     <div class="popup__adress_form_main">
                       <div class="popup__adress_form_main_head">
@@ -334,7 +283,7 @@
                         <input disabled required type="text" class="mapInput">
                       </div>
                     </div>
-      
+
                     <div class="popup__adress_form_ex">
                       <div class="popup__adress_form_ex_head">
                         Укажите дополнительную информацию для курьера
@@ -351,51 +300,51 @@
                         </div>
                       </div>
                     </div>
-      
+
                     <div class="popup__adress_form_btn">
                       <button disabled>Выбрать</button>
                     </div>
                 </form>
-      
+
               </div>
         </div>
 
-        
-  
+
+
       </div>
     </div>
   </div>
         <div class="popup" id="deliv" aria-hidden="true">
 
     <div class="popup__layer" tabindex="-1" data-micromodal-close>
-  
+
       <!-- [3] -->
       <div role="dialog" aria-modal="true" >
-        
+
         <div class="popup__deliv">
 
           <div class="popup__deliv_title">
             Сохраненные адреса
           </div>
 
-          
+
 
           <div class="popup__deliv_body">
              <div class="popup__deliv_body_item" data-micromodal-close>
                Отеделение Почты России №41532643
 обл. Омская, г. Омск, ул. 70 лет Октября, д. 19
 
-             </div> 
+             </div>
              <div class="popup__deliv_body_item" data-micromodal-close>
                Отеделение Почты России №41532643
 обл. Омская, г. Омск, ул. 70 лет Октября, д. 19
 
-             </div> 
+             </div>
              <div class="popup__deliv_body_item" data-micromodal-close>
                Отеделение Почты России №41532643
 обл. Омская, г. Омск, ул. 70 лет Октября, д. 19
 
-             </div> 
+             </div>
           </div>
 
           <button class="popup__deliv_btn" id="delivBtn">
@@ -403,7 +352,7 @@
           </button>
 
         </div>
-  
+
       </div>
     </div>
   </div>
