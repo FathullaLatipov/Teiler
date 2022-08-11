@@ -188,18 +188,22 @@ h1 { font-size: 1.5em; margin: 10px; }
                                             <div class="old">{{ object.price }} ₽</div>
                                             {% endif %}
                                         </div>
-                                         {% if object.is_published == True %}
-                                             <a onclick="add_to_object(this, {{ object.pk }})" style="width: 100%">
-                                                     {% if object|in_cart:request %}
-                                                          <button type="submit" class="order__price_add btn orange-1">Добавлено в корзину</button>
-                                                      {% else %}
-                                                           <button type="submit" class="order__price_add btn">Добавить в корзину</button>
-                                                      {% endif %}
-                                                </a>
-                                            {% else %}
-                                                  <button disabled class="btn btn_dis">Нет в наличии</button>
-                                            {% endif %}
-
+{#                                         {% if object.is_published == True %}#}
+{#                                             <a onclick="add_to_object(this, {{ object.pk }})" style="width: 100%">#}
+{#                                                     {% if object|in_cart:request %}#}
+{#                                                          <button type="submit" class="order__price_add btn orange-1">Добавлено в корзину</button>#}
+{#                                                      {% else %}#}
+{#                                                           <button type="submit" class="order__price_add btn">Добавить в корзину</button>#}
+{#                                                      {% endif %}#}
+{#                                                </a>#}
+{#                                            {% else %}#}
+{#                                                  <button disabled class="btn btn_dis">Нет в наличии</button>#}
+{#                                            {% endif %}#}
+                                           <form action="{% url "cart:cart_add" object.id %}?next={{ request.path }}" method="post">
+                                                <p style="display: none"> {{ cart_product_form }}</p>
+                                                {% csrf_token %}
+                                                <input type="submit" value="Add to cart">
+                                            </form>
 
 
                                         <div class="order__price_delinfo">Стандартная доставка</div>

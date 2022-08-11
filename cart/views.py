@@ -32,3 +32,5 @@ def cart_detail(request):
                      'update': True})
     context = {'cart': cart}
     return render(request, 'cart/detail.html', context)
+
+

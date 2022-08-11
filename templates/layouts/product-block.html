@@ -49,29 +49,34 @@
         {% endif %}
     </div>
     <div class="product_btn">
-        {% if product.is_published == True %}
-            <a onclick="add_to_cart(this, {{ product.pk }})" style="width: 100%">
-                {% if product|in_cart:request %}
-                    <button class="btn orange-1" type="submit">В корзине</button>
-                {% else %}
-                    <button class="btn" type="submit">В корзину</button>
-                {% endif %}
-            </a>
-
-        {% else %}
-            <button disabled class="btn btn_dis">Нет в наличии</button>
-        {% endif %}
+{#        {% if product.is_published == True %}#}
+{#            <a onclick="add_to_cart(this, {{ product.pk }})" style="width: 100%">#}
+{#                {% if product|in_cart:request %}#}
+{#                    <button class="btn orange-1" type="submit">В корзине</button>#}
+{#                {% else %}#}
+{#                    <button class="btn" type="submit">В корзину</button>#}
+{#                {% endif %}#}
+{#            </a>#}
+{##}
+{#        {% else %}#}
+{#            <button disabled class="btn btn_dis">Нет в наличии</button>#}
+{#        {% endif %}#}
 {#        <form action="{% url "cart:cart_add" product.id %}" method="post">#}
 {#            <p style="display: none"> {{ cart_product_form }}</p>#}
 {#            {% csrf_token %}#}
 {#            <input type="submit" value="Add to cart">#}
 {#        </form>#}
-         <form action="{% url "cart:cart_add" product.id %}?next={{ request.path }}" method="post">
-            <p style="display: none"> {{ cart_product_form }}</p>
-            {% csrf_token %}
-            <input type="submit" value="Add to cart">
-        </form>
-
+            {% if product.is_published == True %}
+                <form action="{% url "cart:cart_add" product.id %}?next={{ request.path }}" method="post">
+                    <p style="display: none"> {{ cart_product_form }}</p>
+                    {% csrf_token %}
+                    <input class="btn" type="submit" value="Add to cart">
+                </form>
+                 <a href="{% url 'cart:cart_remove' product.id %}?next={{ request.path }}">Remove</a>
+            {% else %}
+                 <button disabled class="btn btn_dis">Нет в наличии</button>
+            {% endif %}
+{#                {{ cart.product_ids }}#}
 
         <a onclick="add_to_wishlist(this, {{ product.pk }})">
             <div class="fav2">

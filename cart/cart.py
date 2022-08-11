@@ -77,3 +77,8 @@ class Cart(object):
         del self.session[settings.CART_SESSION_ID]
         self.save()
 
+    def product_ids(self):
+        ids = [id for id in self.cart.keys()]
+        return list(ids)
+
+

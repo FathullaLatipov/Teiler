@@ -293,4 +293,351 @@
             </section>
         </div>
     </main>
+
+<div class="popup" id="login" aria-hidden="true">
+
+    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+      <!-- [3] -->
+      <div role="dialog" aria-modal="true" >
+
+        <div class="popup__auth">
+          <div class="popup__auth_hi">Здравствуйте!</div>
+          <div class="popup__auth_title">
+            Войдите в личный кабинет
+          </div>
+
+          <form class="popup__auth_form">
+              <div class="popup__auth_form_item mail">
+                  <label>
+                    E-Mail
+                    <div class="inp">
+                      <input type="email" placeholder="e.g.: elonmusk@mars.com ">
+                    </div>
+                  </label>
+              </div>
+
+              <div class="popup__auth_form_item pass">
+                <label>
+                    Ваш пароль
+                  <div class="inp">
+                    <input type="password" placeholder="e.g.: X Æ A-12 ">
+                  </div>
+                </label>
+            </div>
+
+              <div class="popup__auth_form_btn">
+                  <button class="btn">Войти</button>
+              </div>
+          </form>
+
+          <div class="popup__auth_ex">
+            Нет аккаунта? <button id="regButton">Зарегистрироваться →</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+    <div class="popup" id="signin" aria-hidden="true">
+
+    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+      <!-- [3] -->
+      <div role="dialog" aria-modal="true" >
+
+        <div class="popup__auth">
+          <div class="popup__auth_hi">Здравствуйте!</div>
+          <div class="popup__auth_title">
+            Зарегистрируйтесь,что бы войти в личный кабинет
+          </div>
+
+          <form class="popup__auth_form">
+              <div class="popup__auth_form_item mail">
+                  <label>
+                    E-Mail
+                    <div class="inp">
+                      <input type="email" placeholder="e.g.: elonmusk@mars.com ">
+                    </div>
+                  </label>
+              </div>
+
+              <div class="popup__auth_form_item pass">
+                <label>
+                    Ваш пароль
+                  <div class="inp">
+                    <input type="password" placeholder="e.g.: X Æ A-12 ">
+                  </div>
+                </label>
+            </div>
+
+              <div class="popup__auth_form_btn">
+                  <button class="btn">Зарегистрироваться</button>
+              </div>
+          </form>
+
+          <div class="popup__auth_ex">
+            Есть аккаунт? <button id="logButton">Войти →</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+    <div class="popup" id="deliv" aria-hidden="true">
+
+    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+      <!-- [3] -->
+      <div role="dialog" aria-modal="true" >
+
+        <div class="popup__deliv">
+
+          <div class="popup__deliv_title">
+            Сохраненные адреса
+          </div>
+
+
+
+          <div class="popup__deliv_body">
+             <div class="popup__deliv_body_item" data-micromodal-close>
+               Отеделение Почты России №41532643
+обл. Омская, г. Омск, ул. 70 лет Октября, д. 19
+
+             </div>
+             <div class="popup__deliv_body_item" data-micromodal-close>
+               Отеделение Почты России №41532643
+обл. Омская, г. Омск, ул. 70 лет Октября, д. 19
+
+             </div>
+             <div class="popup__deliv_body_item" data-micromodal-close>
+               Отеделение Почты России №41532643
+обл. Омская, г. Омск, ул. 70 лет Октября, д. 19
+
+             </div>
+          </div>
+
+          <button class="popup__deliv_btn" id="delivBtn">
+              Выбрать адрес доставки
+          </button>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+    <div class="popup" id="personal" aria-hidden="true">
+
+    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+      <!-- [3] -->
+      <div role="dialog" aria-modal="true" >
+
+        <div class="popup__personal">
+
+          <div class="popup__personal_title">
+            Ваши данные
+          </div>
+
+          <form class="popup__personal_form">
+            <div class="popup__personal_form_item name">
+              <div class="popup__personal_form_item_name">Имя</div>
+              <label>
+                <input type="text" placeholder="Иван">
+              </label>
+            </div>
+
+            <div class="popup__personal_form_item secname">
+              <div class="popup__personal_form_item_name">Фамилия</div>
+              <label>
+                <input type="text" placeholder="Иванов">
+              </label>
+            </div>
+
+            <div class="popup__personal_form_item phone">
+              <div class="popup__personal_form_item_name">
+                Ваш телефон
+                <button>Отправить код</button>
+              </div>
+              <label>
+                <input type="text" placeholder="7 999 999 99 99">
+              </label>
+            </div>
+
+            <div class="popup__personal_form_item mail">
+              <div class="popup__personal_form_item_name">Электронная почта</div>
+              <label>
+                <input type="email" placeholder="example@mail.com">
+              </label>
+            </div>
+
+            <button class="popup__personal_form_btn">
+              Войти
+            </button>
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+    <div class="popup" id="adress" aria-hidden="true">
+
+    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+      <!-- [3] -->
+      <div role="dialog" aria-modal="true" >
+
+        <div class="popup__adress">
+
+          <div class="popup__adress_head">
+            Улица, 1 , 1
+          </div>
+
+          <div class="popup__adress_scdr">Санкт-Петербург, Россия</div>
+
+          <form class="popup__adress_form">
+              <div class="popup__adress_form_main">
+                <div class="popup__adress_form_main_head">
+                  <div class="name">Квартира/Офис</div>
+                  <label>
+                    <input type="checkbox">
+                    Частный дом
+                  </label>
+                </div>
+                <div class="popup__adress_form_main_input">
+                  <input type="text">
+                </div>
+              </div>
+
+              <div class="popup__adress_form_ex">
+                <div class="popup__adress_form_ex_head">
+                  Укажите дополнительную информацию для курьера
+                </div>
+                <div class="popup__adress_form_ex_wr">
+                  <div class="item">
+                    <input type="text" placeholder="Укажите подъезд">
+                  </div>
+                  <div class="item">
+                    <input type="text" placeholder="Домофон">
+                  </div>
+                  <div class="item">
+                    <input type="text" placeholder="Этаж">
+                  </div>
+                </div>
+              </div>
+
+              <div class="popup__adress_form_btn">
+                <button>Выбрать</button>
+              </div>
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+    <div class="popup" id="city" aria-hidden="true">
+
+    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+      <!-- [3] -->
+      <div role="dialog" aria-modal="true" >
+
+        <div class="popup__city">
+          <h2 class="popup__city_title">
+            Выберите город
+          </h2>
+          <form class="popup__city_form">
+            <div class="popup__city_search">
+              <select class="popup__city_search_select">
+                <option value="Москва">Москва</option>
+                <option value="Санкт-Петербург">Санкт-Петербург</option>
+                <option value="Екатеринбург">Екатеринбург</option>
+              </select>
+            </div>
+            <button class="popup__city_btn">Сохранить</button>
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+    <div class="popup" id="map-p" aria-hidden="true">
+
+    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+      <!-- [3] -->
+      <div role="dialog" aria-modal="true" >
+
+        <div class="map">
+            <div class="map_wr">
+                <h2 class="map__head">
+                    Введите адрес
+                </h2>
+                <form class="map__form">
+                    <div class="map__form_search">
+                        <input required class="map__form_search_input" type="text" id="suggest">
+                        <button type="button" class="map__form_search_btn" type="submit" id="button">Найти</button>
+                    </div>
+                    <p class="map__form_notice" id="notice">Адрес не найден</p>
+                    <div class="map__form_map" id="map">
+
+                    </div>
+                </form>
+            </div>
+
+            <div class="popup__adress">
+
+                <div id="street-point" class="popup__adress_head dsbl">
+                  Улица
+                </div>
+
+                <div class="popup__adress_scdr dsbl"><span id="city-point">Город</span>, <span id="country-point">Страна</span></div>
+
+                <form id="mapForm" class="popup__adress_form">
+                    <div class="popup__adress_form_main">
+                      <div class="popup__adress_form_main_head">
+                        <div class="name">Квартира/Офис</div>
+                        <label>
+                          <input disabled type="checkbox" class="mapInput">
+                          Частный дом
+                        </label>
+                      </div>
+                      <div class="popup__adress_form_main_input">
+                        <input disabled required type="text" class="mapInput">
+                      </div>
+                    </div>
+
+                    <div class="popup__adress_form_ex">
+                      <div class="popup__adress_form_ex_head">
+                        Укажите дополнительную информацию для курьера
+                      </div>
+                      <div class="popup__adress_form_ex_wr">
+                        <div class="item">
+                          <input disabled required type="text" placeholder="Укажите подъезд" class="mapInput">
+                        </div>
+                        <div class="item">
+                          <input disabled required type="text" placeholder="Домофон" class="mapInput">
+                        </div>
+                        <div class="item">
+                          <input disabled required type="text" placeholder="Этаж" class="mapInput">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="popup__adress_form_btn">
+                      <button disabled>Выбрать</button>
+                    </div>
+                </form>
+
+              </div>
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
 {% endblock %}

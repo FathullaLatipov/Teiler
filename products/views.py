@@ -12,6 +12,7 @@ from cart.forms import CartAddProductForm
 from products import models, forms
 from products.forms import ReviewForm
 from products.models import ProductModel
+from cart.cart import Cart
 from products.utils import get_wishlist_data, get_cart_data
 
 
@@ -37,7 +38,7 @@ class ProductTemplate(ListView):
         obj, created = self.model.objects.get_or_create(bar='foo bar baz')
         return obj
 
-    def get_queryset(self):
+    def get_queryset(self, ):
         q = self.request.GET.get('q', '')
         price = self.request.GET.get('price')
         category = self.request.GET.get('category')
@@ -46,7 +47,7 @@ class ProductTemplate(ListView):
         filters = {}
 
         if q:
-            filters['title__contains'] = q
+            filters['title__icontains'] = q
 
         if category:
             filters['category_id'] = category
@@ -64,6 +65,7 @@ class ProductTemplate(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['cart_product_form'] = CartAddProductForm()
+        context['cart'] = Cart(self.request)
         context['min_price'], context['max_price'] = ProductModel.objects.aggregate(
             Min('real_price'),
             Max('real_price')

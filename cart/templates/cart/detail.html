@@ -52,6 +52,11 @@
     {#      Checkout#}
     {#    </a>#}
     {#  </p>#}
+{% if cart|length == 0 %}
+    <h3>Not found</h3>
+{% else %}
+    <h3>Cart</h3>
+{% endif %}
 
     <main class="main">
         <div class="container">
@@ -95,7 +100,15 @@
                                                         <a href="{% url 'product:single' pk=product.pk %}" class="name">{{ product.title }}</a>
                                                     </div>
                                                     <div class="bottom">
-                                                        <button>В избранное</button>
+                                                         <a onclick="add_to_wishlist(this, {{ product.pk }})">
+                                                                        <div class="fav2">
+                                                                            {% if product|in_wishlist:request %}
+                                                                               <button>В избранное</button>
+                                                                            {% else %}
+                                                                               <button>В избранном</button>
+                                                                            {% endif %}
+                                                                        </div>
+                                                                    </a>
                                                         <a href="{% url "cart:cart_remove" product.id %}?next={{ request.path }}">
                                                             <button>Удалить</button>
                                                         </a>
@@ -237,4 +250,28 @@
             </section>
         </div>
     </main>
+
+<script>
+    function add_to_wishlist(element, pk) {
+        $.getJSON('/products/' + "wishlist/" + pk, function (data) {
+            if (!data.status) {
+               $('#message').append(`<div style="padding:5px">
+                        <div id="inner-message" class="alert alert-error">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            Error
+                        </div>
+                    </div>`);
+            } else {
+                if (data.added) {
+                    $('#message');
+                    element.innerHTML = '<div class="fav2"><button>В избранное</button></div>'
+                } else {
+                    $('#message');
+                     element.innerHTML = '<div class="fav2"><button>В избранном</button></div>'
+                }
+                  $('#like_count').html(data.wishlist_len);
+            }
+        });
+    }
+</script>
 {% endblock %}
