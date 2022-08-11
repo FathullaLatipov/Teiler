@@ -9,16 +9,17 @@
                 <li>
                     {{ item.quantity }}X {{ item.product.title }}
                     <span>${{ item.total_price }}</span>
+                    <img src="{{ item.product.image.url }}" alt="">
                 </li>
             {% endfor %}
         </ul>
         <p>Total: ${{ cart.get_total_price }}</p>
     </div>
-    <form action="." method="post" class="order-form">
-        {% csrf_token %}
-        {{ form.as_table }}
-        <p><input type="submit" value="Place order"></p>
-    </form>
+{#    <form action="." method="post" class="order-form">#}
+{#        {% csrf_token %}#}
+{#        {{ form.as_table }}#}
+{#        <p><input type="submit" value="Place order"></p>#}
+{#    </form>#}
 
   <h3>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus enim necessitatibus non odio pariatur reprehenderit sunt, voluptatibus. Placeat, quam totam?</h3>
 
@@ -39,10 +40,14 @@
                                 <div class="info">
                                     <div class="info__part">
                                         <h3 class="info__part_title">Способ оплаты</h3>
-                                        <form class="info__part_form">
-                                            <div class="item">
-                                                <input id="card" type="radio" name="payment">
-                                                <label for="card">
+                                        <form action="." method="post" class="info__part_form">
+                                             {% csrf_token %}
+                                            <label for="id_online_0" style="display: none">
+                                                <input type="radio" name="online" value="" id="id_online_0" checked="">---------
+                                            </label>
+                                            <div class="item" id="id_online">
+                                                <input id="id_online_1" type="radio" name="online">
+                                                <label for="id_online_1">
                                                     <svg width="10" height="8" viewBox="0 0 10 8" fill="none"
                                                         xmlns="http://www.w3.org/2000/svg">
                                                         <path
@@ -55,8 +60,8 @@
                                                 </label>
                                             </div>
                                             <div class="item">
-                                                <input id="cash" type="radio" name="payment">
-                                                <label for="cash">
+                                                <input id="id_online_2" type="radio" name="chache">
+                                                <label for="id_online_2">
                                                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                         xmlns="http://www.w3.org/2000/svg">
                                                         <path
@@ -73,10 +78,14 @@
 
                                     <div class="info__part">
                                         <h3 class="info__part_title">Способ получения</h3>
-                                        <form class="info__part_form">
+                                        <form action="." method="post" class="info__part_form">
+                                            {% csrf_token %}
+                                            <label for="id_upon_receipt_0" style="display: none">
+                                                <input type="radio" name="upon_receipt" value="" id="id_upon_receipt_0" checked="">---------
+                                            </label>
                                             <div class="item">
-                                                <input id="post" type="radio" name="method">
-                                                <label for="post">
+                                                <input id="id_upon_receipt_1" type="radio" name="upon_receipt">
+                                                <label for="id_upon_receipt_1">
                                                     <svg width="10" height="10" viewBox="0 0 10 10" fill="none"
                                                         xmlns="http://www.w3.org/2000/svg">
                                                         <path
@@ -87,8 +96,8 @@
                                                     Получить почтой</label>
                                             </div>
                                             <div class="item">
-                                                <input id="cur" type="radio" name="method">
-                                                <label for="cur">
+                                                <input id="id_upon_receipt_2" type="radio" name="upon_receipt">
+                                                <label for="id_upon_receipt_2">
                                                     <svg width="11" height="12" viewBox="0 0 11 12" fill="none"
                                                         xmlns="http://www.w3.org/2000/svg">
                                                         <path
@@ -99,8 +108,8 @@
                                                     Доставить курьером</label>
                                             </div>
                                             <div class="item">
-                                                <input id="postm" type="radio" name="method">
-                                                <label for="postm">
+                                                <input id="id_upon_receipt_3" type="radio" name="upon_receipt">
+                                                <label for="id_upon_receipt_3">
                                                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                         xmlns="http://www.w3.org/2000/svg">
                                                         <path
@@ -219,20 +228,27 @@
                                             <div class="all">
                                                 Ваш заказ
                                             </div>
-                                            <div class="all_value">{{ products.count }} товара • {% get_cart_sum request %} гр</div>
+                                            <div class="all_value">{% get_cart_count request %} товара</div>
                                         </div>
                                         <div class="action__panel_list_item">
                                             <div class="price">
-                                                Товары <span>({{ products.count }})</span>
+                                                Товары <span>({% get_cart_count request %})</span>
+                                                     {% for item in cart %}
+                                                      <li style="margin-top: 7px">({{ item.quantity }}) {{ item.product.title }} = {{ item.total_price }}  ₽</li>
+                                                    {% endfor %}
                                             </div>
-                                            <div class="price_value">{% get_cart_sum request %} ₽</div>
+{#                                            <div class="price_value">{% get_cart_sum request %} ₽</div>#}
                                         </div>
 
                                         <div class="action__panel_list_item">
                                             <div class="dsc">
-                                                Скидка <a href="#">Подробнее</a>
+                                                Скидка
                                             </div>
-                                            <div class="dsc_value">-1094 ₽</div>
+                                             {% if product.is_discount %}
+                                                 <div class="dsc_value">{{ product.price }} ₽</div>
+                                             {% else %}
+                                                 <div class="dsc_value">0 ₽</div>
+                                            {% endif %}
                                         </div>
 
                                         <div class="action__panel_list_item">
@@ -247,7 +263,7 @@
                                     <div class="action__panel_total">
                                         <div class="name">Итого</div>
                                         <div class="price">
-                                            <div class="new">{% get_cart_sum request %} ₽ </div>
+                                            <div class="new">{{ cart.get_total_price }} ₽ </div>
 <!--                                            <div class="old">81098 ₽</div>-->
                                         </div>
                                     </div>
@@ -439,39 +455,39 @@
             Ваши данные
           </div>
 
-          <form class="popup__personal_form">
+          <form action="." method="post" class="popup__personal_form">
+              {% csrf_token %}
             <div class="popup__personal_form_item name">
               <div class="popup__personal_form_item_name">Имя</div>
-              <label>
-                <input type="text" placeholder="Иван">
+              <label for="id_first_name">
+                <input type="text" name="first_name" maxlength="50" required="" id="id_first_name" placeholder="Иван">
               </label>
             </div>
 
             <div class="popup__personal_form_item secname">
               <div class="popup__personal_form_item_name">Фамилия</div>
-              <label>
-                <input type="text" placeholder="Иванов">
+              <label for="id_last_name">
+                <input type="text" name="last_name" maxlength="50" required="" id="id_last_name" placeholder="Иванов">
               </label>
             </div>
 
             <div class="popup__personal_form_item phone">
               <div class="popup__personal_form_item_name">
                 Ваш телефон
-                <button>Отправить код</button>
               </div>
-              <label>
-                <input type="text" placeholder="7 999 999 99 99">
+              <label for="id_phone">
+                <input type="number" name="phone" min="0" required="" id="id_phone" placeholder="9 999 999 99 99">
               </label>
             </div>
 
             <div class="popup__personal_form_item mail">
               <div class="popup__personal_form_item_name">Электронная почта</div>
-              <label>
-                <input type="email" placeholder="example@mail.com">
+              <label for="id_email">
+                <input type="email" name="email" maxlength="254" required="" id="id_email" placeholder="example@mail.com">
               </label>
             </div>
 
-            <button class="popup__personal_form_btn">
+            <button class="popup__personal_form_btn" type="submit">
               Войти
             </button>
           </form>

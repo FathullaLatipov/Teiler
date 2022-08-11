@@ -6,6 +6,7 @@ from products.models import ProductModel
 class OrderModel(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+    phone = models.PositiveIntegerField(null=True)
     email = models.EmailField()
     Online_choices = (
         ("online", "Картой онлайн"),
