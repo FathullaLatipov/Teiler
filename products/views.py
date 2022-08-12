@@ -81,6 +81,8 @@ class ProductDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['cart_product_form'] = CartAddProductForm()
+        context['cart'] = Cart(self.request)
         context['related'] = ProductModel.objects.order_by('-pk')
         return context
 

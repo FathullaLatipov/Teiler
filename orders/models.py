@@ -4,10 +4,10 @@ from products.models import ProductModel
 
 
 class OrderModel(models.Model):
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    phone = models.PositiveIntegerField(null=True)
-    email = models.EmailField()
+    first_name = models.CharField(max_length=50,null=True, blank=True)
+    last_name = models.CharField(max_length=50,null=True, blank=True)
+    phone = models.PositiveIntegerField(null=True,blank=True)
+    email = models.EmailField(null=True,blank=True)
     Online_choices = (
         ("online", "Картой онлайн"),
         ("chache", "Оплата при получении"),
@@ -26,7 +26,7 @@ class OrderModel(models.Model):
     )
 
     upon_receipt = models.CharField(
-        max_length=100,
+        max_length=200,
         choices=Receiving_choices,
         null=True,
         blank=True

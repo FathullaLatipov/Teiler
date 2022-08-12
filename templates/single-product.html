@@ -199,10 +199,12 @@ h1 { font-size: 1.5em; margin: 10px; }
 {#                                            {% else %}#}
 {#                                                  <button disabled class="btn btn_dis">Нет в наличии</button>#}
 {#                                            {% endif %}#}
-                                           <form action="{% url "cart:cart_add" object.id %}?next={{ request.path }}" method="post">
-                                                <p style="display: none"> {{ cart_product_form }}</p>
+                                            <p>{{ product.id }}</p>
+                                            <p>{{ cart }}</p>
+                                           <form action="{% url "cart:cart_add" product.id %}" method="post">
+                                                <p>{{ cart_product_form }}</p>
                                                 {% csrf_token %}
-                                                <input type="submit" value="Add to cart">
+                                                <input class="btn" type="submit" value="Add to cart">
                                             </form>
 
 
