@@ -6,8 +6,9 @@ from django.urls import path, include
 from cart import views
 from help.views import HelpListView
 from products.views import HomeTemplate, AboutTemplateView, ContactTemplateView, OrderTemplateView
-from user.views import ProfileView, edit_account_view, update_username, update_phone, update_email, update_date, \
+from user.views import edit_account_view, update_username, update_phone, update_email, update_date, \
     update_male
+from orders.views import user_order_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -21,7 +22,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('cart/', include('cart.urls', namespace='cart')),
     path('orders/', include('orders.urls', namespace='orders')),
-    path('profile/<int:pk>', ProfileView.as_view(), name='profile'),
+    path('profile/<int:user_pk>', user_order_view, name='profile'),
     path('profilw_edit/<user_id>/edit/', edit_account_view, name='edit'),
     path('change_username/<user_id>/edit/', update_username, name='update_username'),
     path('change_phone/<user_id>/edit/', update_phone, name='update_phone'),

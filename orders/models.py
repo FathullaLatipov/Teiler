@@ -1,6 +1,7 @@
 from django.db import models
 
 from products.models import ProductModel
+from user.models import CustomUser
 
 
 class OrderModel(models.Model):
@@ -31,6 +32,23 @@ class OrderModel(models.Model):
         null=True,
         blank=True
     )
+
+    Order_choices = (
+        ("process", "В процессе"),
+        ("cancel", "Заказ отменен"),
+        ("delivery", "Выполняется доставка"),
+        ("success", "Товар получен"),
+    )
+
+    user_order = models.CharField(
+        max_length=200,
+        choices=Order_choices,
+        null=True,
+        default="process",
+        blank=True
+    )
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True, related_name='user_order')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     paid = models.BooleanField(default=False)

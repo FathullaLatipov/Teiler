@@ -15,11 +15,11 @@
         </ul>
         <p>Total: ${{ cart.get_total_price }}</p>
     </div>
-{#        <form action="." method="post" class="order-form">#}
-{#            {% csrf_token %}#}
-{#            {{ form.as_table }}#}
-{#            <p><input type="submit" value="Place order"></p>#}
-{#        </form>#}
+        <form action="." method="post" class="order-form">
+            {% csrf_token %}
+            {{ form.as_table }}
+            <p><input type="submit" value="Place order"></p>
+        </form>
 
     <h3>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus enim necessitatibus non odio pariatur
         reprehenderit sunt, voluptatibus. Placeat, quam totam?</h3>

@@ -14,9 +14,6 @@ class SignupView(CreateView):
     template_name = 'registration/signup.html'
 
 
-class ProfileView(TemplateView):
-    template_name = 'lk.html'
-
 
 def edit_account_view(request, *args, **kwargs):
     if not request.user.is_authenticated:
