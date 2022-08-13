@@ -15,11 +15,11 @@
         </ul>
         <p>Total: ${{ cart.get_total_price }}</p>
     </div>
-        <form action="." method="post" class="order-form">
-            {% csrf_token %}
-            {{ form.as_table }}
-            <p><input type="submit" value="Place order"></p>
-        </form>
+{#        <form action="." method="post" class="order-form">#}
+{#            {% csrf_token %}#}
+{#            {{ form.as_table }}#}
+{#            <p><input type="submit" value="Place order"></p>#}
+{#        </form>#}
 
     <h3>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus enim necessitatibus non odio pariatur
         reprehenderit sunt, voluptatibus. Placeat, quam totam?</h3>
@@ -40,14 +40,14 @@
                                     <div class="info">
                                         <div class="info__part" id="id_online">
                                             <h3 class="info__part_title">Способ оплаты</h3>
-                                            <form action="." method="post" class="info__part_form">
+                                            <div  class="info__part_form">
                                                 <label for="id_online_0" style="display: none">
                                                     <input type="radio" name="online" value="" id="id_online_0"
                                                            checked="">---------
                                                 </label>
                                                 <div class="item">
+                                                   <input id="id_online_1" type="radio" value="online" name="online">
                                                     <label for="id_online_1">
-                                                        <input id="id_online_1" type="radio" value="online" name="online">
                                                         <svg width="10" height="8" viewBox="0 0 10 8" fill="none"
                                                              xmlns="http://www.w3.org/2000/svg">
                                                             <path
@@ -59,8 +59,8 @@
                                                     </label>
                                                 </div>
                                                 <div class="item">
-                                                    <label for="id_online_2">
                                                     <input id="id_online_2" type="radio" value="chache" name="online">
+                                                       <label for="id_online_2">
                                                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                              xmlns="http://www.w3.org/2000/svg">
                                                             <path
@@ -72,11 +72,11 @@
 
                                                     </label>
                                                 </div>
-                                            </form>
+                                            </div>
                                         </div>
                                         <div class="info__part" id="id_upon_receipt">
                                             <h3 class="info__part_title">Способ получения</h3>
-                                            <form action="." method="post" class="info__part_form">
+                                            <div class="info__part_form">
                                                 <label for="id_upon_receipt_0" style="display: none">
                                                     <input type="radio" name="upon_receipt" value="" id="id_upon_receipt_0" checked="">---------
                                                 </label>
@@ -122,7 +122,7 @@
 
                                                        </label>
                                                 </div>
-                                            </form>
+                                            </div>
                                             {#                                        <div class="info__part_adress" data-micromodal-trigger="deliv">#}
                                             {#                                            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"#}
                                             {#                                                xmlns="http://www.w3.org/2000/svg">#}
@@ -149,8 +149,13 @@
                                                             fill="#000"/>
                                                 </svg>
                                                 <div class="body">
-                                                    <span class="name">Иванов Иван </span>
-                                                    <span class="tel">+7 999 082 21 29</span>
+                                                    {%  if user.is_authenticated %}
+                                                        <span class="name">{{ user.username }}</span>
+                                                        <span class="tel">+{{ user.phone }}</span>
+                                                    {% else %}
+                                                         <span class="name">Иванов Иван </span>
+                                                        <span class="tel">+7 999 082 21 29</span>
+                                                    {% endif %}
                                                 </div>
                                             </div>
 
@@ -226,7 +231,7 @@
                                 </div>
                                 <div class="order__content_action">
                                     <div class="action__panel">
-                                       <button class="btn action__panel_btn" type="submit">Оплатить онлайн</button>
+                                     <p><input class="btn action__panel_btn" type="submit" value="Place order"></p>
                                         <div class="action__panel_policy">
                                             Нажимая на кнопку, вы соглашаетесь с <a href="#">Условиями обработки перс.
                                             данных</a>, а также с <a href="#">Условиями продажи</a>
