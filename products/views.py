@@ -75,14 +75,13 @@ class ProductTemplate(ListView):
 
 
 class ProductDetailView(DetailView):
-    template_name = 'single-product.html'
+    template_name = 'shop/product/detail.html'
     model = ProductModel
     context_object_name = 'product'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['cart_product_form'] = CartAddProductForm()
-        context['cart'] = Cart(self.request)
         context['related'] = ProductModel.objects.order_by('-pk')
         return context
 

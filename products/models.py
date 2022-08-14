@@ -83,6 +83,8 @@ class ProductModel(models.Model):
         verbose_name=_('colors')
     )
     season = models.CharField(max_length=200, verbose_name=_('season'))
+    name_customer = models.CharField(max_length=200, verbose_name=_('customer'), null=True)
+    number_name_customer = models.CharField(max_length=200, verbose_name=_('number_name_customer'), null=True)
     real_price = models.FloatField(verbose_name=_('real price'), default=0)
     is_published = models.BooleanField(default=False)
     is_buy = models.BooleanField(default=False)
@@ -146,6 +148,18 @@ class RatingStar(models.Model):
         verbose_name = "star_rating"
         verbose_name_plural = "star_ratings"
         ordering = ["-value"]
+
+
+class ProductCustomModel(models.Model):
+    product = models.ForeignKey(ProductModel, on_delete=models.PROTECT, related_name='customers',
+                                verbose_name=_('product'), null=True, blank=True)
+
+    custom = models.CharField(max_length=200, verbose_name=_('custom'))
+    number = models.PositiveIntegerField(verbose_name=_('number'), null=True)
+
+    class Meta:
+        verbose_name = _('product custom')
+        verbose_name_plural = _('product customers')
 
 
 class ProductImageModel(models.Model):
