@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.db.models import Sum
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView
 
 from products.models import ProductModel
@@ -35,7 +36,9 @@ def order_create(request):
 def user_order_view(request, user_pk):
     user = CustomUser.objects.get(id=user_pk)
     user_orders = user.user_order.all()
+    order_items = OrderItem.objects.annotate(num_products=Sum('product'))
+    print(order_items)
 
-    # for item in user_orders.order_items.all():
-    #     print(item)
-    return render(request, 'lk.html', {'user_orders': user_orders})
+    return render(request, 'lk.html', {'user_orders': user_orders,
+                                       'order_items': order_items
+                                       })

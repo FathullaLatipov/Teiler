@@ -7,7 +7,7 @@ class OrderCreateForm(forms.ModelForm):
     class Meta:
         model = OrderModel
         label = 'Test'
-        fields = ['first_name', 'last_name', 'email', 'phone', 'online', 'upon_receipt', 'user_order', 'user']
+        fields = ['online', 'upon_receipt', 'user_order', 'user', 'address', 'flat_office', 'entrance', 'intercom']
         widgets = {
             'online': forms.RadioSelect(),
             'upon_receipt': forms.RadioSelect(),

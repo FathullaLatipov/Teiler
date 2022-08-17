@@ -66,6 +66,12 @@
 {#            {% csrf_token %}#}
 {#            <input type="submit" value="Add to cart">#}
 {#        </form>#}
+{#            {% if product in cart %}#}
+{#                 {% for product in cart %}#}
+{#                    {{ product }}#}
+{#                {% endfor %}#}
+{#            {% endif %}#}
+
             {% if product.is_published == True %}
                 <form action="{% url "cart:cart_add" product.id %}?next={{ request.path }}" method="post">
                     <p style="display: none"> {{ cart_product_form }}</p>

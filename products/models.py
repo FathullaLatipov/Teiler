@@ -2,6 +2,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.db.models import Sum
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -97,6 +98,13 @@ class ProductModel(models.Model):
         if self.is_discount():
             return self.price - self.price * self.discount / 100
         return self.price
+
+    # def get_rating(self):
+    #     count = self.product.count()
+    #     if count:
+    #         return self.product.aggregate(Sum('rating'))['rate_sum'] / count
+    #     else:
+    #         return 0
 
     @staticmethod
     def get_from_wishlist(request):

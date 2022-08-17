@@ -4,7 +4,7 @@ from django.db import models
 
 class CustomUser(AbstractUser):
     MALE_CHOIСES = (
-        ("", ""),
+        ("None", "Не выбрано"),
         ("Мужчина", "Мужчина"),
         ("Женщина", "Женщина"),
     )
@@ -13,7 +13,7 @@ class CustomUser(AbstractUser):
     male = models.CharField(
         max_length=30,
         choices=MALE_CHOIСES,
-        default='1',
+        default=None,
         null=True,
         blank=True
     )

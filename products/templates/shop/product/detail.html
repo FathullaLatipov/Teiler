@@ -83,8 +83,8 @@
                                         <div class="custom__cond_inputs">
                                              {% for custom in product.customers.all %}
                                                 <div class="custom__cond_item">
-                                                        <input id="{{ custom.custom.pk }}" type="radio" name="condition">
-                                                        <label for="{{ custom.custom.pk }}">{{ custom.custom }}</label>
+                                                        <input id="test" type="radio" name="condition">
+                                                        <label for="test">{{ custom.custom }}</label>
                                                 </div>
                                             {% endfor %}
                                         </div>
@@ -95,8 +95,8 @@
                                         <div class="custom__space_inputs">
                                         {% for custom in product.customers.all %}
                                             <div class="custom__space_item">
-                                                <input id="{{ custom.pk }}" type="radio" name="{{ custom.number }}">
-                                                <label for="{{ custom.pk }}">{{ custom.number }}</label>
+                                                <input id="custom" type="radio" name="{{ custom.number }}">
+                                                <label for="custom">{{ custom.number }}</label>
                                             </div>
                                         {% endfor %}
                                         </div>

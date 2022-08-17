@@ -52,11 +52,7 @@
     {#      Checkout#}
     {#    </a>#}
     {#  </p>#}
-{% if cart|length == 0 %}
-    <h3>Not found</h3>
-{% else %}
-    <h3>Cart</h3>
-{% endif %}
+
 
     <main class="main">
         <div class="container">
@@ -65,6 +61,11 @@
                     <h2 class="section_title">Корзина</h2>
                     <div class="basket">
                         <div class="basket__body">
+                            {% if cart|length == 0 %}
+                                <h3>Not found</h3>
+                            {% else %}
+                                <h3>in Cart</h3>
+                            {% endif %}
                             <div class="basket__body_top">
                                 <label class="basket__body_top_item">
                                     <input type="checkbox">Выбрать все
@@ -97,18 +98,19 @@
                                                         {% else %}
                                                             <div class="discount">0%</div>
                                                         {% endif %}
-                                                        <a href="{% url 'product:single' pk=product.pk %}" class="name">{{ product.title }}</a>
+                                                        <a href="{% url 'product:single' pk=product.pk %}"
+                                                           class="name">{{ product.title }}</a>
                                                     </div>
                                                     <div class="bottom">
-                                                         <a onclick="add_to_wishlist(this, {{ product.pk }})">
-                                                                        <div class="fav2">
-                                                                            {% if product|in_wishlist:request %}
-                                                                               <button>В избранное</button>
-                                                                            {% else %}
-                                                                               <button>В избранном</button>
-                                                                            {% endif %}
-                                                                        </div>
-                                                                    </a>
+                                                        <a onclick="add_to_wishlist(this, {{ product.pk }})">
+                                                            <div class="fav2">
+                                                                {% if product|in_wishlist:request %}
+                                                                    <button>В избранное</button>
+                                                                {% else %}
+                                                                    <button>В избранном</button>
+                                                                {% endif %}
+                                                            </div>
+                                                        </a>
                                                         <a href="{% url "cart:cart_remove" product.id %}?next={{ request.path }}">
                                                             <button>Удалить</button>
                                                         </a>
@@ -124,7 +126,8 @@
                                                     {#                                                <button class="item__action_count_btn" data-direction="minus">-</button>#}
                                                     {#                                                <input type="text" class="item__action_count_value" value="1">#}
                                                     {#                                                <button class="item__action_count_btn" data-direction="plus">+</button>#}
-                                                    <form action="{% url "cart:cart_add" product.id %}?next={{ request.path }}" method="POST">
+                                                    <form action="{% url "cart:cart_add" product.id %}?next={{ request.path }}"
+                                                          method="POST">
                                                         {{ item.update_quantity_form.quantity }}
                                                         {{ item.update_quantity_form.update }}
                                                         <input type="submit" value="Update">
@@ -182,13 +185,13 @@
                         <div class="basket__info">
                             <div class="basket__info_total">
                                 <div class="new">{{ cart.get_total_price }} ₽</div>
-                                     {% if cart.is_discount %}
-                                         <div class="old">{{ cart.price }} ₽</div>
-                                         {% else %}
-                                          <div class="old">
-                                             <div class="old">0 ₽</div>
-                                          </div>
-                                      {% endif %}
+                                {% if cart.is_discount %}
+                                    <div class="old">{{ cart.price }} ₽</div>
+                                {% else %}
+                                    <div class="old">
+                                        <div class="old">0 ₽</div>
+                                    </div>
+                                {% endif %}
                             </div>
                             <ul class="basket__info_list">
                                 <li class="basket__info_item basket__info_item_basket">
@@ -205,7 +208,8 @@
                                 </li>
                             </ul>
                             <div class="basket__info_btn">
-                                <a class="btn action__panel_btn" href="{% url "orders:order_create" %}"> Перейти к оформлению</a>
+                                <a class="btn action__panel_btn" href="{% url "orders:order_create" %}"> Перейти к
+                                    оформлению</a>
                             </div>
 
                             <div class="basket__info_del">
@@ -251,27 +255,27 @@
         </div>
     </main>
 
-<script>
-    function add_to_wishlist(element, pk) {
-        $.getJSON('/products/' + "wishlist/" + pk, function (data) {
-            if (!data.status) {
-               $('#message').append(`<div style="padding:5px">
+    <script>
+        function add_to_wishlist(element, pk) {
+            $.getJSON('/products/' + "wishlist/" + pk, function (data) {
+                if (!data.status) {
+                    $('#message').append(`<div style="padding:5px">
                         <div id="inner-message" class="alert alert-error">
                             <button type="button" class="close" data-dismiss="alert">&times;</button>
                             Error
                         </div>
                     </div>`);
-            } else {
-                if (data.added) {
-                    $('#message');
-                    element.innerHTML = '<div class="fav2"><button>В избранное</button></div>'
                 } else {
-                    $('#message');
-                     element.innerHTML = '<div class="fav2"><button>В избранном</button></div>'
+                    if (data.added) {
+                        $('#message');
+                        element.innerHTML = '<div class="fav2"><button>В избранное</button></div>'
+                    } else {
+                        $('#message');
+                        element.innerHTML = '<div class="fav2"><button>В избранном</button></div>'
+                    }
+                    $('#like_count').html(data.wishlist_len);
                 }
-                  $('#like_count').html(data.wishlist_len);
-            }
-        });
-    }
-</script>
+            });
+        }
+    </script>
 {% endblock %}
