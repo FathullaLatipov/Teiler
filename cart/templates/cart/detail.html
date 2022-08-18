@@ -182,10 +182,38 @@
 
                             </ul>
                         </div>
-
+{#                        <table class="cart">#}
+{#                            {% if cart.coupon %}#}
+{#                                <tr class="subtotal">#}
+{#                                    <td>Subtotal</td>#}
+{#                                    <td colspan="4"></td>#}
+{#                                    <td class="num">${{ cart.get_total_price|floatformat:"2" }}</td>#}
+{#                                </tr>#}
+{#                                <tr>#}
+{#                                    <td>#}
+{#                                        "{{ cart.coupon.code }}" coupon ({{ cart.coupon.discount }}% off)#}
+{#                                    </td>#}
+{#                                    <td colspan="4"></td>#}
+{#                                    <td class="num neg">#}
+{#                                        - ${{ cart.get_discount|floatformat:"2" }}#}
+{#                                    </td>#}
+{#                                </tr>#}
+{#                            {% endif %}#}
+{#                            <tr class="total">#}
+{#                                <td>Total</td>#}
+{#                                <td colspan="4"></td>#}
+{#                                <td class="num">#}
+{#                                    ${{ cart.get_total_price_after_discount|floatformat:"2" }}#}
+{#                                </td>#}
+{#                            </tr>#}
+{#                        </table>#}
                         <div class="basket__info">
                             <div class="basket__info_total">
+                             {% if cart.coupon %}
+                                <div class="new">{{ cart.get_total_price_after_discount|floatformat:"2" }} ₽</div>
+                             {% else %}
                                 <div class="new">{{ cart.get_total_price }} ₽</div>
+                             {% endif %}
                                 {% if cart.is_discount %}
                                     <div class="old">{{ cart.price }} ₽</div>
                                 {% else %}
@@ -208,19 +236,38 @@
                                     <div class="value">-1094 ₽</div>
                                 </li>
                             </ul>
-                            <div class="basket__info_btn">
-                                <a class="btn action__panel_btn" href="{% url "orders:order_create" %}"> Перейти к
-                                    оформлению</a>
-                            </div>
+                            <form action="{% url "coupons:apply" %}" method="post">
+                                <div class="basket__info_btn">
+                                    <input class="btn action__panel_btn" type="submit" value="Перейти к оформлению">
+                                </div>
 
-                            <div class="basket__info_del">
-                                Доступные способы и время доставки можно выбрать при оформлении заказа
-                            </div>
+                                <div class="basket__info_del">
+                                    Доступные способы и время доставки можно выбрать при оформлении заказа
+                                </div>
+                                <div id="order">
+                                    <div class="main__content">
+                                        <div class="order">
+                                            <div class="order__content_action">
+                                                <div class="action__drop active">
+                                                    <div class="action__drop_head active" data-drophead="">
+                                                        % Введите промокод
+                                                    </div>
+                                                    <div class="action__drop_input" style="height: 50px">
+                                                        <label for="id_code">
+                                                            <input type="text" name="code" id="id_code" placeholder="{% if cart.coupon %} {{ cart.coupon.code }}" coupon ({{ cart.coupon.discount }}% off) {% else %}Введите промокод... {% endif %}">
+                                                            {% csrf_token %}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
-
 
             <section class="pop">
                 <div class="section__top">

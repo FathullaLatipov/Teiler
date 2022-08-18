@@ -199,7 +199,6 @@
                                                             </div>
                                                             <div class="body__descr_item gray">Склад (Ростовская обл.) •
                                                                 1 товар
-                                                                • 25 гр
                                                             </div>
                                                             <div class="body__descr_price">
                                                                 <div class="new">
@@ -228,41 +227,6 @@
                                         {% endfor %}
                                     </div>
                                 </div>
-                                            <table class="cart">
-                                                {% if cart.coupon %}
-                                                    <tr class="subtotal">
-                                                        <td>Subtotal</td>
-                                                        <td colspan="4"></td>
-                                                        <td class="num">${{ cart.get_total_price|floatformat:"2" }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            "{{ cart.coupon.code }}" coupon ({{ cart.coupon.discount }}%
-                                                            off)
-                                                        </td>
-                                                        <td colspan="4"></td>
-                                                        <td class="num neg">
-                                                            - ${{ cart.get_discount|floatformat:"2" }}
-                                                        </td>
-                                                    </tr>
-                                                {% endif %}
-                                                <tr class="total">
-                                                    <td>Totalsss</td>
-                                                    <td colspan="4"></td>
-                                                    <td class="num">
-                                                        ${{ cart.get_total_price_after_discount|floatformat:"2" }}
-                                                    </td>
-                                                </tr>
-                                            </table>
-
-                                        <p>Apply a coupon:</p>
-                                        <form action="{% url "coupons:apply" %}" method="post">
-                                            {{ coupon_apply_form }}
-                                            <input type="submit" value="Apply">
-                                            {% csrf_token %}
-                                        </form>
-
-
                                 <div class="order__content_action">
                                     <div class="action__panel">
                                      <p><input class="btn action__panel_btn" type="submit" value="Place order"></p>
@@ -291,7 +255,6 @@
                                                             "{{ cart.coupon.code }}" ({{ cart.coupon.discount }}% off)
                                                             <span>- ${{ cart.get_discount|floatformat:"2" }}</span>
                                                         </li>
-                                                        <p>total {{ cart.get_total_price_after_discount|floatformat:"2" }}$ </p>
                                                     {% endif %}
                                                 </div>
                                                 {#                                            <div class="price_value">{% get_cart_sum request %} ₽</div>#}
@@ -320,27 +283,31 @@
                                         <div class="action__panel_total">
                                             <div class="name">Итого</div>
                                             <div class="price">
-                                                         <div class="new">{{ cart.get_total_price_after_discount|floatformat:"2" }} ₽</div>
+                                                 {% if cart.coupon %}
+                                                    <div class="new">{{ cart.get_total_price_after_discount|floatformat:"2" }} ₽</div>
+                                                 {% else %}
+                                                    <div class="new">{{ cart.get_total_price }} ₽</div>
+                                                 {% endif %}
                                                 <!--                                            <div class="old">81098 ₽</div>-->
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="action__drop">
-                                        <div class="action__drop_head" data-drophead>
-                                            % Введите промокод или сертификат
-                                            <svg data-drophead width="6" height="4" viewBox="0 0 6 4" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path data-drophead
-                                                      d="M1.28101 4.00073C0.77231 4.00073 0.494417 3.40742 0.820081 3.01662L2.87239 0.553851C3.11227 0.265999 3.55438 0.265998 3.79426 0.553851L5.84656 3.01662C6.17223 3.40742 5.89433 4.00073 5.38563 4.00073L1.28101 4.00073Z"
-                                                      fill="#3D5165"/>
-                                            </svg>
-
-                                        </div>
-                                        <div class="action__drop_input">
-                                            <input type="text" placeholder="Введите промокод...">
-                                        </div>
-                                    </div>
+{#                                    <div class="action__drop">#}
+{#                                        <div class="action__drop_head" data-drophead>#}
+{#                                            % Введите промокод или сертификат#}
+{#                                            <svg data-drophead width="6" height="4" viewBox="0 0 6 4" fill="none"#}
+{#                                                 xmlns="http://www.w3.org/2000/svg">#}
+{#                                                <path data-drophead#}
+{#                                                      d="M1.28101 4.00073C0.77231 4.00073 0.494417 3.40742 0.820081 3.01662L2.87239 0.553851C3.11227 0.265999 3.55438 0.265998 3.79426 0.553851L5.84656 3.01662C6.17223 3.40742 5.89433 4.00073 5.38563 4.00073L1.28101 4.00073Z"#}
+{#                                                      fill="#3D5165"/>#}
+{#                                            </svg>#}
+{##}
+{#                                        </div>#}
+{#                                        <div class="action__drop_input">#}
+{#                                            <input type="text" placeholder="Введите промокод...">#}
+{#                                        </div>#}
+{#                                    </div>#}
                                 </div>
                             </div>
 
