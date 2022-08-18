@@ -13,6 +13,7 @@ from orders.views import user_order_view
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ckeditor/', include('ckeditor_uploader.urls')),
+    path('coupons/', include('coupons.urls', namespace='coupons')),
     path('products/', include('products.urls',  namespace='product')),
     path('about/', AboutTemplateView.as_view(), name='abouts'),
     path('contacts/', ContactTemplateView.as_view(), name='contacts'),

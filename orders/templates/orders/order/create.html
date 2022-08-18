@@ -216,9 +216,10 @@
                                                             <div class="body__descr_ex">
                                                                 Доставка в Почта России №13151
                                                             </div>
-                                                            <button class="body__descr_del">
-                                                                Удалить
-                                                            </button>
+                                                            <a class="body__descr_del" href="{% url "cart:cart_remove" item.product.id %}?next={{ request.path }}">
+                                                                    Удалить
+                                                            </a>
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -227,6 +228,41 @@
                                         {% endfor %}
                                     </div>
                                 </div>
+                                            <table class="cart">
+                                                {% if cart.coupon %}
+                                                    <tr class="subtotal">
+                                                        <td>Subtotal</td>
+                                                        <td colspan="4"></td>
+                                                        <td class="num">${{ cart.get_total_price|floatformat:"2" }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            "{{ cart.coupon.code }}" coupon ({{ cart.coupon.discount }}%
+                                                            off)
+                                                        </td>
+                                                        <td colspan="4"></td>
+                                                        <td class="num neg">
+                                                            - ${{ cart.get_discount|floatformat:"2" }}
+                                                        </td>
+                                                    </tr>
+                                                {% endif %}
+                                                <tr class="total">
+                                                    <td>Totalsss</td>
+                                                    <td colspan="4"></td>
+                                                    <td class="num">
+                                                        ${{ cart.get_total_price_after_discount|floatformat:"2" }}
+                                                    </td>
+                                                </tr>
+                                            </table>
+
+                                        <p>Apply a coupon:</p>
+                                        <form action="{% url "coupons:apply" %}" method="post">
+                                            {{ coupon_apply_form }}
+                                            <input type="submit" value="Apply">
+                                            {% csrf_token %}
+                                        </form>
+
+
                                 <div class="order__content_action">
                                     <div class="action__panel">
                                      <p><input class="btn action__panel_btn" type="submit" value="Place order"></p>
@@ -243,13 +279,20 @@
                                             </div>
                                             <div class="action__panel_list_item">
                                                 <div class="price">
-                                                    Товары <span>({% get_cart_count request %})</span>
+                                                    Товары <span></span>
                                                     {% for item in cart %}
                                                         <li style="margin-top: 7px">
                                                             ({{ item.quantity }}) {{ item.product.title }}
                                                             = {{ item.total_price }} ₽
                                                         </li>
                                                     {% endfor %}
+                                                    {% if cart.coupon %}
+                                                        <li>
+                                                            "{{ cart.coupon.code }}" ({{ cart.coupon.discount }}% off)
+                                                            <span>- ${{ cart.get_discount|floatformat:"2" }}</span>
+                                                        </li>
+                                                        <p>total {{ cart.get_total_price_after_discount|floatformat:"2" }}$ </p>
+                                                    {% endif %}
                                                 </div>
                                                 {#                                            <div class="price_value">{% get_cart_sum request %} ₽</div>#}
                                             </div>
@@ -277,7 +320,7 @@
                                         <div class="action__panel_total">
                                             <div class="name">Итого</div>
                                             <div class="price">
-                                                <div class="new">{{ cart.get_total_price }} ₽</div>
+                                                         <div class="new">{{ cart.get_total_price_after_discount|floatformat:"2" }} ₽</div>
                                                 <!--                                            <div class="old">81098 ₽</div>-->
                                             </div>
                                         </div>
