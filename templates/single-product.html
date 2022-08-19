@@ -272,7 +272,7 @@ h1 { font-size: 1.5em; margin: 10px; }
                             <div class="reviews__content_list_item carousel__slide" style="padding: 0px">
                                 <img src="{{ review.image.url }}" style="width: 145px;height: 168px" alt="">
                             </div>
-                       {% endfor %} 
+                       {% endfor %}
                 </div>
             </div>
 
@@ -514,7 +514,11 @@ h1 { font-size: 1.5em; margin: 10px; }
         </section>
     </div>
 </main>
-
+  <form action="{% url "cart:cart_add" product.id %}" method="post">
+                                                <p>{{ cart_product_form }}</p>
+                                                {% csrf_token %}
+                                                <input class="btn" type="submit" value="Add to cart">
+                                            </form>
 <div class="popup" id="login" aria-hidden="true">
 
     <div class="popup__layer" tabindex="-1" data-micromodal-close>

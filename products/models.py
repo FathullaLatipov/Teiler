@@ -131,7 +131,7 @@ class ReviewModel(models.Model):
     image = models.FileField(upload_to='form_images', verbose_name=_('image'), null=True, blank=True)
     rating = models.PositiveSmallIntegerField(default=0, null=True, blank=True)
     comments = models.TextField()
-    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, verbose_name=_('product'))
+    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, verbose_name=_('product'), related_name='ratings')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created_at'), null=True)
 
     def __str__(self):

@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.views import View
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, DeleteView, FormView
-from django.db.models import Max, Min
+from django.db.models import Max, Min, Avg, Sum, Count
 from django.http import JsonResponse
 from rest_framework.response import Response
 
@@ -83,6 +83,7 @@ class ProductDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['cart_product_form'] = CartAddProductForm()
         context['related'] = ProductModel.objects.order_by('-pk')
+        context['avg_rating'] = ProductModel.objects.annotate(avarage_rating=Avg('ratings__rating')).order_by('-avarage_rating')
         return context
 
     def add_to_object(request, pk):
@@ -187,17 +188,18 @@ def add_to_cart(request, pk):
 
 @login_required
 def create_carts(request, pk):
-    product = get_object_or_404(ProductModel, pk=pk)
-    cart = request.session.get('cart', [])
-
-    if request.user in product.cart.all():
-        product.cart.remove(request.user)
-    else:
-        product.cart.add(request.user)
-
-    product.save()
-
-    return redirect('order')
+    # product = get_object_or_404(ProductModel, pk=pk)
+    # cart = request.session.get('cart', [])
+    #
+    # if request.user in product.cart.all():
+    #     product.cart.remove(request.user)
+    # else:
+    #     product.cart.add(request.user)
+    #
+    # product.save()
+    #
+    # return redirect('order')
+    pass
 
 
 class AboutTemplateView(TemplateView):
