@@ -31,19 +31,21 @@ def order_create(request):
                 )
             coupon_apply_form = CouponApplyForm()
             cart.clear()
-            return render(request, 'orders/order/created.html', {'order': order, 'coupon_apply_form': coupon_apply_form})
+            return render(request, 'orders/order/created.html',
+                          {'order': order, 'coupon_apply_form': coupon_apply_form})
 
     else:
         form = OrderCreateForm()
         coupon_apply_form = CouponApplyForm()
 
-    return render(request, 'orders/order/create.html', {'form': form, 'cart': cart, 'coupon_apply_form': coupon_apply_form})
+    return render(request, 'orders/order/create.html',
+                  {'form': form, 'cart': cart, 'coupon_apply_form': coupon_apply_form})
 
 
 def user_order_view(request, user_pk):
-    user = CustomUser.objects.get(id=user_pk)
+    user = CustomUser.objects.get(pk=user_pk)
     user_orders = user.user_order.all()
-    order_items = OrderItem.objects.annotate(num_products=Sum('product'))
+    order_items = OrderItem.objects.select_related('product')
     print(order_items)
 
     return render(request, 'lk.html', {'user_orders': user_orders,

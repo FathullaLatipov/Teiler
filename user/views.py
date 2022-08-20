@@ -14,7 +14,6 @@ class SignupView(CreateView):
     template_name = 'registration/signup.html'
 
 
-
 def edit_account_view(request, *args, **kwargs):
     if not request.user.is_authenticated:
         return redirect("login")

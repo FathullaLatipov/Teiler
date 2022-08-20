@@ -178,8 +178,9 @@
                                 </div>
                             </div>
                             <br>
-                        {% for product in order_items  %}
-                            {{ product }}
+                        {% for item in order_items  %}
+                            {{ item.product.title }}
+                            <img src="{{ item.product.image.url }}" alt="">
                         {% endfor %}
 
 
