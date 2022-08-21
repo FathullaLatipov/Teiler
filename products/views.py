@@ -83,7 +83,7 @@ class ProductDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['cart_product_form'] = CartAddProductForm()
         context['related'] = ProductModel.objects.order_by('-pk')
-        context['avg_rating'] = ProductModel.objects.annotate(avarage_rating=Avg('ratings__rating')).order_by('-avarage_rating')
+        # context['avg_rating'] = ProductModel.objects.annotate(avarage_rating=Avg('ratings__rating')).order_by('-avarage_rating')
         return context
 
     def add_to_object(request, pk):

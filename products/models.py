@@ -2,7 +2,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.db.models import Sum
+from django.db.models import Sum, Avg
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -99,12 +99,12 @@ class ProductModel(models.Model):
             return self.price - self.price * self.discount / 100
         return self.price
 
-    # def get_rating(self):
-    #     count = self.product.count()
-    #     if count:
-    #         return self.product.aggregate(Sum('rating'))['rate_sum'] / count
-    #     else:
-    #         return 0
+    def grade(self):
+        grade = ReviewModel.objects.filter(product=self, ).aggregate(avarage=Avg('rating'))
+        avg = 0
+        if grade["avarage"] is not None:
+            avg = float(grade["avarage"])
+        return avg
 
     @staticmethod
     def get_from_wishlist(request):
@@ -131,7 +131,7 @@ class ReviewModel(models.Model):
     image = models.FileField(upload_to='form_images', verbose_name=_('image'), null=True, blank=True)
     rating = models.PositiveSmallIntegerField(default=0, null=True, blank=True)
     comments = models.TextField()
-    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, verbose_name=_('product'), related_name='ratings')
+    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, verbose_name=_('product'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created_at'), null=True)
 
     def __str__(self):

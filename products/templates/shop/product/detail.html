@@ -5,6 +5,51 @@
 {% load static %}
 
 {% block content %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+
+fieldset, label { margin: 0; padding: 0; }
+body{ margin: 20px; }
+h1 { font-size: 1.5em; margin: 10px; }
+
+/****** Style Star Rating Widget *****/
+
+.rating2 {
+  border: none;
+  float: left;
+}
+
+.rating2 > input { display: none; }
+.rating2 > label:before {
+  margin: 5px;
+  font-size: 1.25em;
+  font-family: FontAwesome;
+  display: inline-block;
+  content: "\f005";
+}
+
+.rating2 > .half:before {
+  content: "\f089";
+  position: absolute;
+}
+
+.rating2 > label {
+  color: #ddd;
+ float: right;
+}
+
+/***** CSS Magic to Highlight Stars on Hover *****/
+
+.rating2 > input:checked ~ label, /* show gold star when clicked */
+.rating2:not(:checked) > label:hover, /* hover current star */
+.rating2:not(:checked) > label:hover ~ label { color: #FFD700;  } /* hover previous stars in list */
+
+.rating2 > input:checked + label:hover, /* hover current star when changing rating */
+.rating2 > input:checked ~ label:hover,
+.rating2 > label:hover ~ input:checked ~ label, /* lighten current selection */
+.rating2 > input:checked ~ label:hover ~ label { color: #FFED85;  }
+</style>
     <main class="main">
         <div class="container">
             <div class="path">
@@ -266,6 +311,13 @@
                     </div>
 
                     <div class="reviews__body_list">
+                    <h3>New Rating</h3>
+                       <i class='fa fa-star{% if product.grade < 1 %}-o empty{% endif%}'></i>
+                              <i class='fa fa-star{% if product.grade < 2 %}-o empty{% endif%}'></i>
+                              <i class='fa fa-star{% if product.grade < 3 %}-o empty{% endif%}'></i>
+                              <i class='fa fa-star{% if product.grade < 4 %}-o empty{% endif%}'></i>
+                              <i class='fa fa-star{% if product.grade < 5 %}-o empty{% endif%}'></i>
+                              {{ product.grade |stringformat:".1f"}}
                         {% for review in product.reviewmodel_set.all %}
                             <div class="reviews__body_item">
                                 <div class="reviews__body_item_head">
@@ -612,38 +664,18 @@
                                 <!--                                    <div class="item__stars_el" data-item-value="3">	&#9733;</div>-->
                                 <!--                                    <div class="item__stars_el" data-item-value="2">	&#9733;</div>-->
                                 <!--                                    <div class="item__stars_el" data-item-value="1">	&#9733;</div>-->
-                                <fieldset class="rating2">
-                                    <input type="radio" id="star5" name="rating" value="5"/><label class="full"
-                                                                                                   for="star5"
-                                                                                                   title="Awesome - 5 stars"></label>
-                                    <input type="radio" id="star4half" name="rating" value="4.5"/><label class="half"
-                                                                                                         for="star4half"
-                                                                                                         title="Pretty good - 4.5 stars"></label>
-                                    <input type="radio" id="star4" name="rating" value="4"/><label class="full"
-                                                                                                   for="star4"
-                                                                                                   title="Pretty good - 4 stars"></label>
-                                    <input type="radio" id="star3half" name="rating" value="3.5"/><label class="half"
-                                                                                                         for="star3half"
-                                                                                                         title="Meh - 3.5 stars"></label>
-                                    <input type="radio" id="star3" name="rating" value="3"/><label class="full"
-                                                                                                   for="star3"
-                                                                                                   title="Meh - 3 stars"></label>
-                                    <input type="radio" id="star2half" name="rating" value="2.5"/><label class="half"
-                                                                                                         for="star2half"
-                                                                                                         title="Kinda bad - 2.5 stars"></label>
-                                    <input type="radio" id="star2" name="rating" value="2"/><label class="full"
-                                                                                                   for="star2"
-                                                                                                   title="Kinda bad - 2 stars"></label>
-                                    <input type="radio" id="star1half" name="rating" value="1.5"/><label class="half"
-                                                                                                         for="star1half"
-                                                                                                         title="Meh - 1.5 stars"></label>
-                                    <input type="radio" id="star1" name="rating" value="1"/><label class="full"
-                                                                                                   for="star1"
-                                                                                                   title="Sucks big time - 1 star"></label>
-                                    <input type="radio" id="starhalf" name="rating" value="0.5"/><label class="half"
-                                                                                                        for="starhalf"
-                                                                                                        title="Sucks big time - 0.5 stars"></label>
-                                </fieldset>
+                               <fieldset class="rating2">
+                                        <input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
+                                        <input type="radio" id="star4half" name="rating" value="4.5" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+                                        <input type="radio" id="star4" name="rating" value="4" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
+                                        <input type="radio" id="star3half" name="rating" value="3.5" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+                                        <input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
+                                        <input type="radio" id="star2half" name="rating" value="2.5" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+                                        <input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
+                                        <input type="radio" id="star1half" name="rating" value="1.5" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+                                        <input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
+                                        <input type="radio" id="starhalf" name="rating" value="0.5" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+                              </fieldset>
                             </div>
                         </div>
 
