@@ -133,8 +133,8 @@ h1 { font-size: 1.5em; margin: 10px; }
                                             <div class="custom__cond_inputs">
                                                 {% for custom in product.customers.all %}
                                                     <div class="custom__cond_item">
-                                                        <input id="test" type="radio" name="condition">
-                                                        <label for="test">{{ custom.custom }}</label>
+                                                        <input id="{{ custom.custom }}" type="radio" value="{{ custom.custom }}" name="condition">
+                                                        <label for="{{ custom.custom }}">{{ custom.custom }}</label>
                                                     </div>
                                                 {% endfor %}
                                             </div>
@@ -145,8 +145,8 @@ h1 { font-size: 1.5em; margin: 10px; }
                                             <div class="custom__space_inputs">
                                                 {% for custom in product.customers.all %}
                                                     <div class="custom__space_item">
-                                                        <input id="custom" type="radio" name="{{ custom.number }}">
-                                                        <label for="custom">{{ custom.number }}</label>
+                                                        <input id="{{ custom.number }}" type="radio" value="{{ custom.number }}" name="space">
+                                                        <label for="{{ custom.number }}">{{ custom.number }}</label>
                                                     </div>
                                                 {% endfor %}
                                             </div>
@@ -156,8 +156,8 @@ h1 { font-size: 1.5em; margin: 10px; }
                                             <div class="custom__color_inputs">
                                                 {% for color in product.colors.all|slice:':4' %}
                                                     <div class="custom__color_item">
-                                                        <input id="{{ color.pk }}" type="radio" name="color">
-                                                        <label for="{{ color.pk }}">
+                                                        <input id="{{ color.code }}" type="radio" value="{{ color.code }}" name="color">
+                                                        <label for="{{ color.code }}">
                                                             <div style="background-color: {{ color.code }};"></div>
                                                         </label>
                                                     </div>
@@ -188,15 +188,15 @@ h1 { font-size: 1.5em; margin: 10px; }
                                                     <div class="old">{{ product.price }} ₽</div>
                                                 {% endif %}
                                                 <form action="{% url 'cart:cart_add' product.id %}" method="post">
-                                                    {{ cart_product_form }}
+                                                        <p style="display: none">{{ cart_product_form }}</p>
                                                     {% csrf_token %}
-                                                    <input type="submit" value="Add to cart">
+
                                                 </form>
                                             </div>
                                             <form action="{% url 'cart:cart_add' product.id %}" method="post">
-                                                {{ cart_product_form }}
+                                                <p style="display: none">{{ cart_product_form }}</p>
                                                 {% csrf_token %}
-                                                <input type="submit" value="Add to cart">
+                                               <button type="submit" class="order__price_add btn">Добавить в корзину</button>
                                             </form>
                                             {#                                         {% if product.is_published == True %}#}
                                             {#                                             <a onclick="add_to_object(this, {{ product.pk }})" style="width: 100%">#}

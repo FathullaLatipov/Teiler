@@ -193,11 +193,10 @@
                                               <i class='fa fa-star{% if item.product.grade < 3 %}-o empty{% endif%}' style="color: #0047FF;font-size: 9.6px"></i>
                                               <i class='fa fa-star{% if item.product.grade < 4 %}-o empty{% endif%}' style="color: #0047FF;font-size: 9.6px"></i>
                                               <i class='fa fa-star{% if item.product.grade < 5 %}-o empty{% endif%}' style="color: #0047FF;font-size: 9.6px"></i>
-                                              {{ item.product.grade |stringformat:".1f"}}
+
                                             </div>
                                             <div class="info">
-                                                4
-                                                <span>(13)</span>
+                                                 {{ item.product.grade |stringformat:".1f"}}
                                             </div>
                                         </div>
                                         <a href="{% url 'product:single' pk=item.product.pk %}" class="product_name">{{ item.product.title }}</a>

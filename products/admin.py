@@ -45,6 +45,11 @@ class ReviewModelAdmin(admin.ModelAdmin):
 class ProductCustomModelAdmin(admin.TabularInline):
     model = ProductCustomModel
 
+    def formfield_for_choice_field(self, db_field, request=None, **kwargs):
+        if db_field.name == 'YOUR_FIELD_NAME':
+            kwargs['choices'] = (('', '---------'), ('1', 'Choice1'), ('2', 'Choice2'))
+        return db_field.formfield(**kwargs)
+
 
 class ProductImageModelAdmin(admin.TabularInline):
     model = ProductImageModel
