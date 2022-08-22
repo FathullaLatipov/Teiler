@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView
@@ -42,10 +43,11 @@ def order_create(request):
                   {'form': form, 'cart': cart, 'coupon_apply_form': coupon_apply_form})
 
 
+@login_required(login_url="signup")
 def user_order_view(request, user_pk):
     user = CustomUser.objects.get(pk=user_pk)
     user_orders = user.user_order.all()
-    order_items = OrderItem.objects.select_related('product')
+    order_items = OrderItem.objects.select_related('product').filter(order__user_id=request.user)
     print(order_items)
 
     return render(request, 'lk.html', {'user_orders': user_orders,

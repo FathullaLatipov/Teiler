@@ -311,12 +311,11 @@ h1 { font-size: 1.5em; margin: 10px; }
                     </div>
 
                     <div class="reviews__body_list">
-                    <h3>New Rating</h3>
-                       <i class='fa fa-star{% if product.grade < 1 %}-o empty{% endif%}'></i>
-                              <i class='fa fa-star{% if product.grade < 2 %}-o empty{% endif%}'></i>
-                              <i class='fa fa-star{% if product.grade < 3 %}-o empty{% endif%}'></i>
-                              <i class='fa fa-star{% if product.grade < 4 %}-o empty{% endif%}'></i>
-                              <i class='fa fa-star{% if product.grade < 5 %}-o empty{% endif%}'></i>
+                              <i class='fa fa-star{% if product.grade < 1 %}-o empty{% endif%}' style="color: #0047FF"></i>
+                              <i class='fa fa-star{% if product.grade < 2 %}-o empty{% endif%}' style="color: #0047FF"></i>
+                              <i class='fa fa-star{% if product.grade < 3 %}-o empty{% endif%}' style="color: #0047FF"></i>
+                              <i class='fa fa-star{% if product.grade < 4 %}-o empty{% endif%}' style="color: #0047FF"></i>
+                              <i class='fa fa-star{% if product.grade < 5 %}-o empty{% endif%}' style="color: #0047FF"></i>
                               {{ product.grade |stringformat:".1f"}}
                         {% for review in product.reviewmodel_set.all %}
                             <div class="reviews__body_item">
