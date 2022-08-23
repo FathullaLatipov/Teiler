@@ -2,7 +2,7 @@ from django import forms
 from django.forms import BaseForm, inlineformset_factory
 
 from products import models
-from products.models import ColorModel, RatingStar, ReviewModel, RegisterForm
+from products.models import ColorModel, RatingStar, ReviewModel, RegisterForm, ProductModel
 
 
 class ColorModelForm(forms.ModelForm):
@@ -21,4 +21,10 @@ class ReviewForm(forms.ModelForm):
         model = ReviewModel
         fields = ("name", "email", "comments", "image", "rating")
 
+
+class SingleProductForm(forms.ModelForm):
+    class Meta:
+        model = ProductModel
+        fields = ("category",)
+        print(fields)
 

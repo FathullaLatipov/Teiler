@@ -84,8 +84,6 @@ class ProductModel(models.Model):
         verbose_name=_('colors')
     )
     season = models.CharField(max_length=200, verbose_name=_('season'))
-    name_customer = models.CharField(max_length=200, verbose_name=_('customer'), null=True)
-    number_name_customer = models.CharField(max_length=200, verbose_name=_('number_name_customer'), null=True)
     real_price = models.FloatField(verbose_name=_('real price'), default=0)
     is_published = models.BooleanField(default=False)
     is_buy = models.BooleanField(default=False)

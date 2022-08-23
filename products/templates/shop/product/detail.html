@@ -129,7 +129,9 @@ h1 { font-size: 1.5em; margin: 10px; }
                                     <div class="custom">
 
                                         <div class="custom__cond">
-                                            <h3 class="form__name">{{ product.name_customer }}:</h3>
+                                         {% for custom_name in product.customer_names.all %}
+                                            <h3 class="form__name">{{ custom_name.custom_name }}:</h3>
+                                         {% endfor %}
                                             <div class="custom__cond_inputs">
                                                 {% for custom in product.customers.all %}
                                                     <div class="custom__cond_item">
@@ -141,7 +143,13 @@ h1 { font-size: 1.5em; margin: 10px; }
                                         </div>
 
                                         <div class="custom__space">
-                                            <h3 class="form__name">{{ product.number_name_customer }}:</h3>
+
+
+
+
+                                          {% for custom_name in product.customer_names.all %}
+                                            <h3 class="form__name">{{ custom_name.custom_number }}:</h3>
+                                          {% endfor %}
                                             <div class="custom__space_inputs">
                                                 {% for custom in product.customers.all %}
                                                     <div class="custom__space_item">

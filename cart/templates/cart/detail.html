@@ -75,6 +75,11 @@
                             <ul class="basket__body_list">
                                 {% for item in cart %}
                                     {% with product=item.product %}
+                                         {% if cart|length == 0 %}
+                                                    <h3>Not found</h3>
+                                                {% else %}
+                                                    <h3>in Cart</h3>
+                                                {% endif %}
                                         <li class="basket__body_item">
                                             <div class="item__main">
                                                 <div class="item__main_input">
@@ -117,7 +122,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="item__action_price">
-                                                    <div class="new">{{ item.price }} ₽</div>
+                                                    <div class="new">{{ item.product.real_price }} ₽</div>
                                                     {% if cart.is_discount %}
                                                         <div class="old">{{ cart.price }} ₽</div>
                                                     {% endif %}
