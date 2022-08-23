@@ -158,6 +158,19 @@ class RatingStar(models.Model):
         ordering = ["-value"]
 
 
+class ProductCustomNameModel(models.Model):
+    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, related_name='customer_names',
+                                verbose_name=_('product'),
+                                null=True, blank=True
+                                )
+    custom_name = models.CharField(max_length=200, verbose_name=_('custom_name'))
+    custom_number = models.CharField(max_length=200, verbose_name=_('custom_number'))
+
+    class Meta:
+        verbose_name = _('product_custom_name')
+        verbose_name_plural = _('product_custom_names')
+
+
 class ProductCustomModel(models.Model):
     product = models.ForeignKey(ProductModel, on_delete=models.PROTECT, related_name='customers',
                                 verbose_name=_('product'), null=True, blank=True)
