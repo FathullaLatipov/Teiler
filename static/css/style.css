@@ -5037,7 +5037,7 @@ html {
 #product .main__content .prod__content_form .order__buy {
   margin-bottom: 16px;
 }
-#product .main__content .prod__content_form .order__buy button {
+#product .main__content .prod__content_form .order__buy form input {
   width: 100%;
   padding: 15px 10px;
   border-radius: 8px;

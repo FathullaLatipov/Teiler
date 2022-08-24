@@ -49,6 +49,40 @@ h1 { font-size: 1.5em; margin: 10px; }
 .rating2 > input:checked ~ label:hover,
 .rating2 > label:hover ~ input:checked ~ label, /* lighten current selection */
 .rating2 > input:checked ~ label:hover ~ label { color: #FFED85;  }
+
+.add-single {
+  width: 100%;
+  padding: 15px 10px;
+  border-radius: 8px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: var(--light_back);
+  color: var(--btn);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 18px;
+  -webkit-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+.add-single:hover {
+    background-color: var(--btn);
+    color: #fff;
+}
+.add-single:active {
+     -webkit-transform: scale(0.97);
+      -ms-transform: scale(0.97);
+          transform: scale(0.97);
+}
+
 </style>
     <main class="main">
         <div class="container">
@@ -200,11 +234,20 @@ h1 { font-size: 1.5em; margin: 10px; }
 
                                                 </form>
                                             </div>
-                                            <form action="{% url 'cart:cart_add' product.id %}" method="post">
-                                                <p style="display: none">{{ cart_product_form }}</p>
-                                                {% csrf_token %}
-                                               <button type="submit" class="order__price_add btn">Добавить в корзину</button>
-                                            </form>
+                                          {% if product.is_published == True %}
+                                                {% if product.id in cart.product_ids %}
+                                                    <a class="btn" style="background-color: #FF9700 !important;" href="{% url 'cart:cart_remove' product.id %}?next={{ request.path }}">Добавлено в корзину</a>
+                                                {% else %}
+                                                    <form style="width: 100%" action="{% url "cart:cart_add" product.id %}?next={{ request.path }}" method="post">
+                                                        <p style="display: none"> {{ cart_product_form }}</p>
+                                                        {% csrf_token %}
+                                                        <input class="btn" style="width: 100%" type="submit" value="Добавить в корзину">
+                                                    </form>
+                                                {% endif %}
+                                            {% else %}
+                                                <button disabled class="btn btn_dis">Нет в наличии</button>
+                                            {% endif %}
+
                                             {#                                         {% if product.is_published == True %}#}
                                             {#                                             <a onclick="add_to_object(this, {{ product.pk }})" style="width: 100%">#}
                                             {#                                                     {% if product|in_cart:request %}#}
@@ -222,10 +265,13 @@ h1 { font-size: 1.5em; margin: 10px; }
                                         </div>
 
                                         <div class="order__buy">
-                                            <a href="#">
-                                                <button type="submit">Купить в один клик</button>
-                                            </a>
+                                             <form action="{% url "cart:single_cart_add" product.id %}" method="post">
+                                                        <p style="display: none"> {{ cart_product_form }}</p>
+                                                        {% csrf_token %}
+                                                        <input class="add-single" type="submit" value="Купить в один клик">
+                                              </form>
                                         </div>
+
                                         <div class="order__info">
                                             <h3 class="order__info_title">Информация о доставке</h3>
                                             <ul class="order__info_list">
@@ -282,7 +328,7 @@ h1 { font-size: 1.5em; margin: 10px; }
 
                     <div class="reviews__content_list carousel" id="productReviews">
                         {% for review in product.reviewmodel_set.all %}
-                            <div class="reviews__content_list_item carousel__slide" style="padding: 0px">
+                            <div class="reviews__content_list_item carousel__slide" style="padding: 0px;overflow-y: hidden;">
                                 <img src="{{ review.image.url }}" style="width: 145px;height: 168px" alt="">
                             </div>
                         {% endfor %}
@@ -318,12 +364,6 @@ h1 { font-size: 1.5em; margin: 10px; }
                     </div>
 
                     <div class="reviews__body_list">
-                              <i class='fa fa-star{% if product.grade < 1 %}-o empty{% endif%}' style="color: #0047FF"></i>
-                              <i class='fa fa-star{% if product.grade < 2 %}-o empty{% endif%}' style="color: #0047FF"></i>
-                              <i class='fa fa-star{% if product.grade < 3 %}-o empty{% endif%}' style="color: #0047FF"></i>
-                              <i class='fa fa-star{% if product.grade < 4 %}-o empty{% endif%}' style="color: #0047FF"></i>
-                              <i class='fa fa-star{% if product.grade < 5 %}-o empty{% endif%}' style="color: #0047FF"></i>
-                              {{ product.grade |stringformat:".1f"}}
                         {% for review in product.reviewmodel_set.all %}
                             <div class="reviews__body_item">
                                 <div class="reviews__body_item_head">
