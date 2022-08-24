@@ -85,12 +85,12 @@
 {#    {{ cart.product_ids }}#}
     {% if product.is_published == True %}
         {% if product.id in cart.product_ids %}
-            <a href="{% url 'cart:cart_remove' product.id %}?next={{ request.path }}">Remove</a>
+            <a class="btn" style="background-color: #FF9700 !important;" href="{% url 'cart:cart_remove' product.id %}?next={{ request.path }}">Remove</a>
         {% else %}
-            <form action="{% url "cart:cart_add" product.id %}?next={{ request.path }}" method="post">
+            <form style="width: 100%" action="{% url "cart:cart_add" product.id %}?next={{ request.path }}" method="post">
                 <p style="display: none"> {{ cart_product_form }}</p>
                 {% csrf_token %}
-                <input class="btn" type="submit" value="Add to cart">
+                <input class="btn" style="width: 100%" type="submit" value="Add to cart">
             </form>
         {% endif %}
 

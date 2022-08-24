@@ -2,6 +2,19 @@
 {% load static %}
 {% load new_tags %}
 {% block content %}
+<style>
+    .delivery-1 {
+        background-color: #FF9700 !important;
+    }
+
+    .process-2 {
+        background-color: #00B0E8;
+    }
+
+    .cancel-1 {
+        background-color: #EB001B !important;
+    }
+</style>
     <main class="main">
         <div class="container">
 
@@ -214,7 +227,11 @@
                                         </div>
                                         <div class="product_btn">
                                             <a style="width: 100%">
-                                                <button class="btn orange-1"
+                                                <button class="btn {% if item.order.status == 'process' %}process-2
+                                                                   {% elif item.order.status == 'success' %}btn
+                                                                   {% elif item.order.status == 'delivery' %}delivery-1
+                                                                   {% elif item.order.status == 'cancel' %}cancel-1
+                                                                   {% endif %}"
                                                         type="submit">{{ item.order.status }}
                                                 </button>
                                             </a>
