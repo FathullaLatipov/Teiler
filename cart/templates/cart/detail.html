@@ -115,7 +115,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="item__action_price">
-                                                    <div class="new">{{ item.product.real_price }} ₽</div>
+                                                    <div class="new">{{ item.product.price }} ₽</div>
                                                     {% if cart.is_discount %}
                                                         <div class="old">{{ cart.price }} ₽</div>
                                                     {% endif %}
@@ -227,11 +227,21 @@
                                 </li>
                                 <li class="basket__info_item basket__info_item_prods">
                                     <div class="name">Товары <span>{% get_cart_count request %}</span></div>
-                                    <div class="value">81 841 ₽</div>
+                                     {% if cart.coupon %}
+                                        <div class="value">{{ cart.get_total_price_after_discount|floatformat:"2" }} ₽</div>
+                                     {% else %}
+                                        <div class="value">{{ cart.get_total_price }} ₽</div>
+                                     {% endif %}
                                 </li>
                                 <li class="basket__info_item basket__info_item_discount">
                                     <div class="name">Скидка</div>
-                                    <div class="value">-1094 ₽</div>
+                                     {% if item.is_discount %}
+                                         <div class="value">
+                                             -{{ item.discount }}₽
+                                         </div>
+                                     {% else %}
+                                         <div class="value">0₽</div>
+                                     {% endif %}
                                 </li>
                             </ul>
                             <form action="{% url "coupons:apply" %}" method="post">

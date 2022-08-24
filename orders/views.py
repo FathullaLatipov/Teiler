@@ -11,6 +11,7 @@ from .forms import OrderCreateForm
 from cart.cart import Cart
 
 
+@login_required(login_url="login")
 def order_create(request):
     cart = Cart(request)
     if request.method == 'POST':
