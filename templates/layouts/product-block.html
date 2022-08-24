@@ -82,24 +82,19 @@
     {% endif %}
 </div>
 <div class="product_btn">
-{% for item in cart %}
-{% with product=item.product %}
-      {% if cart|length == 0 %}
-          <h3>Not found</h3>
-      {% else %}
-          <h3>in Cart</h3>
-      {% endif %}
-{% endwith %}
-{% endfor %}
-
-
+{#    {{ cart.product_ids }}#}
     {% if product.is_published == True %}
-        <form action="{% url "cart:cart_add" product.id %}?next={{ request.path }}" method="post">
-            <p style="display: none"> {{ cart_product_form }}</p>
-            {% csrf_token %}
-            <input class="btn" type="submit" value="Add to cart">
-        </form>
-        <a href="{% url 'cart:cart_remove' product.id %}?next={{ request.path }}">Remove</a>
+        {% if product.id in cart.product_ids %}
+            <a href="{% url 'cart:cart_remove' product.id %}?next={{ request.path }}">Remove</a>
+        {% else %}
+            <form action="{% url "cart:cart_add" product.id %}?next={{ request.path }}" method="post">
+                <p style="display: none"> {{ cart_product_form }}</p>
+                {% csrf_token %}
+                <input class="btn" type="submit" value="Add to cart">
+            </form>
+        {% endif %}
+
+
     {% else %}
         <button disabled class="btn btn_dis">Нет в наличии</button>
     {% endif %}

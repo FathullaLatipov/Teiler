@@ -52,3 +52,16 @@ def user_order_view(request, user_pk):
     return render(request, 'lk.html', {'user_orders': user_orders,
                                        'order_items': order_items
                                        })
+
+
+
+# def create_order(request):
+#     user = user
+#     if request.method == 'POST':
+#         form = OrderCreateForm(request.POST)
+#         if form.is_valid():
+#             form.save(commit=False)
+#             form.cleaned_data['first_name'] = request.user.first_name
+#             form.cleaned_data['address'] = user.addres
+#             form.save()
+#

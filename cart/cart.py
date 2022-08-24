@@ -81,7 +81,7 @@ class Cart(object):
         self.save()
 
     def product_ids(self):
-        ids = [id for id in self.cart.keys()]
+        ids = [int(id) for id in self.cart.keys()]
         return list(ids)
 
     @property
