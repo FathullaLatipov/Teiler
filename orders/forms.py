@@ -7,10 +7,10 @@ class OrderCreateForm(forms.ModelForm):
     class Meta:
         model = OrderModel
         label = 'Test'
-        fields = ['online', 'upon_receipt', 'user_order', 'user']
+        fields = ['online', 'upon_receipt', 'status', 'user']
         widgets = {
             'online': forms.RadioSelect(),
             'upon_receipt': forms.RadioSelect(),
-            'user_order': forms.RadioSelect(),
+            'status': forms.RadioSelect(),
             'user': forms.HiddenInput()
         }

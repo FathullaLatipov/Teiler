@@ -209,9 +209,9 @@
                                         <div class="product_btn">
                                             {% if item.product.is_published == True %}
                                                 <a style="width: 100%">
-                                                    {% for item in user_orders|slice:':1' %}
+                                                    {% for item in user_orders %}
                                                         <button class="btn orange-1"
-                                                                type="submit">{{ item.user_order }}</button>
+                                                                type="submit">{{ item.status }}</button>
                                                     {% endfor %}
                                                 </a>
                                             {% endif %}

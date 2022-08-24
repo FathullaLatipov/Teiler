@@ -25,6 +25,4 @@ class ReviewForm(forms.ModelForm):
 class SingleProductForm(forms.ModelForm):
     class Meta:
         model = ProductModel
-        fields = ("category",)
-        print(fields)
-
+        fields = '__all__'

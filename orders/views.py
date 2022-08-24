@@ -48,7 +48,6 @@ def user_order_view(request, user_pk):
     user = CustomUser.objects.get(pk=user_pk)
     user_orders = user.user_order.all()
     order_items = OrderItem.objects.select_related('product').filter(order__user_id=request.user)
-    print(order_items)
 
     return render(request, 'lk.html', {'user_orders': user_orders,
                                        'order_items': order_items

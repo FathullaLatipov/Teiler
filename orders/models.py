@@ -44,7 +44,7 @@ class OrderModel(models.Model):
         ("success", "Товар получен"),
     )
 
-    user_order = models.CharField(
+    status = models.CharField(
         max_length=200,
         choices=Order_choices,
         null=True,
