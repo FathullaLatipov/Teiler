@@ -82,15 +82,14 @@
     {% endif %}
 </div>
 <div class="product_btn">
-{#    {{ cart.product_ids }}#}
     {% if product.is_published == True %}
         {% if product.id in cart.product_ids %}
-            <a class="btn" style="background-color: #FF9700 !important;" href="{% url 'cart:cart_remove' product.id %}?next={{ request.path }}">Remove</a>
+            <a class="btn" style="background-color: #FF9700 !important;" href="{% url 'cart:cart_remove' product.id %}?next={{ request.path }}">В корзине</a>
         {% else %}
             <form style="width: 100%" action="{% url "cart:cart_add" product.id %}?next={{ request.path }}" method="post">
                 <p style="display: none"> {{ cart_product_form }}</p>
                 {% csrf_token %}
-                <input class="btn" style="width: 100%" type="submit" value="Add to cart">
+                <input class="btn" style="width: 100%" type="submit" value="В корзину">
             </form>
         {% endif %}
 
@@ -98,7 +97,6 @@
     {% else %}
         <button disabled class="btn btn_dis">Нет в наличии</button>
     {% endif %}
-    {#                {{ cart.product_ids }}#}
 
     <a onclick="add_to_wishlist(this, {{ product.pk }})">
         <div class="fav2">

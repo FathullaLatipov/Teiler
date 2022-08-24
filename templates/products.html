@@ -3,110 +3,106 @@
 {% load ratings %}
 {% load new_tags %}
 {% block content %}
-<style>
-    .irs--flat .irs-bar {
-       height: 3px !important;
-        top: calc(67% - 11px) !important;
-        background-color: #0047FF !important;
-    }
-    .irs--flat .irs-from, .irs--flat .irs-to, .irs--flat .irs-single {
-        background-color: #0047FF !important;
-    }
+    <style>
+        .irs--flat .irs-bar {
+            height: 3px !important;
+            top: calc(67% - 11px) !important;
+            background-color: #0047FF !important;
+        }
 
-    .irs--flat .irs-handle {
-         background-color: #fff !important;
-         border-radius: 50px;
-         width: 22px !important;
-         height: 22px !important;
-         border: 1px solid #d9d9d9;
-         top: calc(50% - 11px) !important;
-    }
+        .irs--flat .irs-from, .irs--flat .irs-to, .irs--flat .irs-single {
+            background-color: #0047FF !important;
+        }
 
-    .irs--flat .irs-handle>i:first-child {
-        background-color: #fff !important;
-    }
+        .irs--flat .irs-handle {
+            background-color: #fff !important;
+            border-radius: 50px;
+            width: 22px !important;
+            height: 22px !important;
+            border: 1px solid #d9d9d9;
+            top: calc(50% - 11px) !important;
+        }
 
-    .irs--flat .irs-from:before, .irs--flat .irs-to:before, .irs--flat .irs-single:before {
-        border-top-color: #0047FF !important;
-    }
-    .irs--flat .irs-line {
-        background-color: inherit !important;
-    }
-</style>
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css"/>
-        <main class="main">
-            <div class="container">
-                <div class="path">
-                    <ul class="path_list">
-                        <li class="path_item"><a href="#">Главная</a></li> >
-                        <li class="path_item path_item_current"><a href="#">Акции</a></li>
-                    </ul>
-                </div>
+        .irs--flat .irs-handle > i:first-child {
+            background-color: #fff !important;
+        }
 
-                <div id="products">
-                    <div class="main_content" id="products">
-                        <h2 class="section_title">Товары по акции</h2>
-                        <div class="main_content_wr">
+        .irs--flat .irs-from:before, .irs--flat .irs-to:before, .irs--flat .irs-single:before {
+            border-top-color: #0047FF !important;
+        }
+
+        .irs--flat .irs-line {
+            background-color: inherit !important;
+        }
+    </style>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css"/>
+    <main class="main">
+        <div class="container">
+            <div class="path">
+                <ul class="path_list">
+                    <li class="path_item"><a href="#">Главная</a></li>
+                    >
+                    <li class="path_item path_item_current"><a href="#">Акции</a></li>
+                </ul>
+            </div>
+
+            <div id="products">
+                <div class="main_content" id="products">
+                    <h2 class="section_title">Товары по акции</h2>
+                    <div class="main_content_wr">
 
 
-
-                            <aside class="filter">
-                                <div class="filter_close">
-                                    <button>
-                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M3.96967 3.96967C4.26256 3.67678 4.73744 3.67678 5.03033 3.96967L9 7.93934L12.9697 3.96967C13.2626 3.67678 13.7374 3.67678 14.0303 3.96967C14.3232 4.26256 14.3232 4.73744 14.0303 5.03033L10.0607 9L14.0303 12.9697C14.3232 13.2626 14.3232 13.7374 14.0303 14.0303C13.7374 14.3232 13.2626 14.3232 12.9697 14.0303L9 10.0607L5.03033 14.0303C4.73744 14.3232 4.26256 14.3232 3.96967 14.0303C3.67678 13.7374 3.67678 13.2626 3.96967 12.9697L7.93934 9L3.96967 5.03033C3.67678 4.73744 3.67678 4.26256 3.96967 3.96967Z" fill="#000"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                                <div class="filter_body">
-                                    <div class="filter_category">
+                        <aside class="filter">
+                            <div class="filter_close">
+                                <button>
+                                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M3.96967 3.96967C4.26256 3.67678 4.73744 3.67678 5.03033 3.96967L9 7.93934L12.9697 3.96967C13.2626 3.67678 13.7374 3.67678 14.0303 3.96967C14.3232 4.26256 14.3232 4.73744 14.0303 5.03033L10.0607 9L14.0303 12.9697C14.3232 13.2626 14.3232 13.7374 14.0303 14.0303C13.7374 14.3232 13.2626 14.3232 12.9697 14.0303L9 10.0607L5.03033 14.0303C4.73744 14.3232 4.26256 14.3232 3.96967 14.0303C3.67678 13.7374 3.67678 13.2626 3.96967 12.9697L7.93934 9L3.96967 5.03033C3.67678 4.73744 3.67678 4.26256 3.96967 3.96967Z"
+                                              fill="#000"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="filter_body">
+                                <div class="filter_category">
                                     <h3 class="filter_title">Категория</h3>
-                                    <div class="category">
-                                       {% for category in categories %}
-                                            {% if forloop.first %}
-                                                 <div class="filter_category_i" data-drophead>{{ category.title }}</div>
-                                            {% endif %}
-                                       {% endfor %}
+                                    {% for category in categories %}
+                                        <div class="category">
+                                            <div class="filter_category_i" data-drophead>{{ category.title }}</div>
                                             <ul class="filter_category_list">
-                                               {% for category in categories %}
-                                                    <li class="filter_category_item"><a href="/products/?category={{ category.pk }}">{{ category.title }}</a></li>
-                                               {% endfor %}
+                                                {% for subcategory in category.subcategories.all %}
+                                                    <li class="filter_category_item"><a
+                                                            href="/products/?subcategory={{ subcategory.pk }}">{{ subcategory }}</a>
+                                                    </li>
+                                                {% endfor %}
                                             </ul>
-
-                                    </div>
+                                        </div>
+                                    {% endfor %}
                                 </div>
                                 <div class="filter_checklist">
                                     <h3 class="filter_title">Бренды</h3>
                                     <form class="filter_form">
                                         {% for brand in brands %}
                                             <div class="filter_form_item">
-                                                <input id="{{ brand.pk }}" type="checkbox">
-                                                <label for="{{ brand.pk }}" class="filter_name">{{ brand.brand }}</label>
+                                                {% if forloop.first %}
+                                                    <input id="{{ brand.pk }}" type="checkbox">
+                                                    <label for="{{ brand.pk }}"
+                                                           class="filter_name">{{ brand.brand }}</label>
+                                                {% endif %}
                                             </div>
                                         {% endfor %}
                                         <div class="hide_list">
-                                            <div class="filter_form_item">
-                                                <input id="6" type="checkbox">
-                                                <label for="6" class="filter_name">ID</label>
-                                            </div>
-                                            <div class="filter_form_item">
-                                                <input id="7" type="checkbox">
-                                                <label for="7" class="filter_name">Utaupia</label>
-                                            </div>
-                                            <div class="filter_form_item">
-                                                <input id="8" type="checkbox">
-                                                <label for="8" class="filter_name">TopMag</label>
-                                            </div>
-                                            <div class="filter_form_item">
-                                                <input id="9" type="checkbox">
-                                                <label for="9" class="filter_name">Almoa</label>
-                                            </div>
-                                            <div class="filter_form_item">
-                                                <input id="10" type="checkbox">
-                                                <label for="10" class="filter_name">MOCOLL</label>
-                                            </div>
+                                            {% for brand in brands %}
+                                                {% if forloop.counter == 2 %}
+                                                    <div class="filter_form_item">
+                                                        <input id="{{ brand.pk }}" type="checkbox">
+                                                        <label for="{{ brand.pk }}"
+                                                               class="filter_name">{{ brand.brand }}</label>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
                                         </div>
-                                        <div class="toggler" data-change = "1" data-drophead>Показать все</div>
+                                        <div class="toggler" data-change="1" data-drophead>Показать все</div>
 
                                     </form>
                                 </div>
@@ -167,236 +163,240 @@
 
                                     </div>
                                     <div class="filter_more">
-                                            <button class="filter_more_btn" data-change="2" data-dropheadall>Все фильры</button>
-                                        </div>
+                                        <button class="filter_more_btn" data-change="2" data-dropheadall>Все фильры
+                                        </button>
+                                    </div>
 
 
                                 </div>
-                                </div>
+                            </div>
 
-                            </aside>
-                            <section class="list">
-                                <button class="filter_btn">
-                                    <img src="{% static './img/filter.png' %}" alt="">
+                        </aside>
+                        <section class="list">
+                            <button class="filter_btn">
+                                <img src="{% static './img/filter.png' %}" alt="">
+                            </button>
+                            <div class="product_list">
+                                {% for product in products %}
+                                    <div class="product">
+                                        {% include 'layouts/product-block.html' %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="list_more">
+                                <button class="btn">Показать еще</button>
+                            </div>
+                        </section>
+                    </div>
+
+                </div>
+            </div>
+            <section class="reg">
+                <div class="mainform">
+                    <h2 class="section_title">Узнавайте об новых акциях</h2>
+                    <div class="mainform_subtitle">Подпишитесь и получайте промокоды, акции и подборки товаров на свою
+                        почту.
+                    </div>
+                    <form class="mainform_body">
+                        <input type="email" placeholder="Ваш e-mail ">
+                        <button class="btn" type="submit">Подписаться</button>
+                    </form>
+                    <div class="mainform_info">
+                        Нажимая на кнопку я подтверждаю обработку <a href="#">персональных данных</a>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </main>
+    {% include 'form.html' %}
+    <div class="popup" id="city" aria-hidden="true">
+
+        <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true">
+
+                <div class="popup__city">
+                    <h2 class="popup__city_title">
+                        Выберите город
+                    </h2>
+                    <form class="popup__city_form">
+                        <div class="popup__city_search">
+                            <select class="popup__city_search_select">
+                                <option value="Москва">Москва</option>
+                                <option value="Санкт-Петербург">Санкт-Петербург</option>
+                                <option value="Екатеринбург">Екатеринбург</option>
+                            </select>
+                        </div>
+                        <button class="popup__city_btn">Сохранить</button>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="popup" id="map-p" aria-hidden="true">
+
+        <div class="popup__layer" tabindex="-1" data-micromodal-close>
+
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true">
+
+                <div class="map">
+                    <div class="map_wr">
+                        <h2 class="map__head">
+                            Введите адрес
+                        </h2>
+                        <form class="map__form">
+                            <div class="map__form_search">
+                                <input required class="map__form_search_input" type="text" id="suggest">
+                                <button type="button" class="map__form_search_btn" type="submit" id="button">Найти
                                 </button>
-                                <div class="product_list">
-                                    {% for product in products %}
-                                         <div class="product">
-                                            {% include 'layouts/product-block.html' %}
-                                         </div>
-                                    {% endfor %}
-                                </div>
-                                <div class="list_more">
-                                    <button class="btn">Показать еще</button>
-                                </div>
-                            </section>
+                            </div>
+                            <p class="map__form_notice" id="notice">Адрес не найден</p>
+                            <div class="map__form_map" id="map">
+
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="popup__adress">
+
+                        <div id="street-point" class="popup__adress_head dsbl">
+                            Улица
                         </div>
+
+                        <div class="popup__adress_scdr dsbl"><span id="city-point">Город</span>, <span
+                                id="country-point">Страна</span></div>
+
+                        <form id="mapForm" class="popup__adress_form">
+                            <div class="popup__adress_form_main">
+                                <div class="popup__adress_form_main_head">
+                                    <div class="name">Квартира/Офис</div>
+                                    <label>
+                                        <input disabled type="checkbox" class="mapInput">
+                                        Частный дом
+                                    </label>
+                                </div>
+                                <div class="popup__adress_form_main_input">
+                                    <input disabled required type="text" class="mapInput">
+                                </div>
+                            </div>
+
+                            <div class="popup__adress_form_ex">
+                                <div class="popup__adress_form_ex_head">
+                                    Укажите дополнительную информацию для курьера
+                                </div>
+                                <div class="popup__adress_form_ex_wr">
+                                    <div class="item">
+                                        <input disabled required type="text" placeholder="Укажите подъезд"
+                                               class="mapInput">
+                                    </div>
+                                    <div class="item">
+                                        <input disabled required type="text" placeholder="Домофон" class="mapInput">
+                                    </div>
+                                    <div class="item">
+                                        <input disabled required type="text" placeholder="Этаж" class="mapInput">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="popup__adress_form_btn">
+                                <button disabled>Выбрать</button>
+                            </div>
+                        </form>
 
                     </div>
                 </div>
-                <section class="reg">
-                    <div class="mainform">
-    <h2 class="section_title">Узнавайте об новых акциях</h2>
-    <div class="mainform_subtitle">Подпишитесь и получайте промокоды, акции и подборки товаров на свою почту.</div>
-    <form class="mainform_body">
-        <input type="email" placeholder="Ваш e-mail ">
-        <button class="btn" type="submit">Подписаться</button>
-    </form>
-    <div class="mainform_info">
-        Нажимая на кнопку я подтверждаю обработку <a href="#">персональных данных</a>
-    </div>
-</div>
 
-                </section>
+
             </div>
-        </main>
-        {% include 'form.html' %}
-        <div class="popup" id="city" aria-hidden="true">
-
-    <div class="popup__layer" tabindex="-1" data-micromodal-close>
-
-      <!-- [3] -->
-      <div role="dialog" aria-modal="true" >
-
-        <div class="popup__city">
-          <h2 class="popup__city_title">
-            Выберите город
-          </h2>
-          <form class="popup__city_form">
-            <div class="popup__city_search">
-              <select class="popup__city_search_select">
-                <option value="Москва">Москва</option>
-                <option value="Санкт-Петербург">Санкт-Петербург</option>
-                <option value="Екатеринбург">Екатеринбург</option>
-              </select>
-            </div>
-            <button class="popup__city_btn">Сохранить</button>
-          </form>
-
         </div>
-
-      </div>
     </div>
-  </div>
-        <div class="popup" id="map-p" aria-hidden="true">
+    <div class="popup" id="deliv" aria-hidden="true">
 
-    <div class="popup__layer" tabindex="-1" data-micromodal-close>
+        <div class="popup__layer" tabindex="-1" data-micromodal-close>
 
-      <!-- [3] -->
-      <div role="dialog" aria-modal="true" >
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true">
 
-        <div class="map">
-            <div class="map_wr">
-                <h2 class="map__head">
-                    Введите адрес
-                </h2>
-                <form class="map__form">
-                    <div class="map__form_search">
-                        <input required class="map__form_search_input" type="text" id="suggest">
-                        <button type="button" class="map__form_search_btn" type="submit" id="button">Найти</button>
+                <div class="popup__deliv">
+
+                    <div class="popup__deliv_title">
+                        Сохраненные адреса
                     </div>
-                    <p class="map__form_notice" id="notice">Адрес не найден</p>
-                    <div class="map__form_map" id="map">
 
+
+                    <div class="popup__deliv_body">
+                        <div class="popup__deliv_body_item" data-micromodal-close>
+                            Отеделение Почты России №41532643
+                            обл. Омская, г. Омск, ул. 70 лет Октября, д. 19
+
+                        </div>
+                        <div class="popup__deliv_body_item" data-micromodal-close>
+                            Отеделение Почты России №41532643
+                            обл. Омская, г. Омск, ул. 70 лет Октября, д. 19
+
+                        </div>
+                        <div class="popup__deliv_body_item" data-micromodal-close>
+                            Отеделение Почты России №41532643
+                            обл. Омская, г. Омск, ул. 70 лет Октября, д. 19
+
+                        </div>
                     </div>
-                </form>
-            </div>
 
-            <div class="popup__adress">
+                    <button class="popup__deliv_btn" id="delivBtn">
+                        Выбрать адрес доставки
+                    </button>
 
-                <div id="street-point" class="popup__adress_head dsbl">
-                  Улица
                 </div>
 
-                <div class="popup__adress_scdr dsbl"><span id="city-point">Город</span>, <span id="country-point">Страна</span></div>
-
-                <form id="mapForm" class="popup__adress_form">
-                    <div class="popup__adress_form_main">
-                      <div class="popup__adress_form_main_head">
-                        <div class="name">Квартира/Офис</div>
-                        <label>
-                          <input disabled type="checkbox" class="mapInput">
-                          Частный дом
-                        </label>
-                      </div>
-                      <div class="popup__adress_form_main_input">
-                        <input disabled required type="text" class="mapInput">
-                      </div>
-                    </div>
-
-                    <div class="popup__adress_form_ex">
-                      <div class="popup__adress_form_ex_head">
-                        Укажите дополнительную информацию для курьера
-                      </div>
-                      <div class="popup__adress_form_ex_wr">
-                        <div class="item">
-                          <input disabled required type="text" placeholder="Укажите подъезд" class="mapInput">
-                        </div>
-                        <div class="item">
-                          <input disabled required type="text" placeholder="Домофон" class="mapInput">
-                        </div>
-                        <div class="item">
-                          <input disabled required type="text" placeholder="Этаж" class="mapInput">
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="popup__adress_form_btn">
-                      <button disabled>Выбрать</button>
-                    </div>
-                </form>
-
-              </div>
+            </div>
         </div>
-
-
-
-      </div>
     </div>
-  </div>
-        <div class="popup" id="deliv" aria-hidden="true">
-
-    <div class="popup__layer" tabindex="-1" data-micromodal-close>
-
-      <!-- [3] -->
-      <div role="dialog" aria-modal="true" >
-
-        <div class="popup__deliv">
-
-          <div class="popup__deliv_title">
-            Сохраненные адреса
-          </div>
-
-
-
-          <div class="popup__deliv_body">
-             <div class="popup__deliv_body_item" data-micromodal-close>
-               Отеделение Почты России №41532643
-обл. Омская, г. Омск, ул. 70 лет Октября, д. 19
-
-             </div>
-             <div class="popup__deliv_body_item" data-micromodal-close>
-               Отеделение Почты России №41532643
-обл. Омская, г. Омск, ул. 70 лет Октября, д. 19
-
-             </div>
-             <div class="popup__deliv_body_item" data-micromodal-close>
-               Отеделение Почты России №41532643
-обл. Омская, г. Омск, ул. 70 лет Октября, д. 19
-
-             </div>
-          </div>
-
-          <button class="popup__deliv_btn" id="delivBtn">
-              Выбрать адрес доставки
-          </button>
-
-        </div>
-
-      </div>
-    </div>
-  </div>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
-<script>
-  function addUrlParameter(name, value) {
-      let searchParams = new URLSearchParams(window.location.search)
-      if (['category'].includes(name)) {
-          searchParams.delete('?');
-      }
-      if (searchParams.has(name) && searchParams.get(name) === value) {
-          searchParams.delete(name);
-      } else {
-          searchParams.set(name, value)
-      }
-      window.location.search = searchParams.toString()
-  }
-</script>
-<script>
-    function add_to_cart(element, pk) {
-        $.getJSON('/products/' + "cart/" + pk, function (data) {
-            if (!data.status) {
-               $('#message').append(`<div style="padding:5px">
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
+    <script>
+        function addUrlParameter(name, value) {
+            let searchParams = new URLSearchParams(window.location.search)
+            if (['category'].includes(name)) {
+                searchParams.delete('?');
+            }
+            if (searchParams.has(name) && searchParams.get(name) === value) {
+                searchParams.delete(name);
+            } else {
+                searchParams.set(name, value)
+            }
+            window.location.search = searchParams.toString()
+        }
+    </script>
+    <script>
+        function add_to_cart(element, pk) {
+            $.getJSON('/products/' + "cart/" + pk, function (data) {
+                if (!data.status) {
+                    $('#message').append(`<div style="padding:5px">
                         <div id="inner-message" class="alert alert-error">
                             <button type="button" class="close" data-dismiss="alert">&times;</button>
                             Error
                         </div>
                     </div>`);
-            } else {
-                if (data.added) {
-                    $('#message');
-                    element.innerHTML = '<button class="btn orange-1" type="submit">В корзине</button>'
                 } else {
-                    $('#message');
-                     element.innerHTML = '<button class="btn" type="submit">В корзину</button>'
+                    if (data.added) {
+                        $('#message');
+                        element.innerHTML = '<button class="btn orange-1" type="submit">В корзине</button>'
+                    } else {
+                        $('#message');
+                        element.innerHTML = '<button class="btn" type="submit">В корзину</button>'
+                    }
+                    $('#cart_count').html(data.cart_len);
                 }
-                  $('#cart_count').html(data.cart_len);
-            }
-        });
-    }
+            });
+        }
 
-</script>
- <script>
+    </script>
+    <script>
         $(".js-range-slider").ionRangeSlider({
             type: "double",
             grid: true,
@@ -408,7 +408,7 @@
             onFinish(data) {
                 let result = data.from.toString() + ';' + data.to.toString()
                 addUrlParameter('price', result);
-                }
+            }
         });
-</script>
+    </script>
 {% endblock %}

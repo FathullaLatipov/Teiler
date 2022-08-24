@@ -61,25 +61,18 @@
                     <h2 class="section_title">Корзина</h2>
                     <div class="basket">
                         <div class="basket__body">
-                            {% if cart|length == 0 %}
-                                <h3>Not found</h3>
-                            {% else %}
-                                <h3>in Cart</h3>
-                            {% endif %}
                             <div class="basket__body_top">
                                 <label class="basket__body_top_item">
                                     <input type="checkbox">Выбрать все
                                 </label>
                                 <button class="basket__body_top_item" type="button">Удалить выбранные</button>
                             </div>
+                            {% if cart|length == 0 %}
+                                <h3>Ваша корзина пуста</h3>
+                            {% endif %}
                             <ul class="basket__body_list">
                                 {% for item in cart %}
                                     {% with product=item.product %}
-                                         {% if cart|length == 0 %}
-                                                    <h3>Not found</h3>
-                                                {% else %}
-                                                    <h3>in Cart</h3>
-                                                {% endif %}
                                         <li class="basket__body_item">
                                             <div class="item__main">
                                                 <div class="item__main_input">
@@ -110,9 +103,9 @@
                                                         <a onclick="add_to_wishlist(this, {{ product.pk }})">
                                                             <div class="fav2">
                                                                 {% if product|in_wishlist:request %}
-                                                                    <button>В избранное</button>
-                                                                {% else %}
                                                                     <button>В избранном</button>
+                                                                {% else %}
+                                                                    <button>В избранное</button>
                                                                 {% endif %}
                                                             </div>
                                                         </a>
@@ -187,38 +180,38 @@
 
                             </ul>
                         </div>
-{#                        <table class="cart">#}
-{#                            {% if cart.coupon %}#}
-{#                                <tr class="subtotal">#}
-{#                                    <td>Subtotal</td>#}
-{#                                    <td colspan="4"></td>#}
-{#                                    <td class="num">${{ cart.get_total_price|floatformat:"2" }}</td>#}
-{#                                </tr>#}
-{#                                <tr>#}
-{#                                    <td>#}
-{#                                        "{{ cart.coupon.code }}" coupon ({{ cart.coupon.discount }}% off)#}
-{#                                    </td>#}
-{#                                    <td colspan="4"></td>#}
-{#                                    <td class="num neg">#}
-{#                                        - ${{ cart.get_discount|floatformat:"2" }}#}
-{#                                    </td>#}
-{#                                </tr>#}
-{#                            {% endif %}#}
-{#                            <tr class="total">#}
-{#                                <td>Total</td>#}
-{#                                <td colspan="4"></td>#}
-{#                                <td class="num">#}
-{#                                    ${{ cart.get_total_price_after_discount|floatformat:"2" }}#}
-{#                                </td>#}
-{#                            </tr>#}
-{#                        </table>#}
+                        {#                        <table class="cart">#}
+                        {#                            {% if cart.coupon %}#}
+                        {#                                <tr class="subtotal">#}
+                        {#                                    <td>Subtotal</td>#}
+                        {#                                    <td colspan="4"></td>#}
+                        {#                                    <td class="num">${{ cart.get_total_price|floatformat:"2" }}</td>#}
+                        {#                                </tr>#}
+                        {#                                <tr>#}
+                        {#                                    <td>#}
+                        {#                                        "{{ cart.coupon.code }}" coupon ({{ cart.coupon.discount }}% off)#}
+                        {#                                    </td>#}
+                        {#                                    <td colspan="4"></td>#}
+                        {#                                    <td class="num neg">#}
+                        {#                                        - ${{ cart.get_discount|floatformat:"2" }}#}
+                        {#                                    </td>#}
+                        {#                                </tr>#}
+                        {#                            {% endif %}#}
+                        {#                            <tr class="total">#}
+                        {#                                <td>Total</td>#}
+                        {#                                <td colspan="4"></td>#}
+                        {#                                <td class="num">#}
+                        {#                                    ${{ cart.get_total_price_after_discount|floatformat:"2" }}#}
+                        {#                                </td>#}
+                        {#                            </tr>#}
+                        {#                        </table>#}
                         <div class="basket__info">
                             <div class="basket__info_total">
-                             {% if cart.coupon %}
-                                <div class="new">{{ cart.get_total_price_after_discount|floatformat:"2" }} ₽</div>
-                             {% else %}
-                                <div class="new">{{ cart.get_total_price }} ₽</div>
-                             {% endif %}
+                                {% if cart.coupon %}
+                                    <div class="new">{{ cart.get_total_price_after_discount|floatformat:"2" }} ₽</div>
+                                {% else %}
+                                    <div class="new">{{ cart.get_total_price }} ₽</div>
+                                {% endif %}
                                 {% if cart.is_discount %}
                                     <div class="old">{{ cart.price }} ₽</div>
                                 {% else %}
@@ -259,7 +252,10 @@
                                                     </div>
                                                     <div class="action__drop_input" style="height: 50px">
                                                         <label for="id_code">
-                                                            <input type="text" name="code" id="id_code" placeholder="{% if cart.coupon %} {{ cart.coupon.code }}" coupon ({{ cart.coupon.discount }}% off) {% else %}Введите промокод... {% endif %}">
+                                                            <input type="text" name="code" id="id_code"
+                                                                   placeholder="{% if cart.coupon %} {{ cart.coupon.code }}"
+                                                                   coupon ({{ cart.coupon.discount }}% off)
+                                                                   {% else %}Введите промокод... {% endif %}">
                                                             {% csrf_token %}
                                                         </label>
                                                     </div>
@@ -321,10 +317,10 @@
                 } else {
                     if (data.added) {
                         $('#message');
-                        element.innerHTML = '<div class="fav2"><button>В избранное</button></div>'
+                        element.innerHTML = '<div class="fav2"><button>В избранном</button></div>'
                     } else {
                         $('#message');
-                        element.innerHTML = '<div class="fav2"><button>В избранном</button></div>'
+                        element.innerHTML = '<div class="fav2"><button>В избранное</button></div>'
                     }
                     $('#like_count').html(data.wishlist_len);
                 }
