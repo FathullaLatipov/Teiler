@@ -14,6 +14,8 @@ from cart.cart import Cart
 @login_required(login_url="login")
 def order_create(request):
     cart = Cart(request)
+    print("posted")
+    print(request.user)
     if request.method == 'POST':
         form = OrderCreateForm(request.POST)
         if form.is_valid():
@@ -39,14 +41,15 @@ def order_create(request):
     else:
         form = OrderCreateForm()
         coupon_apply_form = CouponApplyForm()
+        print("invalid")
 
     return render(request, 'orders/order/create.html',
-                  {'form': form, 'cart': cart, 'coupon_apply_form': coupon_apply_form})
+                  {'form': form, 'cart': cart})
 
 
 @login_required(login_url="signup")
 def user_order_view(request, user_pk):
-    user = CustomUser.objects.get(pk=user_pk)
+    user = CustomUser.objects.get(id=user_pk)
     user_orders = user.user_order.all()
     order_items = OrderItem.objects.select_related('product').filter(order__user_id=request.user)
 

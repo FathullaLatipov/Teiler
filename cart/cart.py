@@ -45,14 +45,18 @@ class Cart(object):
         # print(self.cart)
         return sum(item['quantity'] for item in self.cart.values())
 
-    def add(self, product, quantity=1, update_quantity=False):
+    def add(self, product, quantity=1, stat1=None, stat2=None, color=None, update_quantity=False):
         """
         Add a product to the cart or update its quantity.
         """
         product_id = str(product.id)
         if product_id not in self.cart:
             self.cart[product_id] = {'quantity': 0,
-                                     'price': str(product.price)}
+                                     'price': str(product.price),
+                                     'stat1': stat1,
+                                     'stat2': stat2,
+                                     'color': color
+                                     }
         if update_quantity:
             self.cart[product_id]['quantity'] = quantity
         else:

@@ -27,6 +27,7 @@
     <main class="main">
         <form action="." method="post" class="order-form">
             {% csrf_token %}
+            {{ form.errors }}
             <div class="container">
                 <div id="order">
                     <div class="main__content">

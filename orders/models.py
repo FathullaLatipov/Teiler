@@ -52,7 +52,7 @@ class OrderModel(models.Model):
         blank=True
     )
 
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='user_order')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='user_order', null=True, blank=True)
     address = models.CharField(max_length=100, verbose_name='address', null=True)
     flat_office = models.CharField(max_length=100, verbose_name='flat_office', null=True)
     entrance = models.CharField(max_length=100, verbose_name='entrance', null=True)

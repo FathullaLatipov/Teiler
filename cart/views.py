@@ -47,3 +47,15 @@ def cart_detail(request):
     return render(request, 'cart/detail.html', context)
 
 
+@require_POST
+def add_to_card_from_product_page(request, product_id):
+    cart = Cart(request)
+    product = get_object_or_404(ProductModel, id=product_id)
+    form = CartAddProductForm(request.POST)
+    if form.is_valid():
+        data = form.cleaned_data
+        print(data)
+    return redirect(request.GET.get('next', '/'))
+
+
+
