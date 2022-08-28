@@ -66,7 +66,7 @@
                                     </div>
                                     {% endfor %}
                                 {% else %}
-                                 <h3>Product not found!</h3>
+                                 <h3>Избранное пусто</h3>
                                 {% endif %}
                             </div>
                         </div>
@@ -78,7 +78,7 @@
                 <section class="pop">
                     <div class="section__top">
                         <h2 class="section_title">Для вас</h2>
-                        <a href="./positions.html" class="section__top_link">Показать все</a>
+                        <a href="{% url 'product:products' %}" class="section__top_link">Показать все</a>
                     </div>
     
                     <div class="product_list">
