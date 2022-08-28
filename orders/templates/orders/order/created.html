@@ -2,7 +2,19 @@
 
 
 {% block content %}
-    <h1 style="text-align: center;padding: 10px">Спасибо</h1>
-    <p style="text-align: center;padding: 10px">Ваш заказ успешно выполнен. Ваш номер заказа <strong>{{ order.id }}</strong></p>
-    <a style="text-align: center;padding: 10px;color: #0047FF" href="/">Назад домой</a>
+<style>
+@media screen and (max-width: 900px) {
+    .top {
+        margin-top: 40%;
+    }
+}
+</style>
+    <div class="top">
+        <h1 style="text-align: center;padding: 10px">Спасибо</h1>
+        <p style="text-align: center;padding: 10px">Ваш заказ успешно выполнен. Ваш номер заказа <strong>{{ order.id }}</strong></p>
+    </div>
+                <a style="text-align: center;padding: 10px;color: #0047FF" href="/">Назад домой</a>
+    <br>
+    <br>
+    <br>
 {% endblock %}
