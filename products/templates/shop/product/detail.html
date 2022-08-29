@@ -234,7 +234,7 @@ h1 { font-size: 1.5em; margin: 10px; }
                                                 {% if product.id in cart.product_ids %}
                                                     <a class="btn" style="background-color: #FF9700 !important;" href="{% url 'cart:cart_remove' product.id %}?next={{ request.path }}">Добавлено в корзину</a>
                                                 {% else %}
-                                                    <form style="width: 100%" action="{% url "cart:add_to_card_from_product_page" product.id %}?next={{ request.path }}" method="post">
+                                                    <form style="width: 100%" action="{% url "cart:cart_add" product.id %}?next={{ request.path }}" method="post">
                                                         <p style="display: none"> {{ cart_product_form }}</p>
                                                         {% csrf_token %}
                                                         <input class="btn" style="width: 100%" type="submit" value="Добавить в корзину">
