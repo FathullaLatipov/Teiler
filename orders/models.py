@@ -9,10 +9,6 @@ from user.models import CustomUser
 
 
 class OrderModel(models.Model):
-    first_name = models.CharField(max_length=50,null=True, blank=True)
-    last_name = models.CharField(max_length=50,null=True, blank=True)
-    phone = models.PositiveIntegerField(null=True,blank=True)
-    email = models.EmailField(null=True,blank=True)
     Online_choices = (
         ("online", "Картой онлайн"),
         ("chache", "Оплата при получении"),
@@ -53,6 +49,8 @@ class OrderModel(models.Model):
     )
 
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='user_order', null=True, blank=True)
+    phone = models.CharField(max_length=20, verbose_name='phone', null=True)
+    email = models.EmailField(null=True)
     address = models.CharField(max_length=100, verbose_name='address', null=True)
     flat_office = models.CharField(max_length=100, verbose_name='flat_office', null=True)
     entrance = models.CharField(max_length=100, verbose_name='entrance', null=True)

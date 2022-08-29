@@ -2,6 +2,7 @@ from django.views.decorators.http import require_POST
 from django.shortcuts import render, redirect, get_object_or_404
 
 from products.models import ProductModel
+from user.models import CustomUser
 from .cart import Cart
 from .forms import CartAddProductForm
 from coupons.forms import CouponApplyForm
@@ -15,6 +16,7 @@ def cart_add(request, product_id):
     if form.is_valid():
         cd = form.cleaned_data
         cart.add(product=product, quantity=cd['quantity'], update_quantity=cd['update'])
+        print(cart, "this is cart")
     return redirect(request.GET.get('next', '/'))
 
 @require_POST

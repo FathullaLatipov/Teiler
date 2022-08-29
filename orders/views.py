@@ -14,14 +14,13 @@ from cart.cart import Cart
 @login_required(login_url="login")
 def order_create(request):
     cart = Cart(request)
-    print("posted")
-    print(request.user)
     if request.method == 'POST':
         form = OrderCreateForm(request.POST)
         if form.is_valid():
             order = form.save(commit=False)
+            order.phone = request.user.phone
+            order.email = request.user.email
             order.user = request.user
-            order = form.save(commit=False)
             if cart.coupon:
                 order.coupon = cart.coupon
                 order.discount = cart.coupon.discount
@@ -31,7 +30,7 @@ def order_create(request):
                     order=order,
                     product=item['product'],
                     price=item['price'],
-                    quantity=item['quantity']
+                    quantity=item['quantity'],
                 )
             coupon_apply_form = CouponApplyForm()
             cart.clear()
@@ -58,14 +57,14 @@ def user_order_view(request, user_pk):
                                        })
 
 
-
 # def create_order(request):
-#     user = user
+#     user = CustomUser
 #     if request.method == 'POST':
 #         form = OrderCreateForm(request.POST)
 #         if form.is_valid():
 #             form.save(commit=False)
 #             form.cleaned_data['first_name'] = request.user.first_name
-#             form.cleaned_data['address'] = user.addres
+#             # form.cleaned_data['address'] = user.addres
 #             form.save()
-#
+#             print(form)
+
