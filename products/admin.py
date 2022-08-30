@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 from products.forms import ColorModelForm
 from products.models import CategoryModel, ProductModel, ProductCustomModel, BrandModel, ColorModel, \
-    ReviewModel, ProductCharacteristicModel, SubCategoryModel, ProductImageModel, ProductCustomNameModel
+    ReviewModel, ProductCharacteristicModel, SubCategoryModel, ProductImageModel, ProductCustomNameModel, \
+    ProductAttributes
 
 
 @admin.register(CategoryModel)
@@ -70,7 +71,15 @@ class ProductModelAdmin(admin.ModelAdmin):
     list_filter = ['title', 'sku']
     search_fields = ['title', 'sku']
     autocomplete_fields = ['colors']
-    inlines = [ProductCustomNameModelAdmin, ProductCustomModelAdmin, ProductImageModelAdmin, ProductCharacteristicModelAdmin]
+    inlines = [ProductCustomNameModelAdmin, ProductCustomModelAdmin, ProductImageModelAdmin,
+               ProductCharacteristicModelAdmin]
     readonly_fields = ['real_price']
     save_as = True
     save_on_top = True
+
+
+class ProductAttributeAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'product', 'price', 'color', 'num']
+
+
+admin.site.register(ProductAttributes, ProductAttributeAdmin)

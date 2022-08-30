@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, request
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
 from django.views import View
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, DeleteView, FormView
@@ -61,12 +62,13 @@ class ProductTemplate(ListView):
             filters['price__gte'] = price_from
             filters['price__lte'] = price_to
 
-        return ProductModel.objects.filter(**filters).order_by('pk')
+        return ProductModel.objects.filter(**filters).order_by('pk')[:4]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['cart_product_form'] = CartAddProductForm()
         context['cart'] = Cart(self.request)
+        context['total_data'] = ProductModel.objects.count()
         context['min_price'], context['max_price'] = ProductModel.objects.aggregate(
             Min('real_price'),
             Max('real_price')
@@ -167,6 +169,14 @@ class CartModelListView(ListView):
 
     def get_queryset(self):
         return ProductModel.get_from_cart(self.request)
+
+
+def load_more_data(request):
+    offset = int(request.GET['offset'])
+    limit = int(request.GET['limit'])
+    data = ProductModel.objects.all().order_by('id')[offset:offset+limit]
+    t = render_to_string('layouts/product-block.html', {'data': data})
+    return JsonResponse({'data': t})
 
 
 def add_to_cart(request, pk):

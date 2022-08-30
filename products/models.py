@@ -218,3 +218,13 @@ class RegisterForm(models.Model):
     class Meta:
         verbose_name = _('register')
         verbose_name_plural = _('registers')
+
+
+class ProductAttributes(models.Model):
+    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, verbose_name=_('product'))
+    color = models.ForeignKey(ColorModel, on_delete=models.CASCADE,)
+    num = models.ForeignKey(ProductCustomModel, on_delete=models.CASCADE,)
+    price = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.product.title

@@ -176,15 +176,17 @@
                             <button class="filter_btn">
                                 <img src="{% static './img/filter.png' %}" alt="">
                             </button>
-                            <div class="product_list">
+                            <div class="product_list" id="filteredProducts">
                                 {% for product in products %}
                                     <div class="product">
-                                        {% include 'layouts/product-block.html' %}
+                                        <div class="product-box" id="product-box">
+                                            {% include 'layouts/product-block.html' %}
+                                        </div>
                                     </div>
                                 {% endfor %}
                             </div>
                             <div class="list_more">
-                                <button class="btn">Показать еще</button>
+                                <button id="loadMore" data-total="{{ total_data }}" data-limit="4" class="btn">Показать еще</button>
                             </div>
                         </section>
                     </div>
@@ -402,13 +404,46 @@
             grid: true,
             min: {{ min_price|cut:"," }},
             max: {{ max_price|cut:"," }},
-            from: {% get_price request 0 %},
-            to: {% get_price request 1 %},
             prefix: "$",
             onFinish(data) {
                 let result = data.from.toString() + ';' + data.to.toString()
                 addUrlParameter('price', result);
             }
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("#loadMore").on('click', function() {
+                 var _currentProducts=$("#product-box").length;
+                 var _limit=$(this).attr('data-limit');
+                 var _total=$(this).attr('data-total');
+
+
+                 // Start ajax
+                $.ajax({
+                   url: '/load-more-data',
+                   data:{
+                      limit:_limit,
+                      offset:_currentProducts,
+                    },
+                    dataType:'json',
+                    beforeSend:function(){
+                        $("#loadMore").attr('disabled', true);
+                    },
+                    success:function(res){
+                        $("#filteredProducts").append(res.data);
+                        $("#loadMore").attr('disabled', true);
+
+                        var _totalShowing=$("#product-box").length;
+                        if(_totalShowing==_total){
+                            $("#loadMore").remove();
+                        }
+                    }
+                });
+
+                console.log(_currentProducts, _limit, _total)
+                 // end ajax
+            });
         });
     </script>
 {% endblock %}

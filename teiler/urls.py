@@ -5,7 +5,7 @@ from django.urls import path, include
 
 from cart import views
 from help.views import HelpListView
-from products.views import HomeTemplate, AboutTemplateView, ContactTemplateView, OrderTemplateView
+from products.views import HomeTemplate, AboutTemplateView, ContactTemplateView, OrderTemplateView, load_more_data
 from user.views import edit_account_view, update_username, update_phone, update_email, update_date, \
     update_male
 from orders.views import user_order_view
@@ -32,6 +32,7 @@ urlpatterns = [
     path('change_male/<user_id>/edit/', update_male, name='update_male'),
     path('add/<int:product_id>/', views.cart_add, name='cart_add'),
     path('remove/<int:product_id>/', views.cart_remove, name='cart_remove'),
+    path('load-more-data/', load_more_data, name='load_more_data'),
     path('', HomeTemplate.as_view())
 ]
 

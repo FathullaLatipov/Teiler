@@ -1,6 +1,7 @@
 {% load static %}
 {% load new_tags %}
-<a href="{% url 'product:single' pk=product.pk %}" class="product_img">
+<div class="product-box" id="product-box">
+<a href="/products/{{ product.id }}" class="product_img">
     <picture>
         <source type="image/webp">
         <img src="{{ product.image.url }}" style="width: 137px;height: 158px"
@@ -73,7 +74,7 @@
     {#            <span>(13)</span>#}
     {#        </div>#}
 </div>
-<a href="{% url 'product:single' pk=product.pk %}"
+<a href="/products/{{ product.id }}"
    class="product_name">{{ product.title }}</a>
 <div class="product_price">
     <div class="actual">{{ product.real_price }} ₽</div>
@@ -119,6 +120,7 @@
 {% if product.is_discount %}
     <div class="product_ex">-{{ product.discount }}%</div>
 {% endif %}
+</div>
 <script>
     function add_to_wishlist(element, pk) {
         $.getJSON('/products/' + "wishlist/" + pk, function (data) {
