@@ -188,6 +188,18 @@ h1 { font-size: 1.5em; margin: 10px; }
                                                 {% endfor %}
                                             </div>
                                         </div>
+
+                                     <div class="custom__space">
+                                     <div class="form__name">Price:</div>
+                                            <div class="custom__space_inputs"> <h3>hjk</h3>{{ product.productattributes_set.first.price }}
+                                                {% for custom in product.customers.all %}
+                                                    <div class="custom__space_item">
+                                                        <input id="{{ custom.price }}" type="radio" value="{{ custom.price }}" name="price">
+                                                        <label for="{{ custom.price }}">{{ custom.price }}</label>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
                                         <div class="custom__color">
                                             <h3 class="form__name">Цвет:</h3>
                                             <div class="custom__color_inputs">
@@ -207,6 +219,10 @@ h1 { font-size: 1.5em; margin: 10px; }
                                                     <span class="value">{{ i.number }}</span></li>
                                             {% endfor %}
                                         </ul>
+
+
+
+
                                         <a href="#descr" class="custom__link">Перейти к описанию</a>
                                         <!--                                            <div class="custom__ex">-->
                                         <!--                                                <svg width="31" height="38" viewBox="0 0 31 38" fill="none" xmlns="http://www.w3.org/2000/svg">-->
@@ -789,4 +805,18 @@ h1 { font-size: 1.5em; margin: 10px; }
             </div>
         </div>
     </div>
+    <h3>hello</h3>
+    {% for i in colors %}
+
+        <div style="background-color: {{ i.color__code }}">
+        <p>hello</p>
+        </div>
+    {% endfor %}
+
+    <script src="https://yandex.st/jquery/2.2.3/jquery.min.js" type="text/javascript"></script>
+    <script>
+    $(document).ready(function() {
+
+    });
+    </script>
 {% endblock %}

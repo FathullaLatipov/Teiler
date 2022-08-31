@@ -13,7 +13,7 @@ from rest_framework.response import Response
 from cart.forms import CartAddProductForm
 from products import models, forms
 from products.forms import ReviewForm
-from products.models import ProductModel
+from products.models import ProductModel, ProductAttributes
 from cart.cart import Cart
 from products.utils import get_wishlist_data, get_cart_data
 
@@ -86,7 +86,7 @@ class ProductDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['cart_product_form'] = CartAddProductForm()
         context['related'] = ProductModel.objects.order_by('-pk')
-        # context['avg_rating'] = ProductModel.objects.annotate(avarage_rating=Avg('ratings__rating')).order_by('-avarage_rating')
+        context['colors'] = ProductAttributes.objects.all().values('color__id', 'color__code').distinct()
         return context
 
     def add_to_object(request, pk):

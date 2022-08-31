@@ -175,6 +175,10 @@ class ProductCustomModel(models.Model):
 
     custom = models.CharField(max_length=200, verbose_name=_('custom'))
     number = models.PositiveIntegerField(verbose_name=_('number'), null=True)
+    price = models.PositiveIntegerField(verbose_name=_('price'), null=True)
+
+    def __str__(self):
+        return self.custom
 
     class Meta:
         verbose_name = _('product custom')
