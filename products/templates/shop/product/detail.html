@@ -181,17 +181,30 @@ h1 { font-size: 1.5em; margin: 10px; }
                                           {% endfor %}
                                             <div class="custom__space_inputs">
                                                 {% for custom in product.customers.all %}
-                                                    <div class="custom__space_item">
-                                                        <input id="{{ custom.number }}" type="radio" value="{{ custom.number }}" name="space">
-                                                        <label for="{{ custom.number }}">{{ custom.number }}</label>
+                                                    <div class="custom__space_item space-price">
+                                                        <input  id="{{ custom.number }}" type="radio" value="{{ custom.number }}" name="space">
+                                                        <label data-price="{{ custom.price }}" for="{{ custom.number }}">{{ custom.number }}</label>
                                                     </div>
                                                 {% endfor %}
                                             </div>
                                         </div>
 
                                      <div class="custom__space">
-                                     <div class="form__name">Price:</div>
-                                            <div class="custom__space_inputs"> <h3>hjk</h3>{{ product.productattributes_set.first.price }}
+{#                                     <div class="form__name">Price:</div>#}
+{#                                     {% for p_attr in product.productattributes_set.all %}#}
+{#                                         <div class="hjk" style="background-color: {{ p_attr.color }}">#}
+{#                                         <h3 style="color: #fff">hel</h3>#}
+{#                                         </div>#}
+{#                                     {% endfor %}#}
+{##}
+{#                                      {% for p_attr in product.productattributes_set.all %}#}
+{#                                          <button class="btn choose-num">{{ p_attr.num }}</button>#}
+{#                                     {% endfor %}#}
+
+                                            <div class="custom__space_inputs">
+{#                                                <span class="product-price">#}
+{#                                                    {{ product.productattributes_set.first.price }}#}
+{#                                                </span>#}
                                                 {% for custom in product.customers.all %}
                                                     <div class="custom__space_item">
                                                         <input id="{{ custom.price }}" type="radio" value="{{ custom.price }}" name="price">
@@ -236,7 +249,7 @@ h1 { font-size: 1.5em; margin: 10px; }
                                     <div class="order">
                                         <div class="order__price">
                                             <div class="order__price_item">
-                                                <div class="new">{{ product.real_price }} ₽</div>
+                                                <div class="new">{{ product.customers.first.price }} ₽</div>
                                                 {% if product.is_discount %}
                                                     <div class="old">{{ product.price }} ₽</div>
                                                 {% endif %}
@@ -815,8 +828,14 @@ h1 { font-size: 1.5em; margin: 10px; }
 
     <script src="https://yandex.st/jquery/2.2.3/jquery.min.js" type="text/javascript"></script>
     <script>
-    $(document).ready(function() {
-
-    });
+   // $(document).ready(function() {
+      //  $('.space-price').on('click', function (){
+       //      $('.space-price').first().attr()
+      //  });
+      //  $('.space-price').on('click', function (){
+      //      var _price=$(this).attr('data-price');
+      //      $(".product-price").text(_price)
+      //  });
+   // });
     </script>
 {% endblock %}

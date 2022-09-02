@@ -115,7 +115,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="item__action_price">
-                                                    <div class="new">{{ item.product.price }} ₽</div>
+                                                    <div class="new">{{ product.customers.first.price }} ₽</div>
                                                     {% if cart.is_discount %}
                                                         <div class="old">{{ cart.price }} ₽</div>
                                                     {% endif %}
@@ -207,11 +207,17 @@
                         {#                        </table>#}
                         <div class="basket__info">
                             <div class="basket__info_total">
-                                {% if cart.coupon %}
-                                    <div class="new">{{ cart.get_total_price_after_discount|floatformat:"2" }} ₽</div>
-                                {% else %}
-                                    <div class="new">{{ cart.get_total_price }} ₽</div>
-                                {% endif %}
+                              {% for item in cart %}
+                                    {% with product=item.product %}
+                                          {% if cart.coupon %}
+                                                <div class="new">{{ cart.get_total_price_after_discount|floatformat:"2" }} ₽</div>
+                                            {% else %}
+{#                                                   {{ product.customers.first.price }}#}
+                                                <div class="new">{{ cart.get_total_price }} ₽</div>
+                                            {% endif %}
+                                    {% endwith %}
+                              {% endfor %}
+
                                 {% if cart.is_discount %}
                                     <div class="old">{{ cart.price }} ₽</div>
                                 {% else %}
