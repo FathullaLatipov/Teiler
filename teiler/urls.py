@@ -33,6 +33,8 @@ urlpatterns = [
     path('add/<int:product_id>/', views.cart_add, name='cart_add'),
     path('remove/<int:product_id>/', views.cart_remove, name='cart_remove'),
     path('load-more-data/', load_more_data, name='load_more_data'),
+    path('api/', include('api.urls')),
+    path('api-auth/', include('rest_framework.urls')),
     path('', HomeTemplate.as_view())
 ]
 

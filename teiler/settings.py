@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'star_ratings',
     'widget_tweaks',
+    'rest_framework',
 
     #     django apps
     'carousel',
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'cart',
     'orders',
     'coupons',
+    'api',
 ]
 
 MIDDLEWARE = [
