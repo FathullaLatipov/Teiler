@@ -172,6 +172,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 9
 }
 
+
 try:
     from .settings_local import *
 except ImportError:
