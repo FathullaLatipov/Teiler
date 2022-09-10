@@ -9,12 +9,14 @@ from django.views.generic import ListView, DetailView, TemplateView, CreateView,
 from django.db.models import Max, Min, Avg, Sum, Count
 from django.http import JsonResponse
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from cart.forms import CartAddProductForm
 from products import models, forms
 from products.forms import ReviewForm
 from products.models import ProductModel, ProductAttributes
 from cart.cart import Cart
+from products.serializers import ProductSerializer
 from products.utils import get_wishlist_data, get_cart_data
 
 
@@ -174,7 +176,7 @@ class CartModelListView(ListView):
 def load_more_data(request):
     offset = int(request.GET['offset'])
     limit = int(request.GET['limit'])
-    data = ProductModel.objects.all().order_by('id')[offset:offset+limit]
+    data = ProductModel.objects.all().order_by('id')[offset:offset + limit]
     t = render_to_string('layouts/product-block.html', {'data': data})
     return JsonResponse({'data': t})
 
@@ -230,3 +232,14 @@ class OrderTemplateView(ListView):
 
 class ArticleTemplateView(TemplateView):
     template_name = 'articles.html'
+
+
+# API
+
+class ProductListAPIView(APIView):
+    ''' Все продукты '''
+
+    def get(self, request):
+        productsApi = ProductModel.objects.all()
+        serializer = ProductSerializer(productsApi, many=True)
+        return Response(serializer.data)
