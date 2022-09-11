@@ -181,12 +181,15 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "https://example.com",
-    "https://sub.example.com",
-    "http://5.23.52.211/api/v1/carousels",
-    "http://5.23.52.211/api/v1/products",
-]
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:4200',
+    'http://127.0.0.1',
+    'http://5.23.52.211'
+)
 
 try:
     from .settings_local import *
