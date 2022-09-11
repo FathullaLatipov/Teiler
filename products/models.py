@@ -143,19 +143,6 @@ class ReviewModel(models.Model):
         verbose_name_plural = _('reviews')
 
 
-class RatingStar(models.Model):
-    """Звезда рейтинга"""
-    value = models.SmallIntegerField("StarRating", default=0)
-
-    def __str__(self):
-        return f'{self.value}'
-
-    class Meta:
-        verbose_name = "star_rating"
-        verbose_name_plural = "star_ratings"
-        ordering = ["-value"]
-
-
 class ProductCustomNameModel(models.Model):
     product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, related_name='customer_names',
                                 verbose_name=_('product'),

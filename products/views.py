@@ -11,12 +11,13 @@ from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from carousel.models import CarouselModel
 from cart.forms import CartAddProductForm
 from products import models, forms
 from products.forms import ReviewForm
-from products.models import ProductModel, ProductAttributes
+from products.models import ProductModel, ProductAttributes, ReviewModel
 from cart.cart import Cart
-from products.serializers import ProductSerializer
+from products.serializers import ProductSerializer, ProductRatingSerializer, CarouselSerializer
 from products.utils import get_wishlist_data, get_cart_data
 
 
@@ -236,10 +237,26 @@ class ArticleTemplateView(TemplateView):
 
 # API
 
+class ProductRatingAPIView(APIView):
+    ''' Рейтинг продуктов '''
+    def get(self, request):
+        ratings = ReviewModel.objects.all()
+        serializer = ProductRatingSerializer(ratings, many=True)
+        return Response(serializer.data)
+
+
 class ProductListAPIView(APIView):
     ''' Все продукты '''
 
     def get(self, request):
         productsApi = ProductModel.objects.all()
         serializer = ProductSerializer(productsApi, many=True)
+        return Response(serializer.data)
+
+
+class CarouselListAPIView(APIView):
+    ''' Карусель '''
+    def get(self, request):
+        carousels = CarouselModel.objects.all()
+        serializer = CarouselSerializer(carousels, many=True)
         return Response(serializer.data)

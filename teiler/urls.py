@@ -6,7 +6,7 @@ from django.urls import path, include
 from cart import views
 from help.views import HelpListView
 from products.views import HomeTemplate, AboutTemplateView, ContactTemplateView, OrderTemplateView, load_more_data, \
-    ProductListAPIView
+    ProductListAPIView, ProductRatingAPIView, CarouselListAPIView
 from user.views import edit_account_view, update_username, update_phone, update_email, update_date, \
     update_male
 from orders.views import user_order_view
@@ -36,6 +36,8 @@ urlpatterns = [
     path('load-more-data/', load_more_data, name='load_more_data'),
     path('api-auth/', include('rest_framework.urls')),
     path('api/v1/products', ProductListAPIView.as_view()),
+    path('api/v1/rating', ProductRatingAPIView.as_view()),
+    path('api/v1/carousels', CarouselListAPIView.as_view()),
     path('', HomeTemplate.as_view())
 ]
 

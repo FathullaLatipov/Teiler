@@ -2,7 +2,7 @@ from django import forms
 from django.forms import BaseForm, inlineformset_factory
 
 from products import models
-from products.models import ColorModel, RatingStar, ReviewModel, RegisterForm, ProductModel
+from products.models import ColorModel, ReviewModel, RegisterForm, ProductModel
 
 
 class ColorModelForm(forms.ModelForm):
