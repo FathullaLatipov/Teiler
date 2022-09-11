@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'star_ratings',
     'widget_tweaks',
     'rest_framework',
+    'corsheaders',
 
     #     django apps
     'carousel',
@@ -51,6 +52,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -175,6 +177,16 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 2
 }
 
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "https://example.com",
+    "https://sub.example.com",
+    "http://5.23.52.211/api/v1/carousels",
+    "http://5.23.52.211/api/v1/products",
+]
 
 try:
     from .settings_local import *
