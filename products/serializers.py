@@ -7,18 +7,20 @@ from .models import ProductModel, ReviewModel
 
 
 class ProductRatingSerializer(serializers.ModelSerializer):
-    product = serializers.SlugRelatedField(slug_field="title", read_only=True)
 
     class Meta:
         model = ReviewModel
-        fields = ['rating', 'product']
+        fields = ['rating']
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    rating = ProductRatingSerializer
 
     class Meta:
         model = ProductModel
-        fields = ['title', 'sku', 'category', 'subcategory', 'image', 'price', 'discount', 'get_price', 'is_published']
+        fields = ['title', 'sku', 'category', 'subcategory', 'image', 'price',
+                  'discount', 'get_price', 'is_published', 'rating'
+                  ]
 
 
 class CarouselSerializer(serializers.ModelSerializer):

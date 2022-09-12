@@ -40,7 +40,7 @@ class ColorModelAdmin(admin.ModelAdmin):
 
 @admin.register(ReviewModel)
 class ReviewModelAdmin(admin.ModelAdmin):
-    list_display = ['name', 'comments', 'email']
+    list_display = ['name', 'comments', 'email', 'created_at']
 
 
 class ProductCustomNameModelAdmin(admin.TabularInline):

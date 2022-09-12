@@ -257,9 +257,11 @@ class ProductListAPIView(generics.ListAPIView):
     #     return Response(serializer.data)
 
 
-class CarouselListAPIView(APIView):
+class CarouselListAPIView(generics.ListAPIView):
     ''' Карусель '''
-    def get(self, request):
-        carousels = CarouselModel.objects.all()
-        serializer = CarouselSerializer(carousels, many=True)
-        return Response(serializer.data)
+    queryset = CarouselModel.objects.all()
+    serializer_class = CarouselSerializer
+    # def get(self, request):
+    #     carousels = CarouselModel.objects.all()
+    #     serializer = CarouselSerializer(carousels, many=True)
+    #     return Response(serializer.data)
