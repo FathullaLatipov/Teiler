@@ -15,13 +15,10 @@ class ProductRatingSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    category = serializers.SlugRelatedField(slug_field="title", read_only=True)
-    subcategory = serializers.SlugRelatedField(slug_field="subcategory", read_only=True)
-    rating = serializers.SlugRelatedField(slug_field="rating", read_only=True)
 
     class Meta:
         model = ProductModel
-        fields = ['title', 'sku', 'category', 'subcategory', 'image', 'price', 'rating', 'discount', 'get_price', 'is_published']
+        fields = ['title', 'sku', 'category', 'subcategory', 'image', 'price', 'discount', 'get_price', 'is_published']
 
 
 class CarouselSerializer(serializers.ModelSerializer):
