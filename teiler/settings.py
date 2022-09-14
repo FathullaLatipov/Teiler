@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'rest_framework',
     'corsheaders',
+    'drf_yasg',
 
     #     django apps
     'carousel',

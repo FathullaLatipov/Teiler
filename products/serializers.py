@@ -23,7 +23,7 @@ class ProductSerializer(serializers.ModelSerializer):
         model = ProductModel
         fields = ['title', 'sku', 'category', 'subcategory', 'image', 'price',
                   'discount', 'get_price', 'is_published', 'rating', 'real_price',
-                  'min_price', 'max_price'
+                  'min_price', 'max_price',
                   ]
 
     def get_min_price(self, obj):

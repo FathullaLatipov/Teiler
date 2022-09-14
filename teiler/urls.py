@@ -11,6 +11,7 @@ from products.views import HomeTemplate, AboutTemplateView, ContactTemplateView,
 from user.views import edit_account_view, update_username, update_phone, update_email, update_date, \
     update_male
 from orders.views import user_order_view
+from .yasg import urlpatterns as doc_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -44,6 +45,8 @@ urlpatterns = [
     path('api/v1/categories', CategoryListAPIView.as_view()),
     path('', HomeTemplate.as_view())
 ]
+
+urlpatterns += doc_urls
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
