@@ -14,11 +14,13 @@ from rest_framework.views import APIView
 
 from carousel.models import CarouselModel
 from cart.forms import CartAddProductForm
+from help.models import HelpModel
 from products import models, forms
 from products.forms import ReviewForm
-from products.models import ProductModel, ProductAttributes, ReviewModel
+from products.models import ProductModel, ProductAttributes, ReviewModel, CategoryModel
 from cart.cart import Cart
-from products.serializers import ProductSerializer, ProductRatingSerializer, CarouselSerializer
+from products.serializers import ProductSerializer, ProductRatingSerializer, CarouselSerializer, HelpSerializer, \
+    CategorySerializer, ProductDetailSerializer
 from products.utils import get_wishlist_data, get_cart_data
 
 
@@ -240,6 +242,7 @@ class ArticleTemplateView(TemplateView):
 
 class ProductRatingAPIView(APIView):
     ''' Рейтинг продуктов '''
+
     def get(self, request):
         ratings = ReviewModel.objects.all()
         serializer = ProductRatingSerializer(ratings, many=True)
@@ -248,13 +251,22 @@ class ProductRatingAPIView(APIView):
 
 class ProductListAPIView(generics.ListAPIView):
     ''' Все продукты '''
-    queryset = ProductModel.objects.all()
+    queryset = ProductModel.objects.filter().order_by('pk')
     serializer_class = ProductSerializer
-    #
-    # def get(self, request):
-    #     productsApi = ProductModel.objects.all()
-    #     serializer = ProductSerializer(productsApi, many=True)
-    #     return Response(serializer.data)
+
+    def get_extra_counts(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        return queryset.aggregate(
+            Min('real_price'),
+            Max('real_price')
+        )
+
+
+class ProductDetailAPIView(APIView):
+    def get(self, request, pk):
+        products = ProductModel.objects.get(id=pk)
+        serializer = ProductDetailSerializer(products)
+        return Response(serializer.data)
 
 
 class CarouselListAPIView(generics.ListAPIView):
@@ -265,3 +277,15 @@ class CarouselListAPIView(generics.ListAPIView):
     #     carousels = CarouselModel.objects.all()
     #     serializer = CarouselSerializer(carousels, many=True)
     #     return Response(serializer.data)
+
+
+class HelpListAPIView(generics.ListAPIView):
+    ''' Помощь '''
+    queryset = HelpModel.objects.all()
+    serializer_class = HelpSerializer
+
+
+class CategoryListAPIView(generics.ListAPIView):
+    ''' Категории '''
+    queryset = CategoryModel.objects.all()
+    serializer_class = CategorySerializer

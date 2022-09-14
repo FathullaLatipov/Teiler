@@ -67,7 +67,7 @@ class ProductModel(models.Model):
     title = models.CharField(max_length=300, verbose_name=_('title'), db_index=True)
     sku = models.IntegerField(verbose_name=_('sku'), db_index=True)
     brand = models.ForeignKey(BrandModel, on_delete=models.PROTECT, verbose_name=_('brand'))
-    category = models.ForeignKey(CategoryModel, on_delete=models.PROTECT, verbose_name=_('category'))
+    category = models.ForeignKey(CategoryModel, on_delete=models.PROTECT, verbose_name=_('category'), related_name='cat_price')
     subcategory = models.ForeignKey(SubCategoryModel, on_delete=models.CASCADE, verbose_name=_('subcategory'),
                                     null=True, )
     image = models.FileField(upload_to='image', verbose_name=_('image'), null=True)
