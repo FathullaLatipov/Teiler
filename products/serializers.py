@@ -42,6 +42,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     subcategory = serializers.SlugRelatedField(slug_field='subcategory', read_only=True)
     brand = serializers.SlugRelatedField(slug_field='brand', read_only=True)
     colors = serializers.SlugRelatedField(slug_field='code', read_only=True, many=True)
+    rating = ProductRatingSerializer(many=True)
 
     class Meta:
         model = ProductModel
