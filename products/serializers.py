@@ -18,11 +18,13 @@ class ProductSerializer(serializers.ModelSerializer):
     rating = ProductRatingSerializer(many=True)
     max_price = serializers.SerializerMethodField()
     min_price = serializers.SerializerMethodField()
+    category = serializers.SlugRelatedField(slug_field='title', read_only=True)
+    subcategory = serializers.SlugRelatedField(slug_field='subcategory', read_only=True)
 
     class Meta:
         model = ProductModel
-        fields = ['title', 'sku', 'category', 'subcategory', 'image', 'price',
-                  'discount', 'get_price', 'is_published', 'rating', 'real_price',
+        fields = ['title', 'id', 'sku', 'category', 'subcategory', 'image', 'price',
+                  'discount', 'get_price', 'is_published', 'rating',
                   'min_price', 'max_price',
                   ]
 
@@ -36,6 +38,11 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class ProductDetailSerializer(serializers.ModelSerializer):
+    category = serializers.SlugRelatedField(slug_field='title', read_only=True)
+    subcategory = serializers.SlugRelatedField(slug_field='subcategory', read_only=True)
+    brand = serializers.SlugRelatedField(slug_field='brand', read_only=True)
+    colors = serializers.SlugRelatedField(slug_field='code', read_only=True, many=True)
+
     class Meta:
         model = ProductModel
         fields = '__all__'

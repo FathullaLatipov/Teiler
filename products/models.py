@@ -75,7 +75,7 @@ class ProductModel(models.Model):
     discount = models.DecimalField(default=0, max_digits=9, decimal_places=0, verbose_name=_('discount'))
     promotional_price = models.CharField(max_length=200, verbose_name=_('promotional_price'))
     inbox = models.CharField(max_length=300, verbose_name=_('inbox'))
-    description = RichTextUploadingField(verbose_name=_('description'), null=True)
+    description = models.TextField(verbose_name=_('description'), null=True)
     material = models.CharField(max_length=300, verbose_name=_('material'))
     country = models.CharField(max_length=300, verbose_name=_('country'))
     colors = models.ManyToManyField(
