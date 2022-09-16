@@ -5,7 +5,7 @@ from rest_framework import serializers
 
 from carousel.models import CarouselModel
 from help.models import HelpModel
-from .models import ProductModel, ReviewModel, CategoryModel
+from .models import ProductModel, ReviewModel, CategoryModel, SubCategoryModel
 
 
 class ProductRatingSerializer(serializers.ModelSerializer):
@@ -64,4 +64,12 @@ class HelpSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = CategoryModel
-        fields = ['title', 'image']
+        fields = ['id', 'title', 'image']
+
+
+class SubcategorySerializer(serializers.ModelSerializer):
+    category = CategorySerializer()
+
+    class Meta:
+        model = SubCategoryModel
+        fields = '__all__'

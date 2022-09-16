@@ -17,10 +17,10 @@ from cart.forms import CartAddProductForm
 from help.models import HelpModel
 from products import models, forms
 from products.forms import ReviewForm
-from products.models import ProductModel, ProductAttributes, ReviewModel, CategoryModel
+from products.models import ProductModel, ProductAttributes, ReviewModel, CategoryModel, SubCategoryModel
 from cart.cart import Cart
 from products.serializers import ProductSerializer, ProductRatingSerializer, CarouselSerializer, HelpSerializer, \
-    CategorySerializer, ProductDetailSerializer
+    CategorySerializer, ProductDetailSerializer, SubcategorySerializer
 from products.utils import get_wishlist_data, get_cart_data
 
 
@@ -289,3 +289,9 @@ class CategoryListAPIView(generics.ListAPIView):
     ''' Категории '''
     queryset = CategoryModel.objects.all()
     serializer_class = CategorySerializer
+
+
+class SubcategoryListAPIView(generics.ListAPIView):
+    ''' Подкатегория и категория '''
+    queryset = SubCategoryModel.objects.all()
+    serializer_class = SubcategorySerializer
