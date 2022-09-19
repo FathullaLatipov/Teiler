@@ -1,17 +1,54 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from rest_framework import generics, status
 from django.views.generic import CreateView, TemplateView
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.response import Response
 from django.conf import settings
 from user.forms import CustomUserCreationForm, CustomUserChangeForm, UserNameChangeForm, PhoneChangeForm, \
     EmailChangeForm, DateBrithChangeForm, MaleChangeForm
 from user.models import CustomUser
+from user.serializers import RegistrationSerializer, LoginSerializer
 
 
 class SignupView(CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('login')
     template_name = 'registration/signup.html'
+
+
+class RegisterView(generics.GenericAPIView):
+    serializer_class = RegistrationSerializer
+    model = CustomUser
+
+    def post(self, request):
+        user = request.data
+        serializer = self.serializer_class(data=user)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        user_data = serializer.data
+        user = CustomUser.objects.get(email=user_data['email'])
+        token = RefreshToken.for_user(user).access_token
+        # current_site = get_current_site(request).domain
+        # relativeLink = reverse('email-verify')
+        # absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
+        # email_body = 'Hi '+user.username + \
+        #     ' Use the link below to verify your email \n' + absurl
+        # data = {'email_body': email_body, 'to_email': user.email,
+        #         'email_subject': 'Verify your email'}
+        #
+        # Util.send_email(data)
+        return Response({"token": str(token)}, status=status.HTTP_201_CREATED)
+
+
+class LoginAPIView(generics.GenericAPIView):
+    serializer_class = LoginSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 def edit_account_view(request, *args, **kwargs):

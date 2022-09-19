@@ -36,8 +36,10 @@ INSTALLED_APPS = [
     'star_ratings',
     'widget_tweaks',
     'rest_framework',
+    'rest_framework.authtoken',
     'corsheaders',
     'drf_yasg',
+    'djoser',
 
     #     django apps
     'carousel',
@@ -171,11 +173,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+      'rest_framework.authentication.TokenAuthentication',
+      'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny'
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 9
+    'PAGE_SIZE': 8
 }
 
 INTERNAL_IPS = [

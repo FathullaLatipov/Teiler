@@ -41,6 +41,7 @@ class HomeTemplate(TemplateView):
 class ProductTemplate(ListView):
     template_name = 'products.html'
     context_object_name = 'products'
+    paginate_by = 8
 
     def get_object(self, queryset=None):
         obj, created = self.model.objects.get_or_create(bar='foo bar baz')
