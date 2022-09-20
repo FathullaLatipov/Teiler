@@ -1,33 +1,95 @@
+from collections import defaultdict
+
+from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.settings import api_settings
+from django.contrib.auth.models import update_last_login
+from django.contrib.auth.password_validation import validate_password
 
 from user.models import CustomUser
 
 
+class CheckTokenSerializer(serializers.Serializer):
+    token = serializers.CharField(max_length=255)
+
+
+class UserDataSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=False,
+                                     validators=[validate_password])
+
+    class Meta:
+        model = CustomUser
+        fields = '__all__'
+
+    def validate(self, attrs):
+        if password := attrs.get('password'):
+            attrs['password'] = make_password(password)
+        return attrs
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        refresh = self.get_token(self.user)
+
+        data['refresh'] = str(refresh)
+        data['access'] = str(refresh.access_token)
+        data['user_data'] = UserDataSerializer(self.user).data
+
+        if api_settings.UPDATE_LAST_LOGIN:
+            update_last_login(None, self.user)
+
+        return data
+
+
 class RegistrationSerializer(serializers.ModelSerializer):
-    default_error_messages = {
-        'username': 'The username should only contain alphanumeric characters'}
+    password = serializers.CharField(max_length=255, required=False,
+                                     write_only=True)
 
     class Meta:
         model = CustomUser
         fields = ['username', 'email', 'phone', 'password']
+        extra_kwargs = dict(
+            password=dict(required=True)
+        )
 
     def validate(self, attrs):
-        username = attrs.get('username', '')
+        errors = defaultdict(list)
+        users = CustomUser.objects.filter(username=attrs['username'])
 
-        if not username.isalnum():
-            raise serializers.ValidationError(
-                self.default_error_messages)
+        if self.instance:
+            users = users.exclude(pk=self.instance.id)
+        if users.exists():
+            errors['username'].append('Username has already token')
+        if errors:
+            raise serializers.ValidationError(errors)
         return attrs
 
     def create(self, validated_data):
-        return CustomUser.objects.create_user(**validated_data)
+        password = validated_data.pop('password', None)
+        user = super().create(validated_data)
+        if password:
+            user.set_password(password)
+            user.save()
+
+        return user
+
+    def update(self, instance, validated_data):
+        password = validated_data.pop('password', None)
+        user = super().update(instance, validated_data)
+        if password:
+            user.set_password(password)
+            user.save()
+        return user
 
 
 class LoginSerializer(serializers.ModelSerializer):
     username = serializers.CharField(
-        max_length=255, min_length=3, read_only=True)
+        max_length=255, min_length=3)
 
     password = serializers.CharField(
         max_length=68, min_length=6, write_only=True)
@@ -64,3 +126,26 @@ class LoginSerializer(serializers.ModelSerializer):
         }
 
         return super().validate(attrs)
+
+
+class RegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'username', 'email', 'phone', 'password']
+        extra_kwargs = {
+            'password': {'write_only': True},
+        }
+
+        def create(self, validated_data):
+            user = CustomUser.objects.create_user(validated_data['username'],
+                                                  email=validated_data['email'],
+                                                  phone=validated_data['phone'],
+                                                  password=validated_data['password']
+                                                  )
+            return user
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = '__all__'

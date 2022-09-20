@@ -9,6 +9,7 @@ from django.views.generic import ListView, DetailView, TemplateView, CreateView,
 from django.db.models import Max, Min, Avg, Sum, Count
 from django.http import JsonResponse
 from rest_framework import generics, serializers
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -254,6 +255,7 @@ class ProductListAPIView(generics.ListAPIView):
     ''' Все продукты '''
     queryset = ProductModel.objects.filter().order_by('pk')
     serializer_class = ProductSerializer
+    permission_classes = (IsAuthenticated,)
 
     def get_extra_counts(self):
         queryset = self.filter_queryset(self.get_queryset())

@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from cart import views
 from help.views import HelpListView
@@ -22,7 +23,7 @@ urlpatterns = [
     path('contacts/', ContactTemplateView.as_view(), name='contacts'),
     path('articles/', HelpListView.as_view(), name='articles'),
     path('order/', OrderTemplateView.as_view(), name='order'),
-    path('accounts/', include('user.urls')),
+    path('users/', include('user.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('cart/', include('cart.urls', namespace='cart')),
     path('orders/', include('orders.urls', namespace='orders')),
@@ -39,6 +40,8 @@ urlpatterns = [
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
     path('api-auth/', include('rest_framework.urls')),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/v1/products/', ProductListAPIView.as_view()),
     path('api/v1/products/<int:pk>/', ProductDetailAPIView.as_view()),
     path('api/v1/rating', ProductRatingAPIView.as_view()),
