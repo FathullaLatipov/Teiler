@@ -18,6 +18,7 @@ class CategoryModel(models.Model):
     class Meta:
         verbose_name = _('category')
         verbose_name_plural = _('categories')
+        ordering = ['pk']
 
 
 class SubCategoryModel(models.Model):
@@ -32,6 +33,7 @@ class SubCategoryModel(models.Model):
     class Meta:
         verbose_name = _('subcategory')
         verbose_name_plural = _('subcategories')
+        ordering = ['pk']
 
 
 class BrandModel(models.Model):

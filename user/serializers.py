@@ -47,12 +47,15 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(max_length=255, required=False,
+    password1 = serializers.CharField(max_length=255, required=False,
+                                     write_only=True)
+
+    password2 = serializers.CharField(max_length=255, required=False,
                                      write_only=True)
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'email', 'phone', 'password']
+        fields = ['username', 'email', 'phone', 'password1', 'password2']
         extra_kwargs = dict(
             password=dict(required=True)
         )
@@ -60,6 +63,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         errors = defaultdict(list)
         users = CustomUser.objects.filter(username=attrs['username'])
+        password1 = attrs.get('password1')
+        password2 = attrs.get('password2')
 
         if self.instance:
             users = users.exclude(pk=self.instance.id)
@@ -67,22 +72,28 @@ class RegistrationSerializer(serializers.ModelSerializer):
             errors['username'].append('Username has already token')
         if errors:
             raise serializers.ValidationError(errors)
+        if password1 != password2:
+            raise serializers.ValidationError('Password do not match.')
         return attrs
 
     def create(self, validated_data):
-        password = validated_data.pop('password', None)
+        password1 = validated_data.pop('password1', None)
+        password2 = validated_data.pop('password2', None)
         user = super().create(validated_data)
-        if password:
-            user.set_password(password)
+        if password1:
+            user.set_password(password1)
+            user.set_password(password2)
             user.save()
 
         return user
 
     def update(self, instance, validated_data):
-        password = validated_data.pop('password', None)
+        password1 = validated_data.pop('password1', None)
+        password2 = validated_data.pop('password2', None)
         user = super().update(instance, validated_data)
-        if password:
-            user.set_password(password)
+        if password1:
+            user.set_password(password1)
+            user.set_password(password2)
             user.save()
         return user
 
@@ -140,7 +151,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             user = CustomUser.objects.create_user(validated_data['username'],
                                                   email=validated_data['email'],
                                                   phone=validated_data['phone'],
-                                                  password=validated_data['password']
+                                                  password=validated_data['password'],
                                                   )
             return user
 

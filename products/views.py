@@ -255,7 +255,6 @@ class ProductListAPIView(generics.ListAPIView):
     ''' Все продукты '''
     queryset = ProductModel.objects.filter().order_by('pk')
     serializer_class = ProductSerializer
-    permission_classes = (IsAuthenticated,)
 
     def get_extra_counts(self):
         queryset = self.filter_queryset(self.get_queryset())

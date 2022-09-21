@@ -186,8 +186,8 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=20),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=20),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
 
@@ -238,6 +238,9 @@ CORS_ORIGIN_WHITELIST = (
     'http://127.0.0.1',
     'http://5.23.52.211'
 )
+
+# DJOSER
+SET_PASSWORD_RETYPE = True
 
 try:
     from .settings_local import *
