@@ -4,6 +4,7 @@ from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.status import HTTP_200_OK
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.settings import api_settings
 from django.contrib.auth.models import update_last_login
