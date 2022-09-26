@@ -36,7 +36,7 @@ urlpatterns = [
     path('add/<int:product_id>/', views.cart_add, name='cart_add'),
     path('remove/<int:product_id>/', views.cart_remove, name='cart_remove'),
     path('load-more-data/', load_more_data, name='load_more_data'),
-    path('auth/', include('djoser.urls.authtoken')),
+    path('api/v1/auth/', include('djoser.urls.authtoken')),
     path('api-auth/', include('rest_framework.urls')),
     path('api/v1/products/', ProductListAPIView.as_view()),
     path('users/', include('user.urls')),

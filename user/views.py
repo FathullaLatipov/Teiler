@@ -33,6 +33,7 @@ class LoginView(TokenObtainPairView):
 
 
 class UserViewSet(viewsets.ModelViewSet):
+    ''' Регистрация юзера '''
     queryset = CustomUser.objects.all()
     ordering = ['-date_joined']
     search_fields = ['username']
@@ -44,10 +45,11 @@ class UserViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response({"status": True})
         else:
-            return Response({"status": False})
+            return Response(serializer.errors)
 
 
 class LoginAPIView(generics.GenericAPIView):
+    ''' Логин юзера '''
     serializer_class = LoginSerializer
 
     def post(self, request):

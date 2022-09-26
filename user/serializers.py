@@ -74,7 +74,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
         if errors:
             raise serializers.ValidationError(errors)
         if password1 != password2:
-            raise serializers.ValidationError('Password do not match.')
+            raise serializers.ValidationError(
+                {'status': "Password do not match"}
+            )
         return attrs
 
     def create(self, validated_data):
