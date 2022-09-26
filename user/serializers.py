@@ -1,9 +1,10 @@
 from collections import defaultdict
 
 from django.contrib.auth.hashers import make_password
-from rest_framework import serializers
+from rest_framework import serializers, status
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.settings import api_settings
@@ -66,7 +67,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
         users = CustomUser.objects.filter(username=attrs['username'])
         password1 = attrs.get('password1')
         password2 = attrs.get('password2')
-
         if self.instance:
             users = users.exclude(pk=self.instance.id)
         if users.exists():
@@ -85,7 +85,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
             user.set_password(password1)
             user.set_password(password2)
             user.save()
-
         return user
 
     def update(self, instance, validated_data):
@@ -138,23 +137,6 @@ class LoginSerializer(serializers.ModelSerializer):
         }
 
         return super().validate(attrs)
-
-
-class RegisterSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CustomUser
-        fields = ['id', 'username', 'email', 'phone', 'password']
-        extra_kwargs = {
-            'password': {'write_only': True},
-        }
-
-        def create(self, validated_data):
-            user = CustomUser.objects.create_user(validated_data['username'],
-                                                  email=validated_data['email'],
-                                                  phone=validated_data['phone'],
-                                                  password=validated_data['password'],
-                                                  )
-            return user
 
 
 class UserSerializer(serializers.ModelSerializer):

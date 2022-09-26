@@ -1,7 +1,9 @@
+from collections import defaultdict
+
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
-from rest_framework import generics, status
+from django.urls import reverse_lazy, reverse
+from rest_framework import generics, status, viewsets, serializers
 from django.views.generic import CreateView, TemplateView
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.permissions import AllowAny
@@ -14,7 +16,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from user.forms import CustomUserCreationForm, CustomUserChangeForm, UserNameChangeForm, PhoneChangeForm, \
     EmailChangeForm, DateBrithChangeForm, MaleChangeForm
 from user.models import CustomUser
-from user.serializers import RegistrationSerializer, LoginSerializer, RegisterSerializer, UserSerializer, \
+from user.serializers import RegistrationSerializer, LoginSerializer, UserSerializer, \
     MyTokenObtainPairSerializer
 
 
@@ -30,11 +32,19 @@ class LoginView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
-class UserViewSet(ModelViewSet):
-    serializer_class = RegistrationSerializer
+class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     ordering = ['-date_joined']
     search_fields = ['username']
+    serializer_class = RegistrationSerializer
+
+    def create(self, request):
+        serializer = RegistrationSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"status": True})
+        else:
+            return Response({"status": False})
 
 
 class LoginAPIView(generics.GenericAPIView):
