@@ -65,12 +65,15 @@ class RegistrationSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         errors = defaultdict(list)
         users = CustomUser.objects.filter(username=attrs['username'])
+        emails = CustomUser.objects.filter(email=attrs['email'])
         password1 = attrs.get('password1')
         password2 = attrs.get('password2')
         if self.instance:
             users = users.exclude(pk=self.instance.id)
         if users.exists():
             errors['username'].append('Username has already token')
+        if emails.exists():
+            errors['email'].append('Email has already')
         if errors:
             raise serializers.ValidationError(errors)
         if password1 != password2:

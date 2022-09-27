@@ -275,7 +275,7 @@ class CarouselListAPIView(generics.ListAPIView):
     ''' Карусель '''
     queryset = CarouselModel.objects.all()
     serializer_class = CarouselSerializer
-    # def get(self, request):
+    # def get(self, request),
     #     carousels = CarouselModel.objects.all()
     #     serializer = CarouselSerializer(carousels, many=True)
     #     return Response(serializer.data)
