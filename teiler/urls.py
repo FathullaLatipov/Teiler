@@ -39,7 +39,7 @@ urlpatterns = [
     path('api/v1/auth/', include('djoser.urls.authtoken')),
     path('api-auth/', include('rest_framework.urls')),
     path('api/v1/products/', ProductListAPIView.as_view()),
-    path('api/v1/countries/', CountryListAPIView.as_view()),
+    path('api/v1/cities/', CountryListAPIView.as_view()),
     path('users/', include('user.urls')),
     path('api/v1/products/<int:pk>/', ProductDetailAPIView.as_view()),
     path('api/v1/carousels', CarouselListAPIView.as_view()),
