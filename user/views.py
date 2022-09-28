@@ -1,4 +1,5 @@
-
+from django.contrib.auth import logout
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from rest_framework import generics, status, viewsets, serializers
@@ -24,6 +25,12 @@ from user.serializers import RegistrationSerializer, LoginSerializer, MyTokenObt
 class AuthViewSet(GenericViewSet):
     serializer_class = AuthTokenSerializer
     queryset = CustomUser.objects.all()
+
+    @action(['DELETE'], detail=False, permission_classes=[IsAuthenticated])
+    def logout(self, request: Request):
+        Token.objects.get(user=request.user).delete()
+        data = {'status': 'Successfully log outed user'}
+        return Response(status=status.HTTP_204_NO_CONTENT, data=data)
 
     #
     # @action(['POST'], detail=False, permission_classes=[permissions.AllowAny])
