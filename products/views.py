@@ -267,7 +267,7 @@ class ProductListAPIView(generics.ListAPIView):
 class ProductDetailAPIView(APIView):
     def get(self, request, pk):
         products = ProductModel.objects.get(id=pk)
-        serializer = ProductDetailSerializer(products)
+        serializer = ProductDetailSerializer(products, context={'request': request})
         return Response(serializer.data)
 
 

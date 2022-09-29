@@ -43,10 +43,14 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     brand = serializers.SlugRelatedField(slug_field='brand', read_only=True)
     colors = serializers.SlugRelatedField(slug_field='code', read_only=True, many=True)
     rating = ProductRatingSerializer(many=True)
+    img_url = serializers.SerializerMethodField()
 
     class Meta:
         model = ProductModel
         fields = '__all__'
+
+    def get_img_url(self, obj):
+        return self.context['request'].build_absolute_uri(obj.image.url)
 
 
 class CarouselSerializer(serializers.ModelSerializer):
