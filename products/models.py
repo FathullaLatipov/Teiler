@@ -36,6 +36,20 @@ class SubCategoryModel(models.Model):
         ordering = ['pk']
 
 
+class SecondSubCategoryModel(models.Model):
+    category = models.ForeignKey(CategoryModel, on_delete=models.CASCADE, verbose_name=_('sub_cat'), null=True)
+    subcategory = models.ForeignKey(SubCategoryModel, on_delete=models.CASCADE, verbose_name=_('subcategory'))
+    second_subcategory = models.CharField(max_length=200, verbose_name=_('second_subcategory'))
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.second_subcategory
+
+    class Meta:
+        verbose_name = _('second_subcategory')
+        verbose_name_plural = _('second_subcategories')
+
+
 class BrandModel(models.Model):
     brand = models.CharField(max_length=99, verbose_name=_('brands'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created_at'))

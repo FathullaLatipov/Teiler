@@ -18,10 +18,11 @@ from cart.forms import CartAddProductForm
 from help.models import HelpModel
 from products import models, forms
 from products.forms import ReviewForm
-from products.models import ProductModel, ProductAttributes, ReviewModel, CategoryModel, SubCategoryModel
+from products.models import ProductModel, ProductAttributes, ReviewModel, CategoryModel, SubCategoryModel, \
+    SecondSubCategoryModel
 from cart.cart import Cart
 from products.serializers import ProductSerializer, ProductRatingSerializer, CarouselSerializer, HelpSerializer, \
-    CategorySerializer, ProductDetailSerializer, SubcategorySerializer
+    CategorySerializer, ProductDetailSerializer, SubcategorySerializer, SecSubcategorySerializer
 from products.utils import get_wishlist_data, get_cart_data
 
 
@@ -297,6 +298,11 @@ class SubcategoryListAPIView(generics.ListAPIView):
     ''' Подкатегория и категория '''
     queryset = SubCategoryModel.objects.all()
     serializer_class = SubcategorySerializer
+
+
+class SecondSubcategoryListAPIView(generics.ListAPIView):
+    queryset = SecondSubCategoryModel.objects.all()
+    serializer_class = SecSubcategorySerializer
 
 
 class CountryListAPIView(APIView):

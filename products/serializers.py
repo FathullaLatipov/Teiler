@@ -2,10 +2,11 @@ from django.db.models import Min, Max
 from django.utils.html import strip_tags
 from django.utils.safestring import mark_safe
 from rest_framework import serializers
+from rest_framework.relations import PrimaryKeyRelatedField
 
 from carousel.models import CarouselModel
 from help.models import HelpModel
-from .models import ProductModel, ReviewModel, CategoryModel, SubCategoryModel
+from .models import ProductModel, ReviewModel, CategoryModel, SubCategoryModel, SecondSubCategoryModel
 
 
 class ProductRatingSerializer(serializers.ModelSerializer):
@@ -76,4 +77,14 @@ class SubcategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SubCategoryModel
-        fields = '__all__'
+        exclude = ['created_at']
+
+
+class SecSubcategorySerializer(serializers.ModelSerializer):
+    category = CategorySerializer()
+    subcategory = SubcategorySerializer()
+
+    class Meta:
+        model = SecondSubCategoryModel
+        fields = ['id', 'category', 'subcategory', 'second_subcategory']
+
