@@ -2,8 +2,8 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 from products.forms import ColorModelForm
 from products.models import CategoryModel, ProductModel, ProductCustomModel, BrandModel, ColorModel, \
-    ReviewModel, ProductCharacteristicModel, SubCategoryModel, ProductImageModel, ProductCustomNameModel, \
-    ProductAttributes, SecondSubCategoryModel
+    ReviewModel, ProductCharacteristicModel, ProductImageModel, ProductCustomNameModel, \
+    ProductAttributes
 
 
 @admin.register(CategoryModel)
@@ -11,21 +11,6 @@ class CategoryModelAdmin(admin.ModelAdmin):
     list_display = ['pk', 'title', 'created_at']
     list_filter = ['created_at']
     search_fields = ['category']
-
-
-@admin.register(SubCategoryModel)
-class SubCategoryModelAdmin(admin.ModelAdmin):
-    list_display = ['pk', 'category', 'subcategory', 'created_at']
-    list_filter = ['created_at']
-    search_fields = ['category']
-
-
-@admin.register(SecondSubCategoryModel)
-class SecondSubCategoryModelAdmin(admin.ModelAdmin):
-    list_display = ['pk', 'subcategory', 'second_subcategory', 'created_at']
-    search_fields = ['subcategory', 'second_subcategory']
-    list_filter = ['subcategory', 'created_at']
-
 
 @admin.register(BrandModel)
 class BrandModelAdmin(admin.ModelAdmin):

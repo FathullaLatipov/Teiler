@@ -1,11 +1,10 @@
 from carousel.models import CarouselModel
 from help.models import HelpCategory, HelpSubcategory
-from products.models import CategoryModel, ProductModel, BrandModel, ColorModel, SubCategoryModel
+from products.models import CategoryModel, ProductModel, BrandModel, ColorModel
 
 
 def product_categories(request):
     categories = CategoryModel.objects.order_by('pk')
-    subcategories = SubCategoryModel.objects.order_by('pk')
     products = ProductModel.objects.order_by('pk')
     brands = BrandModel.objects.order_by('pk')
     colors = ColorModel.objects.order_by('pk')
@@ -16,7 +15,6 @@ def product_categories(request):
 
     return {
         'categories': categories,
-        'subcategories': subcategories,
         'products': products,
         'brands': brands,
         'colors': colors,

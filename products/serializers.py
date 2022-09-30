@@ -6,7 +6,7 @@ from rest_framework.relations import PrimaryKeyRelatedField
 
 from carousel.models import CarouselModel
 from help.models import HelpModel
-from .models import ProductModel, ReviewModel, CategoryModel, SubCategoryModel, SecondSubCategoryModel
+from .models import ProductModel, ReviewModel, CategoryModel
 
 
 class ProductRatingSerializer(serializers.ModelSerializer):
@@ -66,25 +66,17 @@ class HelpSerializer(serializers.ModelSerializer):
         fields = ['title', 'category', 'subcategory', 'descriptions']
 
 
+# class SubCategorySerializerField(serializers.RelatedField):
+#     def to_representation(self, value):
+#         queryset = CategoryModel.objects.all()
+#         return queryset
+
+
 class CategorySerializer(serializers.ModelSerializer):
+    # child_category = SubCategorySerializerField(many=True, read_only=True)
+
     class Meta:
         model = CategoryModel
-        fields = ['id', 'title', 'image']
-
-
-class SubcategorySerializer(serializers.ModelSerializer):
-    category = CategorySerializer()
-
-    class Meta:
-        model = SubCategoryModel
-        exclude = ['created_at']
-
-
-class SecSubcategorySerializer(serializers.ModelSerializer):
-    category = CategorySerializer()
-    subcategory = SubcategorySerializer()
-
-    class Meta:
-        model = SecondSubCategoryModel
-        fields = ['id', 'category', 'subcategory', 'second_subcategory']
+        fields = ['id', 'title', 'child_category', 'image']
+        depth = 2
 

@@ -9,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 
 class CategoryModel(models.Model):
     title = models.CharField(max_length=300, verbose_name=_('title'))
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='child_category', null=True, blank=True)
     image = models.FileField(upload_to='image', verbose_name=_('image'), null=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created_at'))
 
@@ -19,35 +20,6 @@ class CategoryModel(models.Model):
         verbose_name = _('category')
         verbose_name_plural = _('categories')
         ordering = ['pk']
-
-
-class SubCategoryModel(models.Model):
-    category = models.ForeignKey(CategoryModel, on_delete=models.PROTECT, verbose_name=_('category'),
-                                 related_name='subcategories')
-    subcategory = models.CharField(max_length=100, verbose_name=_('subcategory'))
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.subcategory
-
-    class Meta:
-        verbose_name = _('subcategory')
-        verbose_name_plural = _('subcategories')
-        ordering = ['pk']
-
-
-class SecondSubCategoryModel(models.Model):
-    category = models.ForeignKey(CategoryModel, on_delete=models.CASCADE, verbose_name=_('sub_cat'), null=True)
-    subcategory = models.ForeignKey(SubCategoryModel, on_delete=models.CASCADE, verbose_name=_('subcategory'))
-    second_subcategory = models.CharField(max_length=200, verbose_name=_('second_subcategory'))
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.second_subcategory
-
-    class Meta:
-        verbose_name = _('second_subcategory')
-        verbose_name_plural = _('second_subcategories')
 
 
 class BrandModel(models.Model):
@@ -84,8 +56,6 @@ class ProductModel(models.Model):
     sku = models.IntegerField(verbose_name=_('sku'), db_index=True)
     brand = models.ForeignKey(BrandModel, on_delete=models.PROTECT, verbose_name=_('brand'))
     category = models.ForeignKey(CategoryModel, on_delete=models.PROTECT, verbose_name=_('category'), related_name='cat_price')
-    subcategory = models.ForeignKey(SubCategoryModel, on_delete=models.CASCADE, verbose_name=_('subcategory'),
-                                    null=True, )
     image = models.FileField(upload_to='image', verbose_name=_('image'), null=True)
     price = models.IntegerField(verbose_name=_('price'))
     discount = models.DecimalField(default=0, max_digits=9, decimal_places=0, verbose_name=_('discount'))
