@@ -18,10 +18,10 @@ from cart.forms import CartAddProductForm
 from help.models import HelpModel
 from products import models, forms
 from products.forms import ReviewForm
-from products.models import ProductModel, ProductAttributes, ReviewModel, CategoryModel
+from products.models import ProductModel, ProductAttributes, ReviewModel, CategoryModel, ProductImageModel
 from cart.cart import Cart
 from products.serializers import ProductSerializer, ProductRatingSerializer, CarouselSerializer, HelpSerializer, \
-    CategorySerializer, ProductDetailSerializer
+    CategorySerializer, ProductDetailSerializer, ProductImageModelSerializer
 from products.utils import get_wishlist_data, get_cart_data
 
 
@@ -262,6 +262,11 @@ class ProductListAPIView(generics.ListAPIView):
             Min('real_price'),
             Max('real_price')
         )
+
+
+class ProductImageModelAPIView(generics.ListAPIView):
+    queryset = ProductImageModel.objects.all()
+    serializer_class = ProductImageModelSerializer
 
 
 class ProductDetailAPIView(APIView):

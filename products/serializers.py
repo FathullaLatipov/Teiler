@@ -2,11 +2,12 @@ from django.db.models import Min, Max
 from django.utils.html import strip_tags
 from django.utils.safestring import mark_safe
 from rest_framework import serializers
+from rest_framework.serializers import Serializer
 from rest_framework.relations import PrimaryKeyRelatedField
 
 from carousel.models import CarouselModel
 from help.models import HelpModel
-from .models import ProductModel, ReviewModel, CategoryModel
+from .models import ProductModel, ReviewModel, CategoryModel, ProductImageModel
 
 
 class ProductRatingSerializer(serializers.ModelSerializer):
@@ -38,17 +39,24 @@ class ProductSerializer(serializers.ModelSerializer):
         return max_price['max_price']
 
 
+class ProductImageModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImageModel
+        fields = ['image']
+
+
 class ProductDetailSerializer(serializers.ModelSerializer):
     category = serializers.SlugRelatedField(slug_field='title', read_only=True)
     subcategory = serializers.SlugRelatedField(slug_field='subcategory', read_only=True)
     brand = serializers.SlugRelatedField(slug_field='brand', read_only=True)
     colors = serializers.SlugRelatedField(slug_field='code', read_only=True, many=True)
     rating = ProductRatingSerializer(many=True)
+    images = ProductImageModelSerializer(many=True)
     img_url = serializers.SerializerMethodField()
 
     class Meta:
         model = ProductModel
-        fields = '__all__'
+        exclude = ['created_at', 'image']
 
     def get_img_url(self, obj):
         return self.context['request'].build_absolute_uri(obj.image.url)
@@ -71,12 +79,15 @@ class HelpSerializer(serializers.ModelSerializer):
 #         queryset = CategoryModel.objects.all()
 #         return queryset
 
+class RecursiveField(Serializer):
+    def to_representation(self, value):
+        serializer = self.parent.parent.__class__(value, context=self.context)
+        return serializer.data
+
 
 class CategorySerializer(serializers.ModelSerializer):
-    # child_category = SubCategorySerializerField(many=True, read_only=True)
+    subcategories = RecursiveField(many=True)
 
     class Meta:
         model = CategoryModel
-        fields = ['id', 'title', 'child_category', 'image']
-        depth = 2
-
+        fields = ['id', 'title', 'subcategories', 'image']

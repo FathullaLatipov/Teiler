@@ -8,7 +8,7 @@ from cart import views
 from help.views import HelpListView
 from products.views import HomeTemplate, AboutTemplateView, ContactTemplateView, OrderTemplateView, load_more_data, \
     ProductListAPIView, ProductRatingAPIView, CarouselListAPIView, HelpListAPIView, CategoryListAPIView, \
-    ProductDetailAPIView, CountryListAPIView
+    ProductDetailAPIView, CountryListAPIView, ProductImageModelAPIView
 from user.views import edit_account_view, update_username, update_phone, update_email, update_date, \
     update_male
 from orders.views import user_order_view

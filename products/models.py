@@ -9,8 +9,8 @@ from django.utils.translation import gettext_lazy as _
 
 class CategoryModel(models.Model):
     title = models.CharField(max_length=300, verbose_name=_('title'))
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='child_category', null=True, blank=True)
-    image = models.FileField(upload_to='image', verbose_name=_('image'), null=True)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='subcategories', null=True, blank=True)
+    image = models.FileField(upload_to='image', verbose_name=_('image'), null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created_at'))
 
     def __str__(self):
