@@ -84,7 +84,10 @@
                             <div class="category_item_img">
                                 <picture>
                                     <source type="image/webp">
-                                    <img src="{{ category.image.url }}" style="width: 175px;height: 105px" alt="Category">
+                                    {% if category.image %}
+                                        <img src="{{ category.image.url }}" style="width: 175px;height: 105px" alt="Category">
+                                    {% endif %}
+
                                 </picture>
                             </div>
                             <div class="category_item_info">

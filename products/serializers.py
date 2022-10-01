@@ -1,4 +1,4 @@
-from django.db.models import Min, Max
+from django.db.models import Min, Max, Count, Avg
 from django.utils.html import strip_tags
 from django.utils.safestring import mark_safe
 from rest_framework import serializers
@@ -11,32 +11,34 @@ from .models import ProductModel, ReviewModel, CategoryModel, ProductImageModel
 
 
 class ProductRatingSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = ReviewModel
         fields = ['rating']
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    rating = ProductRatingSerializer(many=True)
-    max_price = serializers.SerializerMethodField()
-    min_price = serializers.SerializerMethodField()
-    category = serializers.SlugRelatedField(slug_field='title', read_only=True)
-    subcategory = serializers.SlugRelatedField(slug_field='subcategory', read_only=True)
+    rating = ProductRatingSerializer(many=True, default=None)
+    # rating = serializers.SerializerMethodField()
+
+    # max_price = serializers.SerializerMethodField()
+    # min_price = serializers.SerializerMethodField()
+    # category = serializers.SlugRelatedField(slug_field='title', read_only=True)
+    # subcategory = serializers.SlugRelatedField(slug_field='subcategory', read_only=True)
 
     class Meta:
         model = ProductModel
-        fields = ['title', 'id', 'sku', 'category', 'subcategory', 'image', 'price',
-                  'discount', 'get_price', 'is_published', 'rating',
-                  'min_price', 'max_price',
+        fields = ['id', 'title', 'sku', 'image', 'discount', 'price',
+                  'get_price', 'is_published', 'is_fav', 'rating', 'status',
                   ]
 
-    def get_min_price(self, obj):
-        min_price = ProductModel.objects.all().aggregate(min_price=Min('real_price'))
-        return min_price['min_price']
-
-    def get_max_price(self, obj):
-        max_price = ProductModel.objects.all().aggregate(max_price=Max('real_price'))
-        return max_price['max_price']
+    # def get_min_price(self, obj):
+    #     min_price = ProductModel.objects.all().aggregate(min_price=Min('real_price'))
+    #     return min_price['min_price']
+    #
+    # def get_max_price(self, obj):
+    #     max_price = ReviewModel.objects.all().aggregate(max_price=Avg('rating'))
+    #     return max_price['max_price']
 
 
 class ProductImageModelSerializer(serializers.ModelSerializer):

@@ -73,6 +73,22 @@ class ProductModel(models.Model):
     real_price = models.FloatField(verbose_name=_('real price'), default=0)
     is_published = models.BooleanField(default=False)
     is_buy = models.BooleanField(default=False)
+    is_fav = models.BooleanField(default=False)
+    Order_choices = (
+        ("process", "В процессе"),
+        ("canceled", "Отменен"),
+        ("wait_send", "Ожидает доставка"),
+        ("wait_rev", "Ожидает отзыв"),
+        ("complete", "Товар получен"),
+    )
+
+    status = models.CharField(
+        max_length=200,
+        choices=Order_choices,
+        null=True,
+        default="process",
+        blank=True
+    )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created_at'))
 
     def is_discount(self):
