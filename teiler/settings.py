@@ -223,7 +223,6 @@ SWAGGER_SETTINGS = {
     'DOC_EXPANSION': False
 
 }
-APPEND_SLASH = False
 
 INTERNAL_IPS = [
     "127.0.0.1",

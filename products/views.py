@@ -21,7 +21,7 @@ from products.forms import ReviewForm
 from products.models import ProductModel, ProductAttributes, ReviewModel, CategoryModel, ProductImageModel
 from cart.cart import Cart
 from products.serializers import ProductSerializer, ProductRatingSerializer, CarouselSerializer, HelpSerializer, \
-    CategorySerializer, ProductDetailSerializer, ProductImageModelSerializer
+    CategorySerializer, ProductDetailSerializer, ProductImageModelSerializer, ProductDiscountSerializer
 from products.utils import get_wishlist_data, get_cart_data
 
 
@@ -251,6 +251,11 @@ class ProductRatingAPIView(APIView):
         return Response(serializer.data)
 
 
+class ProductDiscountAPIView(generics.ListAPIView):
+    queryset = ProductModel.objects.all()
+    serializer_class = ProductDiscountSerializer
+
+
 class ProductListAPIView(generics.ListAPIView):
     ''' Все продукты '''
     queryset = ProductModel.objects.filter().order_by('pk')
@@ -262,6 +267,7 @@ class ProductListAPIView(generics.ListAPIView):
             Min('real_price'),
             Max('real_price')
         )
+
 
 
 class ProductImageModelAPIView(generics.ListAPIView):

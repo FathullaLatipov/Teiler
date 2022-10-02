@@ -2,6 +2,7 @@ from django.db.models import Min, Max, Count, Avg
 from django.utils.html import strip_tags
 from django.utils.safestring import mark_safe
 from rest_framework import serializers
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.serializers import Serializer
 from rest_framework.relations import PrimaryKeyRelatedField
 
@@ -11,7 +12,6 @@ from .models import ProductModel, ReviewModel, CategoryModel, ProductImageModel
 
 
 class ProductRatingSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = ReviewModel
         fields = ['rating']
@@ -19,6 +19,7 @@ class ProductRatingSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     rating = ProductRatingSerializer(many=True, default=None)
+
     # rating = serializers.SerializerMethodField()
 
     # max_price = serializers.SerializerMethodField()
@@ -31,6 +32,33 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'sku', 'image', 'discount', 'price',
                   'get_price', 'is_published', 'is_fav', 'rating', 'status',
                   ]
+
+    def to_representation(self, instance):
+
+        data = super().to_representation(instance)
+        if data['rating'] == []:
+            data['rating'] = 0
+        else:
+            data['rate_count'] = instance.rating.count()
+        return data
+
+
+
+class ProductDiscountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductModel
+        fields = ['title', 'discount']
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        if data['discount'] == "0":
+            data = {
+                "discount": "null"
+            }
+        else:
+            pass
+
+        return data
 
     # def get_min_price(self, obj):
     #     min_price = ProductModel.objects.all().aggregate(min_price=Min('real_price'))
