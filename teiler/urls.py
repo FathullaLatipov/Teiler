@@ -8,7 +8,8 @@ from cart import views
 from help.views import HelpListView
 from products.views import HomeTemplate, AboutTemplateView, ContactTemplateView, OrderTemplateView, load_more_data, \
     ProductListAPIView, ProductRatingAPIView, CarouselListAPIView, HelpListAPIView, CategoryListAPIView, \
-    ProductDetailAPIView, CountryListAPIView, ProductImageModelAPIView, ProductDiscountAPIView
+    ProductDetailAPIView, CountryListAPIView, ProductImageModelAPIView, ProductDiscountAPIView, \
+    ReviewModelSerializerListAPIView
 from user.views import edit_account_view, update_username, update_phone, update_email, update_date, \
     update_male
 from orders.views import user_order_view
@@ -41,6 +42,7 @@ urlpatterns = [
     path('api/v1/products/', ProductListAPIView.as_view()),
     path('api/v1/discount/', ProductDiscountAPIView.as_view()),
     path('api/v1/cities/', CountryListAPIView.as_view()),
+    path('api/v1/reviews/', ReviewModelSerializerListAPIView.as_view()),
     path('users/', include('user.urls')),
     path('api/v1/products/<int:pk>/', ProductDetailAPIView.as_view()),
     path('api/v1/carousels', CarouselListAPIView.as_view()),

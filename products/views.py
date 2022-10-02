@@ -21,7 +21,8 @@ from products.forms import ReviewForm
 from products.models import ProductModel, ProductAttributes, ReviewModel, CategoryModel, ProductImageModel
 from cart.cart import Cart
 from products.serializers import ProductSerializer, ProductRatingSerializer, CarouselSerializer, HelpSerializer, \
-    CategorySerializer, ProductDetailSerializer, ProductImageModelSerializer, ProductDiscountSerializer
+    CategorySerializer, ProductDetailSerializer, ProductImageModelSerializer, ProductDiscountSerializer, \
+    ReviewModelSerializer
 from products.utils import get_wishlist_data, get_cart_data
 
 
@@ -458,3 +459,8 @@ class CountryListAPIView(APIView):
                 "name": "Сургут, Ханты-Мансийский АО. г. Сургут"
             }
         ])
+
+
+class ReviewModelSerializerListAPIView(generics.ListAPIView):
+    queryset = ReviewModel.objects.all()
+    serializer_class = ReviewModelSerializer

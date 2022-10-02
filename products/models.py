@@ -35,6 +35,7 @@ class BrandModel(models.Model):
 
 
 class ColorModel(models.Model):
+    color_title = models.CharField(max_length=100, verbose_name=_('title'), null=True)
     code = models.CharField(max_length=10, verbose_name=_('code'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created_at'))
 
@@ -143,15 +144,16 @@ class ReviewModel(models.Model):
     class Meta:
         verbose_name = _('review')
         verbose_name_plural = _('reviews')
+        ordering = ['pk']
 
 
 class ProductCustomNameModel(models.Model):
-    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, related_name='customer_names',
+    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, related_name='chars',
                                 verbose_name=_('product'),
                                 null=True, blank=True
                                 )
-    custom_name = models.CharField(max_length=200, verbose_name=_('custom_name'))
-    custom_number = models.CharField(max_length=200, verbose_name=_('custom_number'))
+    chars_title = models.CharField(max_length=200, verbose_name=_('custom_name'))
+    chars_number = models.CharField(max_length=200, verbose_name=_('custom_number'))
 
     class Meta:
         verbose_name = _('product_custom_name')
@@ -189,8 +191,8 @@ class ProductCharacteristicModel(models.Model):
     product = models.ForeignKey(ProductModel, on_delete=models.PROTECT, related_name='characteristics',
                                 verbose_name=_('product'), null=True, blank=True)
 
-    data = models.CharField(max_length=300, verbose_name=_('data'))
-    number = models.CharField(max_length=300, verbose_name=_('number'))
+    chars_title = models.CharField(max_length=300, verbose_name=_('data'))
+    chars_number = models.CharField(max_length=300, verbose_name=_('number'))
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

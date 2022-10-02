@@ -8,7 +8,8 @@ from rest_framework.relations import PrimaryKeyRelatedField
 
 from carousel.models import CarouselModel
 from help.models import HelpModel
-from .models import ProductModel, ReviewModel, CategoryModel, ProductImageModel
+from .models import ProductModel, ReviewModel, CategoryModel, ProductImageModel, ColorModel, ProductCustomNameModel, \
+    ProductCharacteristicModel
 
 
 class ProductRatingSerializer(serializers.ModelSerializer):
@@ -43,7 +44,6 @@ class ProductSerializer(serializers.ModelSerializer):
         return data
 
 
-
 class ProductDiscountSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductModel
@@ -75,21 +75,45 @@ class ProductImageModelSerializer(serializers.ModelSerializer):
         fields = ['image']
 
 
+class ProductColorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ColorModel
+        fields = ['color_title', 'code']
+
+
+class ProductCharacteristicModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductCharacteristicModel
+        fields = ['chars_title', 'chars_number']
+
+
 class ProductDetailSerializer(serializers.ModelSerializer):
-    category = serializers.SlugRelatedField(slug_field='title', read_only=True)
-    subcategory = serializers.SlugRelatedField(slug_field='subcategory', read_only=True)
+    # category = serializers.SlugRelatedField(slug_field='title', read_only=True)
+    # subcategory = serializers.SlugRelatedField(slug_field='subcategory', read_only=True)
     brand = serializers.SlugRelatedField(slug_field='brand', read_only=True)
-    colors = serializers.SlugRelatedField(slug_field='code', read_only=True, many=True)
+    colors = ProductColorSerializer(many=True)
     rating = ProductRatingSerializer(many=True)
     images = ProductImageModelSerializer(many=True)
+    characteristics = ProductCharacteristicModelSerializer(many=True)
     img_url = serializers.SerializerMethodField()
 
     class Meta:
         model = ProductModel
-        exclude = ['created_at', 'image']
+        fields = ['sku', 'title', 'discount', 'price', 'get_price', 'rating', 'images', 'img_url', 'colors',
+                  'is_published', 'description', 'characteristics', 'brand',
+                  ]
 
     def get_img_url(self, obj):
         return self.context['request'].build_absolute_uri(obj.image.url)
+
+    def to_representation(self, instance):
+
+        data = super().to_representation(instance)
+        if data['rating'] == []:
+            data['rating'] = 0
+        else:
+            data['rate_count'] = instance.rating.count()
+        return data
 
 
 class CarouselSerializer(serializers.ModelSerializer):
@@ -121,3 +145,17 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = CategoryModel
         fields = ['id', 'title', 'subcategories', 'image']
+
+
+class ReviewProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductModel
+        fields = ['id', 'title']
+
+
+class ReviewModelSerializer(serializers.ModelSerializer):
+    product = ReviewProductSerializer()
+
+    class Meta:
+        model = ReviewModel
+        fields = ['name', 'email', 'image', 'rating', 'comments', 'product', 'created_at']
