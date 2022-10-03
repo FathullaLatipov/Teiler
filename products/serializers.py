@@ -18,8 +18,15 @@ class ProductRatingSerializer(serializers.ModelSerializer):
         fields = ['rating']
 
 
+class ProductColorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ColorModel
+        fields = ['color_title', 'code']
+
+
 class ProductSerializer(serializers.ModelSerializer):
     rating = ProductRatingSerializer(many=True, default=None)
+    colors = ProductColorSerializer(many=True)
 
     # rating = serializers.SerializerMethodField()
 
@@ -30,7 +37,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductModel
-        fields = ['id', 'title', 'sku', 'image', 'discount', 'price',
+        fields = ['id', 'title', 'sku', 'image', 'current_chars', 'colors', 'discount', 'price',
                   'get_price', 'is_published', 'is_fav', 'rating', 'status',
                   ]
 
@@ -73,12 +80,6 @@ class ProductImageModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImageModel
         fields = ['image']
-
-
-class ProductColorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ColorModel
-        fields = ['color_title', 'code']
 
 
 class ProductCharacteristicModelSerializer(serializers.ModelSerializer):

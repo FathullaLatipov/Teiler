@@ -65,6 +65,7 @@ class ProductModel(models.Model):
     description = models.TextField(verbose_name=_('description'), null=True)
     material = models.CharField(max_length=300, verbose_name=_('material'))
     country = models.CharField(max_length=300, verbose_name=_('country'))
+    current_chars = models.CharField(max_length=200, verbose_name=_('current_chars'), null=True)
     colors = models.ManyToManyField(
         ColorModel,
         related_name='products',
