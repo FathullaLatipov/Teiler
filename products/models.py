@@ -76,7 +76,7 @@ class ProductModel(models.Model):
     is_published = models.BooleanField(default=False)
     is_buy = models.BooleanField(default=False)
     is_fav = models.BooleanField(default=False)
-    options = models.CharField(max_length=500, verbose_name=_('options'), null=True)
+    options = models.CharField(max_length=500, verbose_name=_('options'), null=True, blank=True)
     Order_choices = (
         ("process", "В процессе"),
         ("canceled", "Отменен"),
