@@ -42,7 +42,6 @@ class ProductSerializer(serializers.ModelSerializer):
                   ]
 
     def to_representation(self, instance):
-
         data = super().to_representation(instance)
         if data['rating'] == []:
             data['rating'] = 0
@@ -116,7 +115,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         if data['options'] == []:
             data['options'] = 0
         else:
-            data['options'] = ["Вот сюда ты берешь все значения current chars и current colors продуктов у которого одинаковый title(iphone13)"]
+            data['options']
         return data
 
 

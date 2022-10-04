@@ -270,7 +270,6 @@ class ProductListAPIView(generics.ListAPIView):
         )
 
 
-
 class ProductImageModelAPIView(generics.ListAPIView):
     queryset = ProductImageModel.objects.all()
     serializer_class = ProductImageModelSerializer
