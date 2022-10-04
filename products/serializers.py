@@ -26,7 +26,7 @@ class ProductColorSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     rating = ProductRatingSerializer(many=True, default=None)
-    colors = ProductColorSerializer(many=True)
+    current_color = ProductColorSerializer(many=True)
 
     # rating = serializers.SerializerMethodField()
 
@@ -37,7 +37,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductModel
-        fields = ['id', 'title', 'sku', 'image', 'current_chars', 'colors', 'discount', 'price',
+        fields = ['id', 'title', 'sku', 'image', 'current_chars', 'current_color', 'discount', 'price',
                   'get_price', 'is_published', 'is_fav', 'rating', 'status',
                   ]
 
@@ -92,7 +92,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     # category = serializers.SlugRelatedField(slug_field='title', read_only=True)
     # subcategory = serializers.SlugRelatedField(slug_field='subcategory', read_only=True)
     brand = serializers.SlugRelatedField(slug_field='brand', read_only=True)
-    colors = ProductColorSerializer(many=True)
+    current_color = ProductColorSerializer(many=True)
     rating = ProductRatingSerializer(many=True)
     images = ProductImageModelSerializer(many=True)
     characteristics = ProductCharacteristicModelSerializer(many=True)
@@ -100,20 +100,23 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductModel
-        fields = ['sku', 'title', 'discount', 'price', 'get_price', 'rating', 'images', 'img_url', 'colors',
-                  'is_published', 'description', 'characteristics', 'brand',
+        fields = ['sku', 'title', 'discount', 'price', 'get_price', 'rating', 'images', 'img_url', 'current_color',
+                  'is_published', 'description', 'options', 'characteristics', 'brand',
                   ]
 
     def get_img_url(self, obj):
         return self.context['request'].build_absolute_uri(obj.image.url)
 
     def to_representation(self, instance):
-
         data = super().to_representation(instance)
         if data['rating'] == []:
             data['rating'] = 0
         else:
             data['rate_count'] = instance.rating.count()
+        if data['options'] == []:
+            data['options'] = 0
+        else:
+            data['options'] = ["Вот сюда ты берешь все значения current chars и current colors продуктов у которого одинаковый title(iphone13)"]
         return data
 
 

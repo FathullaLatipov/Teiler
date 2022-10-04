@@ -66,7 +66,7 @@ class ProductModel(models.Model):
     material = models.CharField(max_length=300, verbose_name=_('material'))
     country = models.CharField(max_length=300, verbose_name=_('country'))
     current_chars = models.CharField(max_length=200, verbose_name=_('current_chars'), null=True)
-    colors = models.ManyToManyField(
+    current_color = models.ManyToManyField(
         ColorModel,
         related_name='products',
         verbose_name=_('colors')
@@ -76,6 +76,7 @@ class ProductModel(models.Model):
     is_published = models.BooleanField(default=False)
     is_buy = models.BooleanField(default=False)
     is_fav = models.BooleanField(default=False)
+    options = models.CharField(max_length=500, verbose_name=_('options'), null=True)
     Order_choices = (
         ("process", "В процессе"),
         ("canceled", "Отменен"),

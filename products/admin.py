@@ -62,7 +62,7 @@ class ProductModelAdmin(admin.ModelAdmin):
     list_display = ['title', 'sku', 'category', 'price', 'inbox', 'brand', 'material', 'created_at']
     list_filter = ['title', 'sku']
     search_fields = ['title', 'sku']
-    autocomplete_fields = ['colors']
+    autocomplete_fields = ['current_color']
     inlines = [ProductCustomNameModelAdmin, ProductCustomModelAdmin, ProductImageModelAdmin,
                ProductCharacteristicModelAdmin]
     readonly_fields = ['real_price']
