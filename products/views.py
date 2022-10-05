@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect, request
+from django.http import HttpResponse, HttpResponseRedirect, request, Http404
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, DeleteView, FormView
 from django.db.models import Max, Min, Avg, Sum, Count
 from django.http import JsonResponse
-from rest_framework import generics, serializers
+from rest_framework import generics, serializers, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -460,6 +460,20 @@ class CountryListAPIView(APIView):
         ])
 
 
-class ReviewModelSerializerListAPIView(generics.ListAPIView):
-    queryset = ReviewModel.objects.all()
-    serializer_class = ReviewModelSerializer
+class ReviewModelSerializerListAPIView(APIView):
+    def get_object(self, request, *args, **kwargs):
+        pk = self.kwargs.get('pk')
+        try:
+            return ReviewModel.objects.get(pk=pk)
+        except ReviewModel.DoesNotExist:
+            raise Http404
+
+    def get(self, request, *args, **kwargs):
+        pk = self.kwargs.get('pk')
+        snippet = self.get_object(pk)
+        serializer = ReviewModelSerializer(snippet, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_404_NOT_FOUND)
+    # def get(self, request, pk):
+    #     products = ReviewModel.objects.(id=pk)
+    #     serializer = ReviewModelSerializer(products, context={'request': request})
+    #     return Response(serializer.data)

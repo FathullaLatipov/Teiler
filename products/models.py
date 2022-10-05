@@ -37,6 +37,7 @@ class BrandModel(models.Model):
 class ColorModel(models.Model):
     color_title = models.CharField(max_length=100, verbose_name=_('title'), null=True)
     code = models.CharField(max_length=10, verbose_name=_('code'))
+    color_type = models.CharField(default='color', max_length=20, null=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created_at'))
 
     def __str__(self):
@@ -66,7 +67,7 @@ class ProductModel(models.Model):
     description = models.TextField(verbose_name=_('description'), null=True)
     material = models.CharField(max_length=300, verbose_name=_('material'))
     country = models.CharField(max_length=300, verbose_name=_('country'))
-    current_color = models.ManyToManyField(
+    сolors = models.ManyToManyField(
         ColorModel,
         related_name='products',
         verbose_name=_('colors')
@@ -76,6 +77,17 @@ class ProductModel(models.Model):
     is_published = models.BooleanField(default=False)
     is_buy = models.BooleanField(default=False)
     is_fav = models.BooleanField(default=False)
+    Condition_choices = (
+        ("NEW", 'Новый'),
+        ("USED", 'Б/у')
+    )
+    condition = models.CharField(
+        max_length=20,
+        verbose_name=_('condition'),
+        choices=Condition_choices,
+        null=True,
+        blank=True
+    )
     Order_choices = (
         ("process", "В процессе"),
         ("canceled", "Отменен"),
@@ -149,26 +161,6 @@ class ReviewModel(models.Model):
         ordering = ['pk']
 
 
-class ProductCustomModel(models.Model):
-    product = models.ForeignKey(ProductModel, on_delete=models.PROTECT, related_name='options',
-                                verbose_name=_('product'), null=True, blank=True)
-
-    option = models.CharField(max_length=200, verbose_name=_('option'), null=True, blank=True)
-    option1 = models.PositiveIntegerField(verbose_name=_('option1'), null=True, blank=True)
-    option2 = models.PositiveIntegerField(verbose_name=_('option2'), null=True, blank=True)
-    option3 = models.PositiveIntegerField(verbose_name=_('option3'), null=True, blank=True)
-    option4 = models.PositiveIntegerField(verbose_name=_('option4'), null=True, blank=True)
-    option5 = models.PositiveIntegerField(verbose_name=_('option5'), null=True, blank=True)
-    option6 = models.PositiveIntegerField(verbose_name=_('option6'), null=True, blank=True)
-
-    def __str__(self):
-        return self.option
-
-    class Meta:
-        verbose_name = _('product custom')
-        verbose_name_plural = _('product customers')
-
-
 class ProductImageModel(models.Model):
     product = models.ForeignKey(ProductModel, on_delete=models.PROTECT, related_name='images',
                                 verbose_name=_('product'), null=True, blank=True)
@@ -209,10 +201,10 @@ class RegisterForm(models.Model):
 
 
 class ProductAttributes(models.Model):
-    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, verbose_name=_('product'))
-    color = models.ForeignKey(ColorModel, on_delete=models.CASCADE, )
-    num = models.ForeignKey(ProductCustomModel, on_delete=models.CASCADE, )
-    price = models.PositiveIntegerField()
+    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, verbose_name=_('product'), related_name='product_options')
+    option_title = models.CharField(max_length=300, verbose_name=_('option_title'), null=True)
+    option_number = models.CharField(max_length=900, verbose_name=_('option_number'), null=True)
+    option_type = models.CharField(max_length=90, default='default', null=True, blank=True)
 
     def __str__(self):
         return self.product.title

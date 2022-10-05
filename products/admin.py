@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 from products.forms import ColorModelForm
-from products.models import CategoryModel, ProductModel, ProductCustomModel, BrandModel, ColorModel, \
+from products.models import CategoryModel, ProductModel, BrandModel, ColorModel, \
     ReviewModel, ProductCharacteristicModel, ProductImageModel, \
     ProductAttributes
 
@@ -35,15 +35,6 @@ class ReviewModelAdmin(admin.ModelAdmin):
     list_display = ['name', 'comments', 'email', 'created_at']
 
 
-class ProductCustomModelAdmin(admin.TabularInline):
-    model = ProductCustomModel
-
-    def formfield_for_choice_field(self, db_field, request=None, **kwargs):
-        if db_field.name == 'YOUR_FIELD_NAME':
-            kwargs['choices'] = (('', '---------'), ('1', 'Choice1'), ('2', 'Choice2'))
-        return db_field.formfield(**kwargs)
-
-
 class ProductImageModelAdmin(admin.TabularInline):
     model = ProductImageModel
 
@@ -57,8 +48,8 @@ class ProductModelAdmin(admin.ModelAdmin):
     list_display = ['title', 'sku', 'category', 'price', 'inbox', 'brand', 'material', 'created_at']
     list_filter = ['title', 'sku']
     search_fields = ['title', 'sku']
-    autocomplete_fields = ['current_color']
-    inlines = [ProductCustomModelAdmin, ProductImageModelAdmin,
+    autocomplete_fields = ['сolors']
+    inlines = [ProductImageModelAdmin,
                ProductCharacteristicModelAdmin]
     readonly_fields = ['real_price']
     save_as = True
@@ -66,7 +57,7 @@ class ProductModelAdmin(admin.ModelAdmin):
 
 
 class ProductAttributeAdmin(admin.ModelAdmin):
-    list_display = ['pk', 'product', 'price', 'color', 'num']
+    list_display = ['pk', 'product', 'option_title', 'option_number']
 
 
 admin.site.register(ProductAttributes, ProductAttributeAdmin)
