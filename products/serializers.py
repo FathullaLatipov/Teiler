@@ -26,7 +26,7 @@ class ProductColorSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     rating = ProductRatingSerializer(many=True, default=None)
-    colors = ProductColorSerializer(many=True)
+    # сolors = ProductColorSerializer(many=True)
 
     # rating = serializers.SerializerMethodField()
 
@@ -37,7 +37,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductModel
-        fields = ['id', 'title', 'sku', 'image', 'colors', 'discount', 'price',
+        fields = ['title', 'image', 'discount', 'price',
                   'get_price', 'is_published', 'is_fav', 'rating', 'status',
                   ]
 
