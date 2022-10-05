@@ -56,7 +56,8 @@ class ProductModel(models.Model):
     title = models.CharField(max_length=300, verbose_name=_('title'), db_index=True)
     sku = models.IntegerField(verbose_name=_('sku'), db_index=True)
     brand = models.ForeignKey(BrandModel, on_delete=models.PROTECT, verbose_name=_('brand'))
-    category = models.ForeignKey(CategoryModel, on_delete=models.PROTECT, verbose_name=_('category'), related_name='cat_price')
+    category = models.ForeignKey(CategoryModel, on_delete=models.PROTECT, verbose_name=_('category'),
+                                 related_name='cat_price')
     image = models.FileField(upload_to='image', verbose_name=_('image'), null=True)
     price = models.IntegerField(verbose_name=_('price'))
     discount = models.DecimalField(default=0, max_digits=9, decimal_places=0, verbose_name=_('discount'))
@@ -65,7 +66,6 @@ class ProductModel(models.Model):
     description = models.TextField(verbose_name=_('description'), null=True)
     material = models.CharField(max_length=300, verbose_name=_('material'))
     country = models.CharField(max_length=300, verbose_name=_('country'))
-    current_chars = models.CharField(max_length=200, verbose_name=_('current_chars'), null=True)
     current_color = models.ManyToManyField(
         ColorModel,
         related_name='products',
@@ -76,7 +76,6 @@ class ProductModel(models.Model):
     is_published = models.BooleanField(default=False)
     is_buy = models.BooleanField(default=False)
     is_fav = models.BooleanField(default=False)
-    options = models.CharField(max_length=500, verbose_name=_('options'), null=True, blank=True)
     Order_choices = (
         ("process", "В процессе"),
         ("canceled", "Отменен"),
@@ -134,7 +133,8 @@ class ReviewModel(models.Model):
     image = models.FileField(upload_to='form_images', verbose_name=_('image'), null=True, blank=True)
     rating = models.PositiveSmallIntegerField(default=0, null=True, blank=True)
     comments = models.TextField()
-    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, verbose_name=_('product'), related_name='rating')
+    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, verbose_name=_('product'),
+                                related_name='rating')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created_at'), null=True)
 
     def __str__(self):
@@ -149,29 +149,20 @@ class ReviewModel(models.Model):
         ordering = ['pk']
 
 
-class ProductCustomNameModel(models.Model):
-    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, related_name='chars',
-                                verbose_name=_('product'),
-                                null=True, blank=True
-                                )
-    chars_title = models.CharField(max_length=200, verbose_name=_('custom_name'))
-    chars_number = models.CharField(max_length=200, verbose_name=_('custom_number'))
-
-    class Meta:
-        verbose_name = _('product_custom_name')
-        verbose_name_plural = _('product_custom_names')
-
-
 class ProductCustomModel(models.Model):
-    product = models.ForeignKey(ProductModel, on_delete=models.PROTECT, related_name='customers',
+    product = models.ForeignKey(ProductModel, on_delete=models.PROTECT, related_name='options',
                                 verbose_name=_('product'), null=True, blank=True)
 
-    custom = models.CharField(max_length=200, verbose_name=_('custom'))
-    number = models.PositiveIntegerField(verbose_name=_('number'), null=True)
-    price = models.PositiveIntegerField(verbose_name=_('price'), null=True)
+    option = models.CharField(max_length=200, verbose_name=_('option'), null=True, blank=True)
+    option1 = models.PositiveIntegerField(verbose_name=_('option1'), null=True, blank=True)
+    option2 = models.PositiveIntegerField(verbose_name=_('option2'), null=True, blank=True)
+    option3 = models.PositiveIntegerField(verbose_name=_('option3'), null=True, blank=True)
+    option4 = models.PositiveIntegerField(verbose_name=_('option4'), null=True, blank=True)
+    option5 = models.PositiveIntegerField(verbose_name=_('option5'), null=True, blank=True)
+    option6 = models.PositiveIntegerField(verbose_name=_('option6'), null=True, blank=True)
 
     def __str__(self):
-        return self.custom
+        return self.option
 
     class Meta:
         verbose_name = _('product custom')
@@ -219,8 +210,8 @@ class RegisterForm(models.Model):
 
 class ProductAttributes(models.Model):
     product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, verbose_name=_('product'))
-    color = models.ForeignKey(ColorModel, on_delete=models.CASCADE,)
-    num = models.ForeignKey(ProductCustomModel, on_delete=models.CASCADE,)
+    color = models.ForeignKey(ColorModel, on_delete=models.CASCADE, )
+    num = models.ForeignKey(ProductCustomModel, on_delete=models.CASCADE, )
     price = models.PositiveIntegerField()
 
     def __str__(self):
