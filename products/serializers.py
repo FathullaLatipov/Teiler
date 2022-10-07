@@ -37,7 +37,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductModel
-        fields = ['title', 'image', 'discount', 'price',
+        fields = ['id', 'title', 'image', 'discount', 'price',
                   'get_price', 'is_published', 'is_fav', 'rating', 'status',
                   ]
 
@@ -106,7 +106,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductModel
-        fields = ['sku', 'title', 'images', 'discount', 'price', 'get_price', 'rating',  'img_url', 'is_published',
+        fields = ['id', 'sku', 'title', 'images', 'discount', 'price', 'get_price', 'rating',  'img_url', 'is_published',
                   'condition', 'product_options', 'сolors', 'characteristics', 'description', 'brand',
                   ]
 
