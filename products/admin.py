@@ -3,7 +3,7 @@ from django.utils.safestring import mark_safe
 from products.forms import ColorModelForm
 from products.models import CategoryModel, ProductModel, BrandModel, ColorModel, \
     ReviewModel, ProductCharacteristicModel, ProductImageModel, \
-    ProductAttributes
+    ProductAttributes, ProductOptionsModel
 
 
 @admin.register(CategoryModel)
@@ -11,6 +11,7 @@ class CategoryModelAdmin(admin.ModelAdmin):
     list_display = ['pk', 'title', 'created_at']
     list_filter = ['created_at']
     search_fields = ['category']
+
 
 @admin.register(BrandModel)
 class BrandModelAdmin(admin.ModelAdmin):
@@ -39,6 +40,10 @@ class ProductImageModelAdmin(admin.TabularInline):
     model = ProductImageModel
 
 
+class ProductOptionsModelAdmin(admin.TabularInline):
+    model = ProductOptionsModel
+
+
 class ProductCharacteristicModelAdmin(admin.TabularInline):
     model = ProductCharacteristicModel
 
@@ -49,7 +54,7 @@ class ProductModelAdmin(admin.ModelAdmin):
     list_filter = ['title', 'sku']
     search_fields = ['title', 'sku']
     autocomplete_fields = ['сolors']
-    inlines = [ProductImageModelAdmin,
+    inlines = [ProductImageModelAdmin, ProductOptionsModelAdmin,
                ProductCharacteristicModelAdmin]
     readonly_fields = ['real_price']
     save_as = True

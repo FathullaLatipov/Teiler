@@ -9,7 +9,7 @@ from rest_framework.relations import PrimaryKeyRelatedField
 from carousel.models import CarouselModel
 from help.models import HelpModel
 from .models import ProductModel, ReviewModel, CategoryModel, ProductImageModel, ColorModel, \
-    ProductCharacteristicModel, ProductAttributes
+    ProductCharacteristicModel, ProductAttributes, ProductOptionsModel
 
 
 class ProductRatingSerializer(serializers.ModelSerializer):
@@ -89,8 +89,8 @@ class ProductCharacteristicModelSerializer(serializers.ModelSerializer):
 
 class ProductAttributesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ProductAttributes
-        exclude = ['product', 'id']
+        model = ProductOptionsModel
+        exclude = ['product', 'id', 'created_at']
 
 
 class ProductDetailSerializer(serializers.ModelSerializer):
@@ -102,12 +102,12 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     images = ProductImageModelSerializer(many=True)
     characteristics = ProductCharacteristicModelSerializer(many=True)
     img_url = serializers.SerializerMethodField()
-    product_options = ProductAttributesSerializer(many=True)
+    products_options = ProductAttributesSerializer(many=True)
 
     class Meta:
         model = ProductModel
         fields = ['id', 'sku', 'title', 'images', 'discount', 'price', 'get_price', 'rating',  'img_url', 'is_published',
-                  'condition', 'product_options', 'сolors', 'characteristics', 'description', 'brand',
+                  'condition', 'products_options', 'сolors', 'characteristics', 'description', 'brand',
                   ]
 
     def get_img_url(self, obj):
@@ -119,10 +119,10 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             data['rating'] = 0
         else:
             data['rate_count'] = instance.rating.count()
-        if data['product_options'] == []:
-            data['product_options'] = 0
+        if data['products_options'] == []:
+            data['products_options'] = 0
         else:
-            data['product_options']
+            data['products_options']
         return data
 
 

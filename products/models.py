@@ -172,6 +172,19 @@ class ProductImageModel(models.Model):
         verbose_name_plural = _('product images')
 
 
+class ProductOptionsModel(models.Model):
+    product = models.ForeignKey(ProductModel, on_delete=models.PROTECT, related_name='products_options',
+                                verbose_name=_('product'), null=True, blank=True)
+
+    options_title = models.CharField(max_length=300, verbose_name=_('options_title'))
+    options_number = models.CharField(max_length=300, verbose_name=_('options_number'))
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = _('product_options')
+        verbose_name_plural = _('product_options')
+
+
 class ProductCharacteristicModel(models.Model):
     product = models.ForeignKey(ProductModel, on_delete=models.PROTECT, related_name='characteristics',
                                 verbose_name=_('product'), null=True, blank=True)
