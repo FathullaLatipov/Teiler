@@ -461,19 +461,26 @@ class CountryListAPIView(APIView):
 
 
 class ReviewModelSerializerListAPIView(APIView):
-    def get_object(self, request, *args, **kwargs):
-        pk = self.kwargs.get('pk')
-        try:
-            return ReviewModel.objects.get(pk=pk)
-        except ReviewModel.DoesNotExist:
-            raise Http404
+    # def get_object(self, request, *args, **kwargs):
+    #     pk = self.kwargs.get('pk')
+    #     try:
+    #         return ReviewModel.objects.filter(rating=pk)
+    #     except ReviewModel.DoesNotExist:
+    #         raise Http404
+    #
+    # def get(self, request, *args, **kwargs):
+    #     pk = self.kwargs.get('pk')
+    #     snippet = self.get_object(pk)
+    #     serializer = ReviewModelSerializer(snippet, context={'request': request})
+    #     return Response(serializer.data, status=status.HTTP_404_NOT_FOUND)
 
-    def get(self, request, *args, **kwargs):
-        pk = self.kwargs.get('pk')
-        snippet = self.get_object(pk)
-        serializer = ReviewModelSerializer(snippet, context={'request': request})
-        return Response(serializer.data, status=status.HTTP_404_NOT_FOUND)
-    # def get(self, request, pk):
-    #     products = ReviewModel.objects.(id=pk)
-    #     serializer = ReviewModelSerializer(products, context={'request': request})
+    # def get(self, request, *args, **kwargs):
+    #     pk = self.kwargs.get('pk')
+    #     custom_products = ReviewModel.objects.all()
+    #     serializer = ReviewModelSerializer(custom_products, context={'request': request})
     #     return Response(serializer.data)
+    def get(self, request, pk):
+        reviews = ReviewModel.objects.filter(product=pk)
+        serializer = ReviewModelSerializer(reviews, context={'request': request}, many=True)
+        return Response(serializer.data)
+        # return Response({"pk":pk})
