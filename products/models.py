@@ -139,14 +139,23 @@ class ProductModel(models.Model):
         ordering = ['title']
 
 
+class ReviewImageModel(models.Model):
+    image = models.ImageField(upload_to='form_images', verbose_name=_('image'), null=True, blank=True, )
+
+    class Meta:
+        verbose_name = _('review')
+        verbose_name_plural = _('reviews')
+
+
 class ReviewModel(models.Model):
     name = models.CharField(max_length=100, verbose_name=_('name'))
     email = models.EmailField(max_length=200, verbose_name=_('email'))
-    image = models.FileField(upload_to='form_images', verbose_name=_('image'), null=True, blank=True)
+    image = models.ManyToManyField(ReviewImageModel,)
     rating = models.PositiveSmallIntegerField(default=0, null=True, blank=True)
     comments = models.TextField()
     product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, verbose_name=_('product'),
                                 related_name='rating')
+    review_count = models.IntegerField(default=0, )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created_at'), null=True)
 
     def __str__(self):
@@ -214,7 +223,8 @@ class RegisterForm(models.Model):
 
 
 class ProductAttributes(models.Model):
-    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, verbose_name=_('product'), related_name='product_options')
+    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, verbose_name=_('product'),
+                                related_name='product_options')
     option_title = models.CharField(max_length=300, verbose_name=_('option_title'), null=True)
     option_number = models.CharField(max_length=900, verbose_name=_('option_number'), null=True)
     option_type = models.CharField(max_length=90, default='default', null=True, blank=True)

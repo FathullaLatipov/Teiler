@@ -9,7 +9,7 @@ from rest_framework.relations import PrimaryKeyRelatedField
 from carousel.models import CarouselModel
 from help.models import HelpModel
 from .models import ProductModel, ReviewModel, CategoryModel, ProductImageModel, ColorModel, \
-    ProductCharacteristicModel, ProductAttributes, ProductOptionsModel
+    ProductCharacteristicModel, ProductAttributes, ProductOptionsModel, ReviewImageModel
 
 
 class ProductRatingSerializer(serializers.ModelSerializer):
@@ -26,6 +26,7 @@ class ProductColorSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     rating = ProductRatingSerializer(many=True, default=None)
+
     # сolors = ProductColorSerializer(many=True)
 
     # rating = serializers.SerializerMethodField()
@@ -106,7 +107,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductModel
-        fields = ['id', 'sku', 'title', 'images', 'discount', 'price', 'get_price', 'rating',  'img_url', 'is_published',
+        fields = ['id', 'sku', 'title', 'images', 'discount', 'price', 'get_price', 'rating', 'img_url', 'is_published',
                   'condition', 'products_options', 'сolors', 'characteristics', 'description', 'brand',
                   ]
 
@@ -163,10 +164,16 @@ class ReviewProductSerializer(serializers.ModelSerializer):
         fields = ['id', 'title']
 
 
+class ReviewImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReviewImageModel
+        fields = ['image']
+
+
 class ReviewModelSerializer(serializers.ModelSerializer):
     product = ReviewProductSerializer()
+    image = ReviewImageSerializer(many=True)
 
     class Meta:
         model = ReviewModel
-        fields = ['name', 'email', 'image', 'rating', 'comments', 'product']
-        # fields = ["id", "product"]
+        fields = ['name', 'email', 'image', 'rating', 'comments', 'product', 'created_at']
