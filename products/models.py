@@ -143,8 +143,8 @@ class ReviewImageModel(models.Model):
     image = models.ImageField(upload_to='form_images', verbose_name=_('image'), null=True, blank=True, )
 
     class Meta:
-        verbose_name = _('review')
-        verbose_name_plural = _('reviews')
+        verbose_name = _('review_image')
+        verbose_name_plural = _('reviews_image')
 
 
 class ReviewModel(models.Model):
