@@ -180,9 +180,12 @@ class ReviewModelSerializer(serializers.ModelSerializer):
 
 
 class ReviewCreateSerializer(serializers.ModelSerializer):
+    image = ReviewImageSerializer(many=True, read_only=True)
+    rating = ProductRatingSerializer(many=True)
+
     class Meta:
         model = ReviewModel
-        exclude = ['id']
+        fields = ['name', 'email', 'image', 'rating', 'comments', 'product']
 
     def create(self, validated_data):
         return ReviewModel.objects.create(**validated_data)
