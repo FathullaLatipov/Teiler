@@ -22,7 +22,7 @@ from products.models import ProductModel, ProductAttributes, ReviewModel, Catego
 from cart.cart import Cart
 from products.serializers import ProductSerializer, ProductRatingSerializer, CarouselSerializer, HelpSerializer, \
     CategorySerializer, ProductDetailSerializer, ProductImageModelSerializer, ProductDiscountSerializer, \
-    ReviewModelSerializer
+    ReviewModelSerializer, ReviewCreateSerializer
 from products.utils import get_wishlist_data, get_cart_data
 
 
@@ -460,6 +460,14 @@ class CountryListAPIView(APIView):
         ])
 
 
+class ReviewAddCreateAPIView(APIView):
+    def post(self, request):
+        serializers = ReviewCreateSerializer(data=request.data)
+        serializers.is_valid(raise_exception=True)
+        serializers.save()
+        return Response({'post': serializers.data})
+
+
 class ReviewModelSerializerListAPIView(APIView):
     def get(self, request, pk):
         reviews = ReviewModel.objects.filter(product=pk)
@@ -481,4 +489,4 @@ class ReviewModelSerializerListAPIView(APIView):
     #         serializer.save()
     #         return Response(serializer.data)
     #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        # return Response({"pk":pk})
+    # return Response({"pk":pk})
