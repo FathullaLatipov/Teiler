@@ -140,8 +140,8 @@ class ProductModel(models.Model):
 
 
 class ReviewModel(models.Model):
-    name = models.CharField(max_length=100, verbose_name=_('name'))
-    email = models.EmailField(max_length=200, verbose_name=_('email'))
+    name = models.CharField(max_length=100, verbose_name=_('name'), null=True, blank=True)
+    email = models.EmailField(max_length=200, verbose_name=_('email'), null=True, blank=True)
     rating = models.PositiveSmallIntegerField(default=0, null=True, blank=True)
     comments = models.TextField()
     product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, verbose_name=_('product'),
