@@ -17,7 +17,7 @@ from .yasg import urlpatterns as doc_urls
 
 
 router = DefaultRouter()
-router.register(r'add-rating', AddRatingViewSet)
+router.register(r'api/v1/add-review', AddRatingViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -46,7 +46,6 @@ urlpatterns = [
     path('api/v1/products/', ProductListAPIView.as_view()),
     path('api/v1/discount/', ProductDiscountAPIView.as_view()),
     path('api/v1/cities/', CountryListAPIView.as_view()),
-    path('api/v1/reviews/<int:pk>', ReviewModelSerializerListAPIView.as_view()),
     path('api/v1/reviews/<int:pk>', ReviewModelSerializerListAPIView.as_view()),
     path('users/', include('user.urls')),
     path('api/v1/products/<int:pk>/', ProductDetailAPIView.as_view()),
