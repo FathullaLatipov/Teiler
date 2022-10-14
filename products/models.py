@@ -146,7 +146,6 @@ class ReviewModel(models.Model):
     comments = models.TextField()
     product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, verbose_name=_('product'),
                                 related_name='rating')
-    review_count = models.IntegerField(default=0, )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created_at'), null=True)
 
     def __str__(self):
@@ -162,8 +161,8 @@ class ReviewModel(models.Model):
 
 
 class ReviewImageModel(models.Model):
-    image = models.ImageField(upload_to='form_images', verbose_name=_('image'), null=True, blank=True, )
-    review = models.ForeignKey(ReviewModel, on_delete=models.CASCADE, null=True, related_name='images')
+    image = models.ImageField(upload_to='form_images', verbose_name=_('image'), null=True, blank=True)
+    review = models.ForeignKey(ReviewModel, on_delete=models.CASCADE, null=True, blank=True, related_name='images')
 
     class Meta:
         verbose_name = _('review_image')

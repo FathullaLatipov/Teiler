@@ -164,12 +164,6 @@ class ReviewProductSerializer(serializers.ModelSerializer):
         fields = ['id', 'title']
 
 
-class ReviewCreateProductSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProductModel
-        fields = ['id',]
-
-
 class ReviewImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReviewImageModel
@@ -179,6 +173,32 @@ class ReviewImageSerializer(serializers.ModelSerializer):
 class ReviewModelSerializer(serializers.ModelSerializer):
     product = ReviewProductSerializer()
     images = ReviewImageSerializer(many=True, read_only=True)
+    uploaded_images = serializers.ListField(allow_null=True, required=False,
+        child=serializers.ImageField(max_length=None, allow_empty_file=False, use_url=False, required=False),
+    )
+
+    class Meta:
+        model = ReviewModel
+        fields = ['name', 'email', 'images', 'uploaded_images', 'rating', 'comments', 'product', 'created_at']
+
+    # def create(self, validated_data):
+    #     uploaded_data = validated_data.pop('uploaded_images')
+    #     new_product = ReviewModel.objects.create(**validated_data)
+    #     for uploaded_item in uploaded_data:
+    #         new_product_image = ReviewImageModel.objects.create(product=new_product, images=uploaded_item)
+    #     return new_product
+    # return ReviewModel.objects.create(**validated_data)
+
+
+class ReviewCreateProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductModel
+        fields = ['pk', ]
+
+
+class ReviewCreateSerializer(serializers.ModelSerializer):
+    product = ReviewCreateProductSerializer()
+    images = ReviewImageSerializer(many=True, read_only=True)
     uploaded_images = serializers.ListField(
         child=serializers.ImageField(max_length=1000000, allow_empty_file=False, use_url=False),
         write_only=True
@@ -186,7 +206,7 @@ class ReviewModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReviewModel
-        fields = ['name', 'email', 'images', 'uploaded_images', 'rating', 'comments', 'product', 'created_at']
+        fields = ['name', 'email', 'images', 'uploaded_images', 'rating', 'comments', 'product.pk', 'created_at']
 
     def create(self, validated_data):
         uploaded_data = validated_data.pop('uploaded_images')
@@ -194,14 +214,3 @@ class ReviewModelSerializer(serializers.ModelSerializer):
         for uploaded_item in uploaded_data:
             new_product_image = ReviewImageModel.objects.create(product=new_product, images=uploaded_item)
         return new_product
-        # return ReviewModel.objects.create(**validated_data)
-
-# class ReviewCreateSerializer(serializers.ModelSerializer):
-#     image = ReviewImageSerializer(many=True, read_only=True)
-#
-#     class Meta:
-#         model = ReviewModel
-#         fields = ['name', 'email', 'image', 'rating', 'comments', 'product']
-#
-#     def create(self, validated_data):
-#         return ReviewModel.objects.create(**validated_data)
