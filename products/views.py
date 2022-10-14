@@ -23,7 +23,7 @@ from products.models import ProductModel, ProductAttributes, ReviewModel, Catego
 from cart.cart import Cart
 from products.serializers import ProductSerializer, ProductRatingSerializer, CarouselSerializer, HelpSerializer, \
     CategorySerializer, ProductDetailSerializer, ProductImageModelSerializer, ProductDiscountSerializer, \
-    ReviewModelSerializer
+    ReviewModelSerializer, ReviewCreateSerializer
 from products.utils import get_wishlist_data, get_cart_data
 
 
@@ -501,7 +501,7 @@ class ReviewModelSerializerListAPIView(APIView):
 
 class AddRatingViewSet(mixins.CreateModelMixin, GenericViewSet):
     queryset = ReviewModel.objects.all()
-    serializer_class = ReviewModelSerializer
+    serializer_class = ReviewCreateSerializer
 
     def get_serializer_context(self):
         return {'request': self.request}
