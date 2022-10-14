@@ -8,10 +8,11 @@ from django.views.decorators.http import require_POST
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, DeleteView, FormView
 from django.db.models import Max, Min, Avg, Sum, Count
 from django.http import JsonResponse
-from rest_framework import generics, serializers, status
+from rest_framework import generics, serializers, status, mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import GenericViewSet
 
 from carousel.models import CarouselModel
 from cart.forms import CartAddProductForm
@@ -22,7 +23,7 @@ from products.models import ProductModel, ProductAttributes, ReviewModel, Catego
 from cart.cart import Cart
 from products.serializers import ProductSerializer, ProductRatingSerializer, CarouselSerializer, HelpSerializer, \
     CategorySerializer, ProductDetailSerializer, ProductImageModelSerializer, ProductDiscountSerializer, \
-    ReviewModelSerializer, ReviewCreateSerializer
+    ReviewModelSerializer
 from products.utils import get_wishlist_data, get_cart_data
 
 
@@ -460,12 +461,12 @@ class CountryListAPIView(APIView):
         ])
 
 
-class ReviewAddCreateAPIView(APIView):
-    def post(self, request):
-        serializers = ReviewCreateSerializer(data=request.data)
-        serializers.is_valid(raise_exception=True)
-        serializers.save()
-        return Response({'post': serializers.data})
+# class ReviewAddCreateAPIView(APIView):
+#     def post(self, request):
+#         serializers = ReviewCreateSerializer(data=request.data)
+#         serializers.is_valid(raise_exception=True)
+#         serializers.save()
+#         return Response({'post': serializers.data})
 
 
 class ReviewModelSerializerListAPIView(APIView):
@@ -480,6 +481,12 @@ class ReviewModelSerializerListAPIView(APIView):
         except ReviewModel.DoesNotExist:
             raise Http404
 
+    # def post(self, request, pk):
+    #     serializers = ReviewModelSerializer(data=request.data)
+    #     serializers.is_valid(raise_exception=True)
+    #     serializers.save()
+    #     return Response({'post': serializers.data})
+
     # def put(self, request, pk, format=None):
     #     snippet = self.get_object(pk)
     #     serializer = ReviewModelSerializer(snippet, data=request.data)
@@ -490,3 +497,11 @@ class ReviewModelSerializerListAPIView(APIView):
     #         return Response(serializer.data)
     #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     # return Response({"pk":pk})
+
+
+class AddRatingViewSet(mixins.CreateModelMixin, GenericViewSet):
+    queryset = ReviewModel.objects.all()
+    serializer_class = ReviewModelSerializer
+
+    def get_serializer_context(self):
+        return {'request': self.request}

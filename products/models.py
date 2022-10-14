@@ -139,18 +139,9 @@ class ProductModel(models.Model):
         ordering = ['title']
 
 
-class ReviewImageModel(models.Model):
-    image = models.ImageField(upload_to='form_images', verbose_name=_('image'), null=True, blank=True, )
-
-    class Meta:
-        verbose_name = _('review_image')
-        verbose_name_plural = _('reviews_image')
-
-
 class ReviewModel(models.Model):
     name = models.CharField(max_length=100, verbose_name=_('name'))
     email = models.EmailField(max_length=200, verbose_name=_('email'))
-    image = models.ManyToManyField(ReviewImageModel,)
     rating = models.PositiveSmallIntegerField(default=0, null=True, blank=True)
     comments = models.TextField()
     product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, verbose_name=_('product'),
@@ -168,6 +159,15 @@ class ReviewModel(models.Model):
         verbose_name = _('review')
         verbose_name_plural = _('reviews')
         ordering = ['pk']
+
+
+class ReviewImageModel(models.Model):
+    image = models.ImageField(upload_to='form_images', verbose_name=_('image'), null=True, blank=True, )
+    review = models.ForeignKey(ReviewModel, on_delete=models.CASCADE, null=True, related_name='images')
+
+    class Meta:
+        verbose_name = _('review_image')
+        verbose_name_plural = _('reviews_image')
 
 
 class ProductImageModel(models.Model):

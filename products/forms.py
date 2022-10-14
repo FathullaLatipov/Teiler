@@ -19,7 +19,7 @@ class ColorModelForm(forms.ModelForm):
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = ReviewModel
-        fields = ("name", "email", "comments", "image", "rating")
+        fields = ("name", "email", "comments", "rating")
 
 
 class SingleProductForm(forms.ModelForm):

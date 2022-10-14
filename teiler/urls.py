@@ -3,17 +3,21 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-
+from rest_framework.routers import DefaultRouter
 from cart import views
 from help.views import HelpListView
 from products.views import HomeTemplate, AboutTemplateView, ContactTemplateView, OrderTemplateView, load_more_data, \
     ProductListAPIView, ProductRatingAPIView, CarouselListAPIView, HelpListAPIView, CategoryListAPIView, \
     ProductDetailAPIView, CountryListAPIView, ProductImageModelAPIView, ProductDiscountAPIView, \
-    ReviewModelSerializerListAPIView, ReviewAddCreateAPIView
+    ReviewModelSerializerListAPIView, AddRatingViewSet
 from user.views import edit_account_view, update_username, update_phone, update_email, update_date, \
     update_male
 from orders.views import user_order_view
 from .yasg import urlpatterns as doc_urls
+
+
+router = DefaultRouter()
+router.register(r'add-rating', AddRatingViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -43,7 +47,7 @@ urlpatterns = [
     path('api/v1/discount/', ProductDiscountAPIView.as_view()),
     path('api/v1/cities/', CountryListAPIView.as_view()),
     path('api/v1/reviews/<int:pk>', ReviewModelSerializerListAPIView.as_view()),
-    path('api/v1/add-reviews/', ReviewAddCreateAPIView.as_view()),
+    path('api/v1/reviews/<int:pk>', ReviewModelSerializerListAPIView.as_view()),
     path('users/', include('user.urls')),
     path('api/v1/products/<int:pk>/', ProductDetailAPIView.as_view()),
     path('api/v1/carousels', CarouselListAPIView.as_view()),
@@ -53,6 +57,7 @@ urlpatterns = [
 ]
 
 urlpatterns += doc_urls
+urlpatterns += router.urls
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
