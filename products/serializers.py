@@ -174,8 +174,9 @@ class ReviewModelSerializer(serializers.ModelSerializer):
     product = ReviewProductSerializer()
     images = ReviewImageSerializer(many=True, read_only=True)
     uploaded_images = serializers.ListField(required=False,
-        child=serializers.ImageField(max_length=None, allow_empty_file=False, use_url=False, required=False),
-    )
+                                            child=serializers.ImageField(max_length=None, allow_empty_file=False,
+                                                                         use_url=False, required=False),
+                                            )
 
     class Meta:
         model = ReviewModel
@@ -198,20 +199,39 @@ class ReviewCreateProductSerializer(serializers.ModelSerializer):
 
 
 class ReviewCreateSerializer(serializers.ModelSerializer):
-    product = serializers.ModelField(model_field=ProductModel()._meta.get_field('id'))
     images = ReviewImageSerializer(many=True, read_only=True)
     uploaded_images = serializers.ListField(required=False,
-        child=serializers.ImageField(max_length=1000000, allow_empty_file=False, use_url=False),
-        write_only=True
-    )
+                                            child=serializers.ImageField(max_length=1000000, allow_empty_file=False,
+                                                                         use_url=False),
+                                            write_only=True
+                                            )
 
     class Meta:
         model = ReviewModel
         fields = ['name', 'email', 'images', 'uploaded_images', 'rating', 'comments', 'product', 'created_at']
 
     def create(self, validated_data):
+        print(validated_data)
+        product = ProductModel.objects.get(id=validated_data['id'])
+        print(product)
         uploaded_data = validated_data.pop('uploaded_images')
-        new_product = ReviewModel.objects.create(**validated_data)
+        housemodel = ReviewModel.objects.create(name=validated_data['name'],
+                                                email=validated_data['email'],
+                                                rating=validated_data['rating'],
+                                                comments=validated_data['comments'],
+                                                # product=validated_data['product'],
+                                                )
+        housemodel.product.add(product.id)
         for uploaded_item in uploaded_data:
-            new_product_image = ReviewImageModel.objects.create(product=new_product, images=uploaded_item)
-        return new_product
+           new_product_image = ReviewImageModel.objects.create(images=uploaded_item)
+        housemodel.save()
+        return housemodel
+# def create(self, validated_data):
+#     uploaded_data = validated_data.pop('uploaded_images')
+#     product = ProductModel.objects.get(pk=validated_data['pk'])
+#     print(product)
+#     # product = validated_data.pop('product')
+#     new_product = ReviewModel.objects.create(**validated_data)
+#     for uploaded_item in uploaded_data:
+#         new_product_image = ReviewImageModel.objects.create(product=new_product, images=uploaded_item)
+#     return new_product

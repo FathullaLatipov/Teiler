@@ -126,7 +126,7 @@ class ProductDeleteView(DeleteView):
 class AddReview(View):
     def post(self, request, pk):
         form = ReviewForm(request.POST, request.FILES)
-        product = ProductModel.objects.get(id=pk)
+        product = ProductModel.objects.get(id=request[pk])
         if form.is_valid():
             form = form.save(commit=False)
             form.product = product
