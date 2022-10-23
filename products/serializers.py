@@ -1,9 +1,11 @@
 from django.db.models import Min, Max, Count, Avg
+from django.http import JsonResponse, HttpResponse
 from django.utils.html import strip_tags
 from django.utils.safestring import mark_safe
 from rest_framework import serializers
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.serializers import Serializer
+import json
 from rest_framework.relations import PrimaryKeyRelatedField
 
 from carousel.models import CarouselModel
@@ -173,15 +175,15 @@ class ReviewImageSerializer(serializers.ModelSerializer):
 class ReviewModelSerializer(serializers.ModelSerializer):
     product = ReviewProductSerializer()
     images = ReviewImageSerializer(many=True, read_only=True)
-    uploaded_images = serializers.ListField(required=False,
-                                            child=serializers.ImageField(max_length=None, allow_empty_file=False,
-                                                                         use_url=False, required=False),
-                                            )
 
     class Meta:
         model = ReviewModel
-        fields = ['name', 'email', 'images', 'uploaded_images', 'rating', 'comments', 'product', 'created_at']
+        fields = ['name', 'email', 'images', 'rating', 'comments', 'product', 'created_at']
 
+    def to_representation(self, instance):
+        context = super().to_representation(instance)
+        context['images'] = ReviewImageSerializer(instance.images, many=True).data
+        return context
     # def create(self, validated_data):
     #     uploaded_data = validated_data.pop('uploaded_images')
     #     new_product = ReviewModel.objects.create(**validated_data)
@@ -198,34 +200,55 @@ class ReviewCreateProductSerializer(serializers.ModelSerializer):
         fields = ['pk', ]
 
 
+class RewiewCreateImageSerializer(serializers.Serializer):
+    image = serializers.FileField(use_url=True)
+
+    def get_img_url(self, obj):
+        return self.context['request'].build_absolute_url(obj.image.url)
+
+
 class ReviewCreateSerializer(serializers.ModelSerializer):
-    images = ReviewImageSerializer(many=True, read_only=True)
-    uploaded_images = serializers.ListField(required=False,
-                                            child=serializers.ImageField(max_length=1000000, allow_empty_file=False,
-                                                                         use_url=False),
-                                            write_only=True
-                                            )
+    images = serializers.FileField(use_url=True)
+
+    class Meta:
+        model = ReviewImageModel
+        fields = ['image', ]
 
     class Meta:
         model = ReviewModel
-        fields = ['name', 'email', 'images', 'uploaded_images', 'rating', 'comments', 'product', 'created_at']
+        fields = ['name', 'email', 'images', 'rating', 'comments', 'product', 'created_at']
+        extra_kwargs = {
+            'images': {'required': False}
+        }
 
-    def create(self, validated_data):
-        print(validated_data)
-        product = ProductModel.objects.get(id=validated_data['id'])
-        print(product)
-        uploaded_data = validated_data.pop('uploaded_images')
-        housemodel = ReviewModel.objects.create(name=validated_data['name'],
-                                                email=validated_data['email'],
-                                                rating=validated_data['rating'],
-                                                comments=validated_data['comments'],
-                                                # product=validated_data['product'],
-                                                )
-        housemodel.product.add(product.id)
-        for uploaded_item in uploaded_data:
-           new_product_image = ReviewImageModel.objects.create(images=uploaded_item)
-        housemodel.save()
-        return housemodel
+    def to_representation(self, instance):
+        context = super().to_representation(instance)
+        context['images'] = RewiewCreateImageSerializer(instance.images, many=True).data
+
+        return context
+
+
+
+    # def get_img_url(self, obj):
+    #     return self.context['request'].build_absolute_url(obj.images.url)
+
+    # def create(self, validated_data):
+    #     print(validated_data)
+    #     # product = ProductModel.objects.get(id=validated_data['id'])/
+    #     # print(product)
+    #     uploaded_data = validated_data.pop('uploaded_images')
+    #     housemodel = ReviewModel.objects.create(name=validated_data['name'],
+    #                                             email=validated_data['email'],
+    #                                             rating=validated_data['rating'],
+    #                                             comments=validated_data['comments'],
+    #                                             product=validated_data['product'],
+    #                                             )
+    #     # housemodel.product.add(product.id)
+    #     for uploaded_item in uploaded_data:
+    #         new_product_image = ReviewImageModel.objects.create(image=uploaded_item)
+    #         # new_product_image.save()
+    #     housemodel.save()
+    #     return housemodel
 # def create(self, validated_data):
 #     uploaded_data = validated_data.pop('uploaded_images')
 #     product = ProductModel.objects.get(pk=validated_data['pk'])

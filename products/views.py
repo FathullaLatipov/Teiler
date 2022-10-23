@@ -9,6 +9,7 @@ from django.views.generic import ListView, DetailView, TemplateView, CreateView,
 from django.db.models import Max, Min, Avg, Sum, Count
 from django.http import JsonResponse
 from rest_framework import generics, serializers, status, mixins
+from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -19,7 +20,8 @@ from cart.forms import CartAddProductForm
 from help.models import HelpModel
 from products import models, forms
 from products.forms import ReviewForm
-from products.models import ProductModel, ProductAttributes, ReviewModel, CategoryModel, ProductImageModel
+from products.models import ProductModel, ProductAttributes, ReviewModel, CategoryModel, ProductImageModel, \
+    ReviewImageModel
 from cart.cart import Cart
 from products.serializers import ProductSerializer, ProductRatingSerializer, CarouselSerializer, HelpSerializer, \
     CategorySerializer, ProductDetailSerializer, ProductImageModelSerializer, ProductDiscountSerializer, \
@@ -470,6 +472,8 @@ class CountryListAPIView(APIView):
 
 
 class ReviewModelSerializerListAPIView(APIView):
+    parser_classes = [MultiPartParser]
+
     def get(self, request, pk):
         reviews = ReviewModel.objects.filter(product=pk)
         serializer = ReviewModelSerializer(reviews, context={'request': request}, many=True)
@@ -499,9 +503,43 @@ class ReviewModelSerializerListAPIView(APIView):
     # return Response({"pk":pk})
 
 
-class AddRatingViewSet(mixins.CreateModelMixin, GenericViewSet):
-    queryset = ReviewModel.objects.all()
+class AddRatingViewSet(APIView):
     serializer_class = ReviewCreateSerializer
+    parser_classes = [MultiPartParser]
 
-    def get_serializer_context(self):
-        return {'request': self.request}
+    def get_object(self, pk=None):
+        if pk:
+            pass
+        reviews = ReviewModel.objects.all()
+        return reviews
+
+    def get(self, request, **kwargs):
+        if 'pk' in kwargs:
+            pass
+        reviews = self.get_object()
+        serializer = self.serializer_class(reviews, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        # serializer = self.serializer_class(data=request.data)
+        # print(request.FILES.getlist('images'))
+        product = ProductModel.objects.get(id=int(request.data['product']))
+        # address = MapModel.objects.get(id=int(request.data['address']))
+        reviews = ReviewModel.objects.create(
+            name=request.data['name'],
+            email=request.data['email'],
+            rating=request.data['rating'],
+            comments=request.data['comments'],
+            product=product,
+        )
+        image = request.FILES.getlist('images')
+        # print(image)
+        for img_name in image:
+            img = ReviewImageModel.objects.create(image=img_name)
+            reviews.images.add(img)
+            # print(img)
+            reviews.save()
+
+        return Response(self.serializer_class(reviews).data, status=status.HTTP_201_CREATED)
+
+

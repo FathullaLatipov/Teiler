@@ -33,7 +33,7 @@ class ColorModelAdmin(admin.ModelAdmin):
 
 @admin.register(ReviewImageModel)
 class ReviewImageModelAdmin(admin.ModelAdmin):
-    list_display = ['pk', 'image']
+    list_display = ['pk', 'image', 'created_at']
 
 
 @admin.register(ReviewModel)
