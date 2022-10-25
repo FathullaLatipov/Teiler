@@ -8,6 +8,7 @@ from django.views.decorators.http import require_POST
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, DeleteView, FormView
 from django.db.models import Max, Min, Avg, Sum, Count
 from django.http import JsonResponse
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, serializers, status, mixins
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
@@ -485,21 +486,17 @@ class ReviewModelSerializerListAPIView(APIView):
         except ReviewModel.DoesNotExist:
             raise Http404
 
-    # def post(self, request, pk):
-    #     serializers = ReviewModelSerializer(data=request.data)
-    #     serializers.is_valid(raise_exception=True)
-    #     serializers.save()
-    #     return Response({'post': serializers.data})
-
-    # def put(self, request, pk, format=None):
-    #     snippet = self.get_object(pk)
-    #     serializer = ReviewModelSerializer(snippet, data=request.data)
-    #     if serializer.is_valid():
-    #         reviews = ReviewModel.objects.get(pk=pk)
-    #         reviews.review_count += 1
-    #         serializer.save()
-    #         return Response(serializer.data)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request, pk, format=None):
+        # snippet = self.get_object(pk)
+        # serializer = ReviewModelSerializer(snippet, data=request.data)
+        # if serializer.is_valid():
+        rev = request.data.get('review_id', 0)
+        reviews = ReviewModel.objects.get(pk=rev)
+        reviews.review_count += 1
+        reviews.save()
+        # serializer.save()
+        return Response(status=status.HTTP_200_OK)
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     # return Response({"pk":pk})
 
 
@@ -516,8 +513,9 @@ class AddRatingViewSet(APIView):
     def get(self, request, **kwargs):
         if 'pk' in kwargs:
             pass
-        reviews = self.get_object()
-        serializer = self.serializer_class(reviews, many=True)
+        sort_type = request.data.get('sort_type', '-created_at')
+        reviews = self.get_object().order_by(sort_type)
+        serializer = self.serializer_class(reviews, context={'request': request},  many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
@@ -540,6 +538,6 @@ class AddRatingViewSet(APIView):
             # print(img)
             reviews.save()
 
-        return Response(self.serializer_class(reviews).data, status=status.HTTP_201_CREATED)
+        return Response(self.serializer_class(reviews, context={'request': request}).data,  status=status.HTTP_201_CREATED)
 
 

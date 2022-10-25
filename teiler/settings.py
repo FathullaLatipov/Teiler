@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'star_ratings',
     'widget_tweaks',
     'rest_framework',
+    # Django Filters
+    'django_filters',
     'rest_framework.authtoken',
     'corsheaders',
     'drf_yasg',
@@ -181,6 +183,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny'
     ],
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 8
 }

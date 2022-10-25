@@ -178,7 +178,7 @@ class ReviewModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReviewModel
-        fields = ['name', 'email', 'images', 'rating', 'comments', 'product', 'created_at']
+        fields = ['id', 'name', 'review_count', 'email', 'images', 'rating', 'comments', 'product', 'created_at']
 
     def to_representation(self, instance):
         context = super().to_representation(instance)
@@ -203,12 +203,10 @@ class ReviewCreateProductSerializer(serializers.ModelSerializer):
 class RewiewCreateImageSerializer(serializers.Serializer):
     image = serializers.FileField(use_url=True)
 
-    def get_img_url(self, obj):
-        return self.context['request'].build_absolute_url(obj.image.url)
-
 
 class ReviewCreateSerializer(serializers.ModelSerializer):
     images = serializers.FileField(use_url=True)
+    img_url = serializers.SerializerMethodField()
 
     class Meta:
         model = ReviewImageModel
@@ -216,10 +214,18 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReviewModel
-        fields = ['name', 'email', 'images', 'rating', 'comments', 'product', 'created_at']
+        fields = ['id', 'name', 'review_count', 'email', 'images', 'img_url', 'rating', 'comments', 'product', 'created_at']
         extra_kwargs = {
             'images': {'required': False}
         }
+
+    def get_img_url(self, obj):
+        # print('teeest', obj.images.all()
+        urls = []
+        for i in obj.images.all():
+            myurl = self.context['request'].build_absolute_uri(i.image.url)
+            urls.append(myurl)
+        return urls
 
     def to_representation(self, instance):
         context = super().to_representation(instance)

@@ -154,6 +154,7 @@ class ReviewModel(models.Model):
     images = models.ManyToManyField(ReviewImageModel, null=True, blank=True)
     rating = models.PositiveSmallIntegerField(default=0, null=True, blank=True)
     comments = models.TextField()
+    review_count = models.PositiveIntegerField(default=0, null=True, blank=True)
     product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, verbose_name=_('product'),
                                 related_name='rating')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created_at'), null=True)
