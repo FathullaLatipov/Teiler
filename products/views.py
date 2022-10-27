@@ -10,6 +10,8 @@ from django.db.models import Max, Min, Avg, Sum, Count
 from django.http import JsonResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, serializers, status, mixins
+from rest_framework.generics import ListAPIView
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -471,20 +473,22 @@ class CountryListAPIView(APIView):
 #         serializers.save()
 #         return Response({'post': serializers.data})
 
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 5
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
 
-class ReviewModelSerializerListAPIView(APIView):
+
+class ReviewModelSerializerListAPIView(ListAPIView):
+    queryset = ReviewModel.objects.all()
+    serializer_class = ReviewCreateSerializer
     parser_classes = [MultiPartParser]
+    pagination_class = StandardResultsSetPagination
 
-    def get(self, request, pk):
-        reviews = ReviewModel.objects.filter(product=pk)
-        serializer = ReviewModelSerializer(reviews, context={'request': request}, many=True)
-        return Response(serializer.data)
-
-    def get_object(self, pk):
-        try:
-            return ReviewModel.objects.get(pk=pk)
-        except ReviewModel.DoesNotExist:
-            raise Http404
+    def get(self, request, pk, *args, **kwargs):
+        sort_type = self.request.data.get('sort_type', '-created_at')
+        self.queryset = self.queryset.order_by(sort_type).filter(product=pk)
+        return super().get(request, *args, **kwargs)
 
     def put(self, request, pk, format=None):
         # snippet = self.get_object(pk)
@@ -500,23 +504,16 @@ class ReviewModelSerializerListAPIView(APIView):
     # return Response({"pk":pk})
 
 
-class AddRatingViewSet(APIView):
+class AddRatingViewSet(ListAPIView):
+    queryset = ReviewModel.objects.all()
     serializer_class = ReviewCreateSerializer
     parser_classes = [MultiPartParser]
+    pagination_class = StandardResultsSetPagination
 
-    def get_object(self, pk=None):
-        if pk:
-            pass
-        reviews = ReviewModel.objects.all()
-        return reviews
-
-    def get(self, request, **kwargs):
-        if 'pk' in kwargs:
-            pass
-        sort_type = request.data.get('sort_type', '-created_at')
-        reviews = self.get_object().order_by(sort_type)
-        serializer = self.serializer_class(reviews, context={'request': request},  many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    def get(self, request, *args, **kwargs):
+        sort_type = self.request.data.get('sort_type', '-created_at')
+        self.queryset = self.queryset.order_by(sort_type)
+        return super().get(request, *args, **kwargs)
 
     def post(self, request):
         # serializer = self.serializer_class(data=request.data)
@@ -538,6 +535,23 @@ class AddRatingViewSet(APIView):
             # print(img)
             reviews.save()
 
-        return Response(self.serializer_class(reviews, context={'request': request}).data,  status=status.HTTP_201_CREATED)
+        return Response(self.serializer_class(reviews, context={'request': request}).data,
+                        status=status.HTTP_201_CREATED)
 
-
+# class AddRatingViewSet(APIView):
+#     serializer_class = ReviewCreateSerializer
+#     parser_classes = [MultiPartParser]
+#
+#     def get_object(self, pk=None):
+#         if pk:
+#             pass
+#         reviews = ReviewModel.objects.all()
+#         return reviews
+#
+#     def get(self, request, **kwargs):
+#         if 'pk' in kwargs:
+#             pass
+#         sort_type = request.data.get('sort_type', '-created_at')
+#         reviews = self.get_object().order_by(sort_type)
+#         serializer = self.serializer_class(reviews, context={'request': request}, many=True)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
