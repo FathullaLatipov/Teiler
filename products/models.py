@@ -182,6 +182,20 @@ class ProductImageModel(models.Model):
         verbose_name_plural = _('product images')
 
 
+class CurrentProductOptionsModel(models.Model):
+    product = models.ForeignKey(ProductModel, on_delete=models.PROTECT, related_name='current_products_options',
+                                verbose_name=_('product'), null=True, blank=True)
+
+    current_options_title = models.CharField(max_length=300, verbose_name=_('current_options_title'))
+    current_options_number = models.CharField(max_length=300, verbose_name=_('current_options_number'))
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = _('Current_product_options')
+        verbose_name_plural = _('Current_product_options')
+        ordering = ['pk']
+
+
 class ProductOptionsModel(models.Model):
     product = models.ForeignKey(ProductModel, on_delete=models.PROTECT, related_name='products_options',
                                 verbose_name=_('product'), null=True, blank=True)

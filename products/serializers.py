@@ -11,7 +11,7 @@ from rest_framework.relations import PrimaryKeyRelatedField
 from carousel.models import CarouselModel
 from help.models import HelpModel
 from .models import ProductModel, ReviewModel, CategoryModel, ProductImageModel, ColorModel, \
-    ProductCharacteristicModel, ProductAttributes, ProductOptionsModel, ReviewImageModel
+    ProductCharacteristicModel, ProductAttributes, ProductOptionsModel, ReviewImageModel, CurrentProductOptionsModel
 
 
 class ProductRatingSerializer(serializers.ModelSerializer):
@@ -90,6 +90,12 @@ class ProductCharacteristicModelSerializer(serializers.ModelSerializer):
         fields = ['chars_title', 'chars_number']
 
 
+class ProductCurrentOptionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CurrentProductOptionsModel
+        exclude = ['product', 'id', 'created_at']
+
+
 class ProductAttributesSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductOptionsModel
@@ -106,11 +112,12 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     characteristics = ProductCharacteristicModelSerializer(many=True)
     img_url = serializers.SerializerMethodField()
     products_options = ProductAttributesSerializer(many=True)
+    current_products_options = ProductCurrentOptionsSerializer(many=True)
 
     class Meta:
         model = ProductModel
         fields = ['id', 'sku', 'title', 'images', 'discount', 'price', 'get_price', 'rating', 'img_url', 'is_published',
-                  'condition', 'products_options', 'сolors', 'characteristics', 'description', 'brand',
+                  'condition', 'current_products_options', 'products_options', 'сolors', 'characteristics', 'description', 'brand',
                   ]
 
     def get_img_url(self, obj):
@@ -214,7 +221,8 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReviewModel
-        fields = ['id', 'name', 'review_count', 'email', 'images', 'img_url', 'rating', 'comments', 'product', 'created_at']
+        fields = ['id', 'name', 'review_count', 'email', 'images', 'img_url', 'rating', 'comments', 'product',
+                  'created_at']
         extra_kwargs = {
             'images': {'required': False}
         }
@@ -232,8 +240,6 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
         context['images'] = RewiewCreateImageSerializer(instance.images, many=True).data
 
         return context
-
-
 
     # def get_img_url(self, obj):
     #     return self.context['request'].build_absolute_url(obj.images.url)
