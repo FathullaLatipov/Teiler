@@ -8,7 +8,8 @@ from django.views.decorators.http import require_POST
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, DeleteView, FormView
 from django.db.models import Max, Min, Avg, Sum, Count
 from django.http import JsonResponse
-from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import generics, serializers, status, mixins
 from rest_framework.generics import ListAPIView
 from rest_framework.pagination import PageNumberPagination
@@ -479,16 +480,13 @@ class StandardResultsSetPagination(PageNumberPagination):
     max_page_size = 1000
 
 
-class ReviewModelSerializerListAPIView(ListAPIView):
+class ReviewModelSerializerListAPIView(generics.ListAPIView):
     queryset = ReviewModel.objects.all()
     serializer_class = ReviewCreateSerializer
     parser_classes = [MultiPartParser]
     pagination_class = StandardResultsSetPagination
-
-    def get(self, request, pk, *args, **kwargs):
-        sort_type = self.request.data.get('sort_type', '-created_at')
-        self.queryset = self.queryset.order_by(sort_type).filter(product=pk)
-        return super().get(request, *args, **kwargs)
+    filter_backends = [OrderingFilter]
+    ordering_fields = ['rating', 'created_at']
 
     def put(self, request, pk, format=None):
         # snippet = self.get_object(pk)
@@ -509,6 +507,8 @@ class AddRatingViewSet(ListAPIView):
     serializer_class = ReviewCreateSerializer
     parser_classes = [MultiPartParser]
     pagination_class = StandardResultsSetPagination
+    filter_backends = [OrderingFilter]
+    ordering_fields = ['rating', 'created_at']
 
     def get(self, request, *args, **kwargs):
         sort_type = self.request.data.get('sort_type', '-created_at')
