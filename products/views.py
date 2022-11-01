@@ -8,6 +8,8 @@ from django.views.decorators.http import require_POST
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, DeleteView, FormView
 from django.db.models import Max, Min, Avg, Sum, Count
 from django.http import JsonResponse
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from rest_framework.decorators import permission_classes
 from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import generics, serializers, status, mixins
@@ -18,6 +20,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from carousel.models import CarouselModel
 from cart.forms import CartAddProductForm
@@ -506,6 +509,10 @@ class AddRatingViewSet(ListAPIView):
     queryset = ReviewModel.objects.all()
     serializer_class = ReviewCreateSerializer
     parser_classes = [MultiPartParser]
+    authentication_classes = [SessionAuthentication, BasicAuthentication,
+                              TokenAuthentication, JWTAuthentication
+                              ]
+    # permission_classes = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
     filter_backends = [OrderingFilter]
     ordering_fields = ['rating', 'created_at']
@@ -513,8 +520,13 @@ class AddRatingViewSet(ListAPIView):
     def get(self, request, *args, **kwargs):
         sort_type = self.request.data.get('sort_type', '-created_at')
         self.queryset = self.queryset.order_by(sort_type)
-        return super().get(request, *args, **kwargs)
+        content = {
+            'user': str(request.user),  # `django.contrib.auth.User` instance.
+            'auth': str(request.auth),  # None
+        }
+        return super().get(request, *args, **kwargs, content=content)
 
+    @permission_classes([IsAuthenticated])
     def post(self, request):
         # serializer = self.serializer_class(data=request.data)
         # print(request.FILES.getlist('images'))

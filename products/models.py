@@ -6,6 +6,8 @@ from django.db.models import Sum, Avg
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from user.models import CustomUser
+
 
 class CategoryModel(models.Model):
     title = models.CharField(max_length=300, verbose_name=_('title'))
@@ -149,6 +151,7 @@ class ReviewImageModel(models.Model):
 
 
 class ReviewModel(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=100, verbose_name=_('name'), null=True, blank=True)
     email = models.EmailField(max_length=200, verbose_name=_('email'), null=True, blank=True)
     images = models.ManyToManyField(ReviewImageModel, null=True, blank=True)

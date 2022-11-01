@@ -10,8 +10,18 @@ from rest_framework.relations import PrimaryKeyRelatedField
 
 from carousel.models import CarouselModel
 from help.models import HelpModel
+from user.models import CustomUser
 from .models import ProductModel, ReviewModel, CategoryModel, ProductImageModel, ColorModel, \
     ProductCharacteristicModel, ProductAttributes, ProductOptionsModel, ReviewImageModel, CurrentProductOptionsModel
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = [
+            'first_name',
+            'email',
+        ]
 
 
 class ProductRatingSerializer(serializers.ModelSerializer):
@@ -214,6 +224,7 @@ class RewiewCreateImageSerializer(serializers.Serializer):
 class ReviewCreateSerializer(serializers.ModelSerializer):
     images = serializers.FileField(use_url=True)
     img_url = serializers.SerializerMethodField()
+    user = UserSerializer()
 
     class Meta:
         model = ReviewImageModel
@@ -221,7 +232,7 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReviewModel
-        fields = ['id', 'name', 'review_count', 'email', 'images', 'img_url', 'rating', 'comments', 'product',
+        fields = ['id', 'user', 'name', 'review_count', 'email', 'images', 'img_url', 'rating', 'comments', 'product',
                   'created_at']
         extra_kwargs = {
             'images': {'required': False}
