@@ -10,7 +10,7 @@ from django.db.models import Max, Min, Avg, Sum, Count
 from django.http import JsonResponse
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.decorators import permission_classes
-from rest_framework.filters import OrderingFilter
+from rest_framework.filters import OrderingFilter, SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import generics, serializers, status, mixins
 from rest_framework.generics import ListAPIView
@@ -489,8 +489,14 @@ class ReviewModelSerializerListAPIView(generics.ListAPIView):
     serializer_class = ReviewCreateSerializer
     parser_classes = [MultiPartParser]
     pagination_class = StandardResultsSetPagination
-    filter_backends = [OrderingFilter]
+    filter_backends = [OrderingFilter, DjangoFilterBackend]
     ordering_fields = ['rating', 'created_at']
+    filterset_fields = ['product__id']
+
+    # def get(self, request, pk):
+    #     reviews = ReviewModel.objects.filter(product=pk)
+    #     serializer = ReviewModelSerializer(reviews, context={'request': request}, many=True)
+    #     return Response(serializer.data)
 
     def put(self, request, pk, format=None):
         # snippet = self.get_object(pk)
