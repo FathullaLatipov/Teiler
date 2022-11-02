@@ -34,6 +34,7 @@ from products.serializers import ProductSerializer, ProductRatingSerializer, Car
     CategorySerializer, ProductDetailSerializer, ProductImageModelSerializer, ProductDiscountSerializer, \
     ReviewModelSerializer, ReviewCreateSerializer
 from products.utils import get_wishlist_data, get_cart_data
+from user.models import CustomUser
 
 
 class HomeTemplate(TemplateView):
@@ -520,21 +521,19 @@ class AddRatingViewSet(ListAPIView):
     def get(self, request, *args, **kwargs):
         sort_type = self.request.data.get('sort_type', '-created_at')
         self.queryset = self.queryset.order_by(sort_type)
-        content = {
-            'user': str(request.user),  # `django.contrib.auth.User` instance.
-            'auth': str(request.auth),  # None
-        }
-        return super().get(request, *args, **kwargs, content=content)
+        return super().get(request, *args, **kwargs)
 
     @permission_classes([IsAuthenticated])
     def post(self, request):
         # serializer = self.serializer_class(data=request.data)
         # print(request.FILES.getlist('images'))
         product = ProductModel.objects.get(id=int(request.data['product']))
+        current_user = CustomUser.objects.get(id=int(request.user.id))
+
         # address = MapModel.objects.get(id=int(request.data['address']))
         reviews = ReviewModel.objects.create(
-            name=request.data['name'],
-            email=request.data['email'],
+            name=current_user.username,
+            email=current_user.email,
             rating=request.data['rating'],
             comments=request.data['comments'],
             product=product,

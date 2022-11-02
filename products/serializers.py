@@ -18,10 +18,7 @@ from .models import ProductModel, ReviewModel, CategoryModel, ProductImageModel,
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = [
-            'first_name',
-            'email',
-        ]
+        fields = []
 
 
 class ProductRatingSerializer(serializers.ModelSerializer):
@@ -224,7 +221,7 @@ class RewiewCreateImageSerializer(serializers.Serializer):
 class ReviewCreateSerializer(serializers.ModelSerializer):
     images = serializers.FileField(use_url=True)
     img_url = serializers.SerializerMethodField()
-    user = UserSerializer()
+    # user = UserSerializer()
 
     class Meta:
         model = ReviewImageModel
@@ -232,7 +229,7 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReviewModel
-        fields = ['id', 'user', 'name', 'review_count', 'email', 'images', 'img_url', 'rating', 'comments', 'product',
+        fields = ['id', 'name', 'email', 'review_count', 'images', 'img_url', 'rating', 'comments', 'product',
                   'created_at']
         extra_kwargs = {
             'images': {'required': False}
