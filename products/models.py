@@ -200,12 +200,15 @@ class CurrentProductOptionsModel(models.Model):
 
 
 class ProductOptionsModel(models.Model):
-    product = models.ForeignKey(ProductModel, on_delete=models.PROTECT, related_name='products_options',
+    product = models.ForeignKey(ProductModel, on_delete=models.PROTECT, related_name='options',
                                 verbose_name=_('product'), null=True, blank=True)
 
     options_title = models.CharField(max_length=300, verbose_name=_('options_title'))
     options_number = models.CharField(max_length=300, verbose_name=_('options_number'))
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.options_title} {self.options_number}'
 
     class Meta:
         verbose_name = _('product_options')

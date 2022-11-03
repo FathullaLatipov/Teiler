@@ -272,6 +272,8 @@ class ProductListAPIView(generics.ListAPIView):
     ''' Все продукты '''
     queryset = ProductModel.objects.filter().order_by('pk')
     serializer_class = ProductSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['options__options_number', 'сolors__color_title']
 
     def get_extra_counts(self):
         queryset = self.filter_queryset(self.get_queryset())
