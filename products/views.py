@@ -13,7 +13,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.filters import OrderingFilter, SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import generics, serializers, status, mixins
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, GenericAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
@@ -272,8 +272,8 @@ class ProductListAPIView(generics.ListAPIView):
     ''' Все продукты '''
     queryset = ProductModel.objects.filter().order_by('pk')
     serializer_class = ProductSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['options__options_number', 'сolors__color_title']
+    filter_backends = [SearchFilter]
+    search_fields = ['products_options__options_title']
 
     def get_extra_counts(self):
         queryset = self.filter_queryset(self.get_queryset())

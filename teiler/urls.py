@@ -13,7 +13,7 @@ from products.views import HomeTemplate, AboutTemplateView, ContactTemplateView,
     ReviewModelSerializerListAPIView, AddRatingViewSet
 from user.views import edit_account_view, update_username, update_phone, update_email, update_date, \
     update_male
-from orders.views import user_order_view
+from orders.views import user_order_view, UserAPIListView, OrderAPIListView
 from .yasg import urlpatterns as doc_urls
 
 
@@ -54,6 +54,8 @@ urlpatterns = [
     path('api/v1/carousels', CarouselListAPIView.as_view()),
     path('api/v1/help', HelpListAPIView.as_view()),
     path('api/v1/categories', CategoryListAPIView.as_view()),
+    path('api2/users/', UserAPIListView.as_view()),
+    path('api2/user-order/', OrderAPIListView.as_view()),
     path('', HomeTemplate.as_view())
 ]
 

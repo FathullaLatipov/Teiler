@@ -200,7 +200,7 @@ class CurrentProductOptionsModel(models.Model):
 
 
 class ProductOptionsModel(models.Model):
-    product = models.ForeignKey(ProductModel, on_delete=models.PROTECT, related_name='options',
+    product = models.ForeignKey(ProductModel, on_delete=models.PROTECT, related_name='products_options',
                                 verbose_name=_('product'), null=True, blank=True)
 
     options_title = models.CharField(max_length=300, verbose_name=_('options_title'))
