@@ -2,7 +2,11 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status
 from rest_framework.generics import ListAPIView
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.response import Response
 
 from coupons.forms import CouponApplyForm
 from products.models import ProductModel
@@ -59,9 +63,42 @@ def user_order_view(request, user_pk):
                                        })
 
 
-class UserAPIListView(ListAPIView):
+class UserAPIListView(ModelViewSet):
     queryset = OrderModel.objects.all()
     serializer_class = UserSerializer
+
+    @swagger_auto_schema(
+        operation_summary="All infos user",
+        operation_description="Methods for All infos user",
+    )
+    def list(self, request):
+        queryset = OrderModel.objects.all()
+        serializer = UserSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @swagger_auto_schema(
+        operation_summary="GET user by ID(GET METHOD)",
+        operation_description="Methods for GET user by ID(GET METHOD)",
+    )
+    def retrieve(self, request, pk=None):
+        queryset = OrderModel.objects.all()
+        user = get_object_or_404(queryset, pk=pk)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+    @swagger_auto_schema(
+        operation_summary="POST user (POST METHOD)",
+        operation_description="Methods for POST user (POST METHOD)",
+    )
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def get_serializer_context(self):
+        return {'request': self.request}
 
 
 class OrderAPIListView(ListAPIView):
@@ -77,4 +114,3 @@ class OrderAPIListView(ListAPIView):
 #             # form.cleaned_data['address'] = user.addres
 #             form.save()
 #             print(form)
-

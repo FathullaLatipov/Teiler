@@ -18,7 +18,7 @@ from .yasg import urlpatterns as doc_urls
 
 
 router = DefaultRouter()
-# router.register(r'api/v1/add-review', AddRatingViewSet)
+router.register(r'api/v1/lk/user', UserAPIListView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -54,7 +54,7 @@ urlpatterns = [
     path('api/v1/carousels', CarouselListAPIView.as_view()),
     path('api/v1/help', HelpListAPIView.as_view()),
     path('api/v1/categories', CategoryListAPIView.as_view()),
-    path('api2/users/', UserAPIListView.as_view()),
+    # path('api2/users/', UserAPIListView.as_view()),
     path('api2/user-order/', OrderAPIListView.as_view()),
     path('', HomeTemplate.as_view())
 ]
