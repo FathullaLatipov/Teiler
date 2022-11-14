@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect, request, Http404
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, DeleteView, FormView
@@ -21,6 +22,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.authentication import JWTAuthentication
+
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 
 from carousel.models import CarouselModel
 from cart.forms import CartAddProductForm
@@ -256,7 +260,10 @@ class ArticleTemplateView(TemplateView):
 
 class ProductRatingAPIView(APIView):
     ''' Рейтинг продуктов '''
-
+    @swagger_auto_schema(
+        operation_summary="All products ratings(GET)",
+        operation_description="Method for all products ratings(GET)",
+    )
     def get(self, request):
         ratings = ReviewModel.objects.all()
         serializer = ProductRatingSerializer(ratings, many=True)
@@ -267,6 +274,16 @@ class ProductDiscountAPIView(generics.ListAPIView):
     queryset = ProductModel.objects.all()
     serializer_class = ProductDiscountSerializer
 
+    @swagger_auto_schema(
+        operation_summary="All products discount(GET)",
+        operation_description="Method for all products discount(GET)",
+    )
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        serializer = ProductDiscountSerializer(page, many=True, context={'request': request})
+        return self.get_paginated_response(serializer.data)
+
 
 class ProductListAPIView(generics.ListAPIView):
     ''' Все продукты '''
@@ -274,6 +291,16 @@ class ProductListAPIView(generics.ListAPIView):
     serializer_class = ProductSerializer
     filter_backends = [SearchFilter]
     search_fields = ['products_options__options_title']
+
+    @swagger_auto_schema(
+        operation_summary="All products(GET)",
+        operation_description="Method for all products(GET)",
+    )
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        serializer = ProductSerializer(page, many=True, context={'request': request})
+        return self.get_paginated_response(serializer.data)
 
     def get_extra_counts(self):
         queryset = self.filter_queryset(self.get_queryset())
@@ -287,8 +314,23 @@ class ProductImageModelAPIView(generics.ListAPIView):
     queryset = ProductImageModel.objects.all()
     serializer_class = ProductImageModelSerializer
 
+    @swagger_auto_schema(
+        operation_summary="All product images(GET)",
+        operation_description="Method for all product images(GET)",
+    )
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        serializer = ProductImageModelSerializer(page, many=True, context={'request': request})
+        return self.get_paginated_response(serializer.data)
+
+
 
 class ProductDetailAPIView(APIView):
+    @swagger_auto_schema(
+        operation_summary="Product Detail(APIView, GET)",
+        operation_description="Method for Single Product Detail(APIView, GET)",
+    )
     def get(self, request, pk):
         products = ProductModel.objects.get(id=pk)
         serializer = ProductDetailSerializer(products, context={'request': request})
@@ -299,6 +341,17 @@ class CarouselListAPIView(generics.ListAPIView):
     ''' Карусель '''
     queryset = CarouselModel.objects.all()
     serializer_class = CarouselSerializer
+
+    @swagger_auto_schema(
+        operation_summary="All carousels(GET)",
+        operation_description="Method for all carousels(GET)",
+    )
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        serializer = CarouselSerializer(page, many=True, context={'request': request})
+        return self.get_paginated_response(serializer.data)
+
     # def get(self, request),
     #     carousels = CarouselModel.objects.all()
     #     serializer = CarouselSerializer(carousels, many=True)
@@ -310,14 +363,38 @@ class HelpListAPIView(generics.ListAPIView):
     queryset = HelpModel.objects.all()
     serializer_class = HelpSerializer
 
+    @swagger_auto_schema(
+        operation_summary="All helps(GET)",
+        operation_description="Method for all helps(GET)",
+    )
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        serializer = HelpSerializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
+
 
 class CategoryListAPIView(generics.ListAPIView):
     ''' Категории '''
     queryset = CategoryModel.objects.filter(parent=None)
     serializer_class = CategorySerializer
 
+    @swagger_auto_schema(
+        operation_summary="All categories(GET)",
+        operation_description="Method for all categories(GET)",
+    )
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        serializer = CategorySerializer(page, many=True, context={'request': request})
+        return self.get_paginated_response(serializer.data)
+
 
 class CountryListAPIView(APIView):
+    @swagger_auto_schema(
+        operation_summary="ALL Countries(GET)",
+        operation_description="Method for ALL Countries(GET)",
+    )
     def get(self, request):
         return Response([
             {
@@ -495,11 +572,25 @@ class ReviewModelSerializerListAPIView(generics.ListAPIView):
     ordering_fields = ['rating', 'created_at']
     filterset_fields = ['product__id']
 
+
+    @swagger_auto_schema(
+        operation_summary="All reviews(GET)",
+        operation_description="Method for all reviews(GET)",
+    )
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        serializer = ReviewCreateSerializer(page, many=True, context={'request': request})
+        return self.get_paginated_response(serializer.data)
+
     # def get(self, request, pk):
     #     reviews = ReviewModel.objects.filter(product=pk)
     #     serializer = ReviewModelSerializer(reviews, context={'request': request}, many=True)
     #     return Response(serializer.data)
-
+    @swagger_auto_schema(
+        operation_summary="Change reviews(PUT)",
+        operation_description="Method for change reviews in product(PUT)",
+    )
     def put(self, request, pk, format=None):
         # snippet = self.get_object(pk)
         # serializer = ReviewModelSerializer(snippet, data=request.data)
@@ -526,12 +617,20 @@ class AddRatingViewSet(ListAPIView):
     filter_backends = [OrderingFilter]
     ordering_fields = ['rating', 'created_at']
 
+    @swagger_auto_schema(
+        operation_summary="All ratings(GET)",
+        operation_description="Method for all ratings(GET)",
+    )
     def get(self, request, *args, **kwargs):
         sort_type = self.request.data.get('sort_type', '-created_at')
         self.queryset = self.queryset.order_by(sort_type)
         return super().get(request, *args, **kwargs)
 
     @permission_classes([IsAuthenticated])
+    @swagger_auto_schema(
+        operation_summary="Create ratings(POST)",
+        operation_description="Method for create ratings(POST)",
+    )
     def post(self, request):
         # serializer = self.serializer_class(data=request.data)
         # print(request.FILES.getlist('images'))

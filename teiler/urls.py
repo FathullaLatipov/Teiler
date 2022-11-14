@@ -44,7 +44,7 @@ urlpatterns = [
     path('load-more-data/', load_more_data, name='load_more_data'),
     path('api/v1/auth/', include('djoser.urls.authtoken')),
     path('api-auth/', include('rest_framework.urls')),
-    path('api/v1/products/', ProductListAPIView.as_view()),
+    path('api/v1/products/', ProductListAPIView.as_view(), name='products'),
     path('api/v1/discount/', ProductDiscountAPIView.as_view()),
     path('api/v1/cities/', CountryListAPIView.as_view()),
     path('api/v1/reviews/', ReviewModelSerializerListAPIView.as_view()),

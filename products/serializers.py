@@ -173,6 +173,9 @@ class CategorySerializer(serializers.ModelSerializer):
         model = CategoryModel
         fields = ['id', 'title', 'subcategories', 'image']
 
+    def get_img_url(self, obj):
+        return self.context['request'].build_absolute_url(obj.image.url)
+
 
 class ReviewProductSerializer(serializers.ModelSerializer):
     class Meta:
