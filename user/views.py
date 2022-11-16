@@ -2,22 +2,28 @@ from django.contrib.auth import logout
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, status, viewsets, serializers
 from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework.generics import ListAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.request import Request
 
 from rest_framework.decorators import action
+from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from orders.models import OrderItem
+from products.models import ProductModel
+from products.serializers import ProductDetailSerializer
 from user.forms import CustomUserChangeForm, UserNameChangeForm, PhoneChangeForm, \
     EmailChangeForm, DateBrithChangeForm, MaleChangeForm
 from user.models import CustomUser
-from user.serializers import RegistrationSerializer, LoginSerializer, MyTokenObtainPairSerializer
+from user.serializers import RegistrationSerializer, LoginSerializer, MyTokenObtainPairSerializer, UserOrderSerializer
 
 
 # new new
@@ -77,6 +83,31 @@ class UserViewSet(viewsets.ModelViewSet):
         else:
             return Response(serializer.errors)
 
+
+class UserDetailAPIView(APIView):
+    @swagger_auto_schema(
+        operation_summary="Получения данных пользователья(ЛК)",
+        operation_description="Метод получения данных пользователья. Помимо типа данных и токен авторизации, передаётся только ID пользователья.",
+    )
+    def get(self, request, pk):
+        users = CustomUser.objects.get(id=pk)
+        serializer = RegistrationSerializer(users, context={'request': request})
+        return Response(serializer.data)
+
+
+class UserProductDetail(APIView):
+    @swagger_auto_schema(
+        operation_summary="Получения данных товаров пользователья(ЛК)",
+        operation_description="Метод получения товаров пользователья. Помимо типа данных и токен авторизации, передаётся только ID заказа(ID заказа отображается на админке и оно генирируется сам) после оформления заказа.",
+    )
+    def get(self, request, pk):
+        products = OrderItem.objects.get(order=pk)
+        serializer = UserOrderSerializer(products, context={'request': request})
+        return Response(serializer.data)
+
+# class UserProductDetail(ListAPIView):
+#     queryset = OrderItem.objects.all()
+#     serializer_class = UserOrderSerializer
 
 class LoginAPIView(generics.GenericAPIView):
     ''' Логин юзера '''

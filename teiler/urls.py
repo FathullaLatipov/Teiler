@@ -12,13 +12,12 @@ from products.views import HomeTemplate, AboutTemplateView, ContactTemplateView,
     ProductDetailAPIView, CountryListAPIView, ProductImageModelAPIView, ProductDiscountAPIView, \
     ReviewModelSerializerListAPIView, AddRatingViewSet
 from user.views import edit_account_view, update_username, update_phone, update_email, update_date, \
-    update_male
+    update_male, UserViewSet, UserDetailAPIView, UserProductDetail
 from orders.views import user_order_view, UserAPIListView, OrderAPIListView
 from .yasg import urlpatterns as doc_urls
 
 
 router = DefaultRouter()
-router.register(r'api/v1/lk/user', UserAPIListView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -54,6 +53,8 @@ urlpatterns = [
     path('api/v1/carousels', CarouselListAPIView.as_view()),
     path('api/v1/help', HelpListAPIView.as_view()),
     path('api/v1/categories', CategoryListAPIView.as_view()),
+    path('api/v1/lk/user/<int:pk>', UserDetailAPIView.as_view()),
+    path('api/v1/lk/user/products/<int:pk>', UserProductDetail.as_view()),
     # path('api2/users/', UserAPIListView.as_view()),
     path('api2/user-order/', OrderAPIListView.as_view()),
     path('', HomeTemplate.as_view())

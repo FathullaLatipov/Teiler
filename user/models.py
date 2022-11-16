@@ -18,6 +18,7 @@ class CustomUser(AbstractUser):
         null=True,
         blank=True
     )
+    address = models.CharField(max_length=169, verbose_name='address', null=True)
 
     def tokens(self):
         refresh = RefreshToken.for_user(self)

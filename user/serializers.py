@@ -11,6 +11,8 @@ from rest_framework_simplejwt.settings import api_settings
 from django.contrib.auth.models import update_last_login
 from django.contrib.auth.password_validation import validate_password
 
+from orders.models import OrderItem, OrderModel
+from products.serializers import ProductSerializer
 from user.models import CustomUser
 
 
@@ -50,16 +52,19 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 class RegistrationSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(max_length=255, required=False,
-                                     write_only=True)
+                                      write_only=True)
 
     password2 = serializers.CharField(max_length=255, required=False,
-                                     write_only=True)
+                                      write_only=True)
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'email', 'phone', 'password1', 'password2']
+        fields = ['username', 'email', 'phone', 'password1', 'password2', 'date_birth', 'male', 'address']
         extra_kwargs = dict(
-            password=dict(required=True)
+            password=dict(required=True),
+            date_birth={"read_only": True},
+            male={"read_only": True},
+            address={"read_only": True}
         )
 
     def validate(self, attrs):
@@ -148,3 +153,18 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = '__all__'
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderModel
+        fields = ['id', 'online', 'upon_receipt', 'status', 'user', 'paid']
+
+
+class UserOrderSerializer(serializers.ModelSerializer):
+    order = OrderSerializer()
+    product = ProductSerializer()
+
+    class Meta:
+        model = OrderItem
+        fields = ['order', 'product', 'quantity']
