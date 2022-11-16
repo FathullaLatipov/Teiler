@@ -85,6 +85,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class UserDetailAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
     @swagger_auto_schema(
         operation_summary="Получения данных пользователья(ЛК)",
         operation_description="Метод получения данных пользователья. Помимо типа данных и токен авторизации, передаётся только ID пользователья.",
@@ -96,6 +97,8 @@ class UserDetailAPIView(APIView):
 
 
 class UserProductDetail(APIView):
+    permission_classes = (IsAuthenticated,)
+
     @swagger_auto_schema(
         operation_summary="Получения данных товаров пользователья(ЛК)",
         operation_description="Метод получения товаров пользователья. Помимо типа данных и токен авторизации, передаётся только ID заказа(ID заказа отображается на админке и оно генирируется сам) после оформления заказа.",
