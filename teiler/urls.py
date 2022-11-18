@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework.routers import DefaultRouter
 from cart import views
@@ -12,7 +13,7 @@ from products.views import HomeTemplate, AboutTemplateView, ContactTemplateView,
     ProductDetailAPIView, CountryListAPIView, ProductImageModelAPIView, ProductDiscountAPIView, \
     ReviewModelSerializerListAPIView, AddRatingViewSet
 from user.views import edit_account_view, update_username, update_phone, update_email, update_date, \
-    update_male, UserViewSet, UserDetailAPIView, UserProductDetail
+    update_male, UserViewSet, UserDetailAPIView, UserProductDetail, TokenCreateView
 from orders.views import user_order_view, UserAPIListView, OrderAPIListView
 from .yasg import urlpatterns as doc_urls
 
@@ -41,7 +42,8 @@ urlpatterns = [
     path('add/<int:product_id>/', views.cart_add, name='cart_add'),
     path('remove/<int:product_id>/', views.cart_remove, name='cart_remove'),
     path('load-more-data/', load_more_data, name='load_more_data'),
-    path('api/v1/auth/', include('djoser.urls.authtoken')),
+    # path('api/v1/auth/', include('djoser.urls.authtoken')),
+    # path('api/v1/auth/login/', TokenCreateView.as_view()),
     path('api-auth/', include('rest_framework.urls')),
     path('api/v1/products/', ProductListAPIView.as_view(), name='products'),
     path('api/v1/discount/', ProductDiscountAPIView.as_view()),

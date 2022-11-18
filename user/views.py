@@ -10,7 +10,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.request import Request
-
+from djoser import utils
+from djoser.conf import settings
 from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
@@ -39,14 +40,15 @@ class AuthViewSet(GenericViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT, data=data)
 
     #
-    # @action(['POST'], detail=False, permission_classes=[permissions.AllowAny])
-    # def login(self, request: Request):
-    #     self.serializer_class = AuthTokenSerializer
-    #     serializer = self.get_serializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     user = serializer.validated_data['user']
-    #     token, created = Token.objects.get_or_create(user=user)
-    #     return Response({'token': token.key})
+    @action(['POST'], detail=False, permission_classes=[permissions.AllowAny])
+    def login(self, request: Request):
+        self.serializer_class = AuthTokenSerializer
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user.id)
+        return Response({'token': token.key, 'message': 'Success'})
+    # {'message':'sucess','error':False,'code':200,'result':{'totalItems':len(serializer.data),'items':serializer.data,'totalPages':'null','currentPage':0}}
     #
     # #
     # @action(['DELETE'], detail=False, permission_classes=[IsAuthenticated])
@@ -120,6 +122,25 @@ class LoginAPIView(generics.GenericAPIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class TokenCreateView(utils.ActionViewMixin, generics.GenericAPIView):
+
+    serializer_class = settings.SERIALIZERS.token_create
+    permission_classes = settings.PERMISSIONS.token_create
+    print(serializer_class)
+    print(permission_classes)
+
+    def _action(self, serializer):
+        token = utils.login_user(self.request, serializer.user)
+        token_serializer_class = settings.SERIALIZERS.token
+        print(token)
+        print(serializer.user, 'user')
+        return Response(
+            data=token_serializer_class(token).data,
+            exception=serializer.user,
+            status=status.HTTP_200_OK
+        )
 
 
 def edit_account_view(request, *args, **kwargs):
