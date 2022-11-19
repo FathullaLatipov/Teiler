@@ -10,6 +10,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.settings import api_settings
 from django.contrib.auth.models import update_last_login
 from django.contrib.auth.password_validation import validate_password
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from orders.models import OrderItem, OrderModel
 from products.serializers import ProductSerializer
@@ -35,6 +36,10 @@ class UserDataSerializer(serializers.ModelSerializer):
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        return RefreshToken.for_user(user)
+
     def validate(self, attrs):
         data = super().validate(attrs)
 
@@ -42,12 +47,31 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         data['refresh'] = str(refresh)
         data['access'] = str(refresh.access_token)
-        data['user_data'] = UserDataSerializer(self.user).data
+        data['user'] = str(self.user)
+        data['user_id'] = str(self.user.id)
+        data['status'] = str('Success')
 
         if api_settings.UPDATE_LAST_LOGIN:
             update_last_login(None, self.user)
 
         return data
+
+    # def validate(self, attrs):
+    #     data = super().validate(attrs)
+    #
+    #     refresh = self.get_token(self.user)
+    #
+    #     data['refresh'] = str(refresh)
+    #     data['access'] = str(refresh.access_token)
+    #     data['user_data'] = UserDataSerializer(self.user).data
+    #     data['user'] = str(self.user)
+    #     data['user_id'] = str(self.user.id)
+    #     data['status'] = str('Success')
+    #
+    #     if api_settings.UPDATE_LAST_LOGIN:
+    #         update_last_login(None, self.user)
+    #
+    #     return data
 
 
 class RegistrationSerializer(serializers.ModelSerializer):

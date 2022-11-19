@@ -17,7 +17,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenViewBase
 
 from orders.models import OrderItem
 from products.models import ProductModel
@@ -303,3 +303,8 @@ class GetProfileView(APIView):
         users = CustomUser.objects.get(pk=pk)
         serializer = UserInfoSerializer(users, context={'request': request})
         return Response(serializer.data)
+
+
+class MyTokenObtainPairView(TokenViewBase):
+    serializer_class = MyTokenObtainPairSerializer
+    token_obtain_pair = TokenObtainPairView.as_view()
