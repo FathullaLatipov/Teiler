@@ -16,6 +16,7 @@ from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from orders.models import OrderItem
@@ -39,30 +40,49 @@ class AuthViewSet(GenericViewSet):
         data = {'status': 'Successfully log outed user'}
         return Response(status=status.HTTP_204_NO_CONTENT, data=data)
 
-    #
-    @action(['POST'], detail=False, permission_classes=[permissions.AllowAny])
-    def login(self, request: Request):
-        self.serializer_class = AuthTokenSerializer
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user.id)
-        return Response({'token': token.key, 'message': 'Success'})
-    # {'message':'sucess','error':False,'code':200,'result':{'totalItems':len(serializer.data),'items':serializer.data,'totalPages':'null','currentPage':0}}
-    #
-    # #
-    # @action(['DELETE'], detail=False, permission_classes=[IsAuthenticated])
-    # def logout(self, request: Request):
-    #     Token.objects.get(user=request.user).delete()
-    #     return Response(status=status.HTTP_204_NO_CONTENT)
-    #
-    # @action(['POST'], detail=False, permission_classes=[permissions.AllowAny])
-    # def login(self, request: Request):
-    #     self.serializer_class = MyTokenObtainPairSerializer
-    #     serializer = self.get_serializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     token = serializer.validated_data['access']
-    #     return Response({'token': token})
+
+class LogoutView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    @swagger_auto_schema(
+        operation_summary="Logout(POST)",
+        operation_description="Метод для Logout",
+    )
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+# #
+# @action(['POST'], detail=False, permission_classes=[permissions.AllowAny])
+# def login(self, request: Request):
+#     self.serializer_class = AuthTokenSerializer
+#     serializer = self.get_serializer(data=request.data)
+#     serializer.is_valid(raise_exception=True)
+#     user = serializer.validated_data['user']
+#     token, created = Token.objects.get_or_create(user=user.id)
+#     return Response({'token': token.key, 'message': 'Success'})
+# {'message':'sucess','error':False,'code':200,'result':{'totalItems':len(serializer.data),'items':serializer.data,'totalPages':'null','currentPage':0}}
+#
+# #
+# @action(['DELETE'], detail=False, permission_classes=[IsAuthenticated])
+# def logout(self, request: Request):
+#     Token.objects.get(user=request.user).delete()
+#     return Response(status=status.HTTP_204_NO_CONTENT)
+#
+# @action(['POST'], detail=False, permission_classes=[permissions.AllowAny])
+# def login(self, request: Request):
+#     self.serializer_class = MyTokenObtainPairSerializer
+#     serializer = self.get_serializer(data=request.data)
+#     serializer.is_valid(raise_exception=True)
+#     token = serializer.validated_data['access']
+#     return Response({'token': token})
 
 
 class LoginView(TokenObtainPairView):
@@ -88,6 +108,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class UserDetailAPIView(APIView):
     permission_classes = (IsAuthenticated,)
+
     @swagger_auto_schema(
         operation_summary="Получения данных пользователья(ЛК)",
         operation_description="Метод получения данных пользователья. Помимо типа данных и токен авторизации, передаётся только ID пользователья.",
@@ -110,6 +131,7 @@ class UserProductDetail(APIView):
         serializer = UserOrderSerializer(products, context={'request': request})
         return Response(serializer.data)
 
+
 # class UserProductDetail(ListAPIView):
 #     queryset = OrderItem.objects.all()
 #     serializer_class = UserOrderSerializer
@@ -125,7 +147,6 @@ class LoginAPIView(generics.GenericAPIView):
 
 
 class TokenCreateView(utils.ActionViewMixin, generics.GenericAPIView):
-
     serializer_class = settings.SERIALIZERS.token_create
     permission_classes = settings.PERMISSIONS.token_create
     print(serializer_class)

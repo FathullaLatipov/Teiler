@@ -13,7 +13,7 @@ from products.views import HomeTemplate, AboutTemplateView, ContactTemplateView,
     ProductDetailAPIView, CountryListAPIView, ProductImageModelAPIView, ProductDiscountAPIView, \
     ReviewModelSerializerListAPIView, AddRatingViewSet
 from user.views import edit_account_view, update_username, update_phone, update_email, update_date, \
-    update_male, UserViewSet, UserDetailAPIView, UserProductDetail, TokenCreateView
+    update_male, UserViewSet, UserDetailAPIView, UserProductDetail, TokenCreateView, LogoutView
 from orders.views import user_order_view, UserAPIListView, OrderAPIListView
 from .yasg import urlpatterns as doc_urls
 
@@ -44,6 +44,9 @@ urlpatterns = [
     path('load-more-data/', load_more_data, name='load_more_data'),
     # path('api/v1/auth/', include('djoser.urls.authtoken')),
     # path('api/v1/auth/login/', TokenCreateView.as_view()),
+    path('api/token/login', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/logout', LogoutView.as_view(), name='logouts'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api-auth/', include('rest_framework.urls')),
     path('api/v1/products/', ProductListAPIView.as_view(), name='products'),
     path('api/v1/discount/', ProductDiscountAPIView.as_view()),
