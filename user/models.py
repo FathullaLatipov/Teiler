@@ -12,11 +12,7 @@ class CustomUser(AbstractUser):
     phone = models.CharField(null=True, blank=True, max_length=50, default='+')
     date_birth = models.DateField(null=True, blank=True)
     male = models.CharField(
-        max_length=30,
-        choices=MALE_CHOIСES,
-        default=None,
-        null=True,
-        blank=True
+        max_length=30, null=True
     )
     address = models.CharField(max_length=169, verbose_name='address', null=True)
 

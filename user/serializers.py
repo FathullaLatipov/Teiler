@@ -165,7 +165,57 @@ class UserOrderSerializer(serializers.ModelSerializer):
     order = OrderSerializer()
     product = ProductSerializer()
 
-
     class Meta:
         model = OrderItem
         fields = ['order', 'product', 'quantity']
+
+
+class UserInfoSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(required=False)
+
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'first_name', 'date_birth', 'male', 'phone', 'email', 'password')
+
+
+class UpdateUserSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(required=False)
+
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'first_name', 'date_birth', 'male', 'phone', 'email', 'password')
+        extra_kwargs = {
+            'first_name': {'required': False},
+            'username': {'required': False},
+            'password': {'required': False},
+        }
+
+    def validate_email(self, value):
+        user = self.context['request'].user
+        if CustomUser.objects.exclude(pk=user.pk).filter(email=value).exists():
+            raise serializers.ValidationError({"email": "This email is already in use."})
+        return value
+
+    def validate_username(self, value):
+        user = self.context['request'].user
+        if CustomUser.objects.exclude(pk=user.pk).filter(username=value).exists():
+            raise serializers.ValidationError({"username": "This username is already in use."})
+        return value
+
+    def update(self, instance, validated_data):
+        user = self.context['request'].user
+
+        if user.pk != instance.pk:
+            raise serializers.ValidationError({"authorize": "You dont have permission for this user."})
+
+        instance.username = validated_data['username']
+        instance.first_name = validated_data['first_name']
+        instance.date_birth = validated_data['date_birth']
+        instance.male = validated_data['male']
+        instance.email = validated_data['email']
+        instance.phone = validated_data['phone']
+        instance.set_password(validated_data['password'])
+
+        instance.save()
+
+        return instance

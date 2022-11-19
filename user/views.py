@@ -25,7 +25,8 @@ from products.serializers import ProductDetailSerializer
 from user.forms import CustomUserChangeForm, UserNameChangeForm, PhoneChangeForm, \
     EmailChangeForm, DateBrithChangeForm, MaleChangeForm
 from user.models import CustomUser
-from user.serializers import RegistrationSerializer, LoginSerializer, MyTokenObtainPairSerializer, UserOrderSerializer
+from user.serializers import RegistrationSerializer, LoginSerializer, MyTokenObtainPairSerializer, UserOrderSerializer, \
+    UpdateUserSerializer, UserInfoSerializer
 
 
 # new new
@@ -284,3 +285,21 @@ def update_male(request, *args, **kwargs):
             context['form'] = form
 
     return render(request, 'lk.html', context)
+
+
+class UpdateProfileView(generics.UpdateAPIView):
+    queryset = CustomUser.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UpdateUserSerializer
+
+
+class GetProfileView(APIView):
+    permission_classes = (IsAuthenticated,)
+    @swagger_auto_schema(
+        operation_summary="Принимает обновленные данные пользователя",
+        operation_description="Метод для того что бы показать обновленные данные пользователя.В запросе надо в конце писать ID(Пользователя)",
+    )
+    def get(self, request, pk):
+        users = CustomUser.objects.get(pk=pk)
+        serializer = UserInfoSerializer(users, context={'request': request})
+        return Response(serializer.data)

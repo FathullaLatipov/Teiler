@@ -13,7 +13,8 @@ from products.views import HomeTemplate, AboutTemplateView, ContactTemplateView,
     ProductDetailAPIView, CountryListAPIView, ProductImageModelAPIView, ProductDiscountAPIView, \
     ReviewModelSerializerListAPIView, AddRatingViewSet
 from user.views import edit_account_view, update_username, update_phone, update_email, update_date, \
-    update_male, UserViewSet, UserDetailAPIView, UserProductDetail, TokenCreateView, LogoutView
+    update_male, UserViewSet, UserDetailAPIView, UserProductDetail, TokenCreateView, LogoutView, UpdateProfileView, \
+    GetProfileView
 from orders.views import user_order_view, UserAPIListView, OrderAPIListView
 from .yasg import urlpatterns as doc_urls
 
@@ -62,6 +63,8 @@ urlpatterns = [
     path('api/v1/lk/user/products/<int:pk>', UserProductDetail.as_view()),
     # path('api2/users/', UserAPIListView.as_view()),
     path('api2/user-order/', OrderAPIListView.as_view()),
+    path('api/v1/editUser/<int:pk>/', UpdateProfileView.as_view(), name='auth_update_profile'),
+    path('api/v1/getUser/<int:pk>/', GetProfileView.as_view(), name='getUser'),
     path('', HomeTemplate.as_view())
 ]
 
