@@ -2,13 +2,17 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView
 
-from user.views import AuthViewSet, UserViewSet
+from user.views import AuthViewSet, UserViewSet, UserDetailAPIView, UserProductDetail, UpdateProfileView, \
+        GetProfileView, LogoutView, MyTokenObtainPairView
 
 router = DefaultRouter()
-router.register('api/v1/auth', AuthViewSet, 'auth')
-router.register('api/v1/signup', UserViewSet, 'signup')
+# router.register('api/v1/auth', AuthViewSet, 'auth')
+# router.register('api/v1/signup', UserViewSet, 'signup')
 
 urlpatterns = [
-        path('login/refresh', TokenRefreshView.as_view(), name='token_refresh'),
+        path('api/v1/lk/user/<int:pk>', UserDetailAPIView.as_view()),
+        path('api/v1/lk/user/products/<int:pk>', UserProductDetail.as_view()),
+        path('api/v1/editUser/<int:pk>/', UpdateProfileView.as_view(), name='auth_update_profile'),
+        path('api/v1/getUser/<int:pk>/', GetProfileView.as_view(), name='getUser'),
         path('', include(router.urls), name='signup'),
 ]

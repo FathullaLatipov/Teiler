@@ -36,6 +36,11 @@ class UserDataSerializer(serializers.ModelSerializer):
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    extra_kwargs = dict(
+        password=dict(required=True),
+        username=dict(required=True),
+    )
+
     @classmethod
     def get_token(cls, user):
         return RefreshToken.for_user(user)
@@ -51,9 +56,17 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['user_id'] = str(self.user.id)
         data['status'] = str('Success')
 
+        password = attrs.get('password', '')
+        username = attrs.get('username', '')
+        user_pass = auth.authenticate(password=password)
+        user = CustomUser.objects.filter(username=username).first()
+        if user is None:
+            raise AuthenticationFailed('нужен username')
+        if not user.check_password(password):
+            raise AuthenticationFailed('нужен password')
+
         if api_settings.UPDATE_LAST_LOGIN:
             update_last_login(None, self.user)
-
         return data
 
     # def validate(self, attrs):
@@ -83,11 +96,11 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'email', 'phone', 'password1', 'password2', 'date_birth', 'male', 'address']
+        fields = ['username', 'first_name', 'last_name', 'email', 'phone', 'password1', 'password2', 'date_birth', 'sex', 'address']
         extra_kwargs = dict(
             password=dict(required=True),
             date_birth={"read_only": True},
-            male={"read_only": True},
+            sex={"read_only": True},
             address={"read_only": True}
         )
 
@@ -154,11 +167,12 @@ class LoginSerializer(serializers.ModelSerializer):
         fields = ['username', 'password', 'tokens']
 
     def validate(self, attrs):
+        data = super().validate(attrs)
         password = attrs.get('password', '')
         user = auth.authenticate(password=password)
 
         if not user:
-            raise AuthenticationFailed('Invalid credentials, try again pls')
+            raise AuthenticationFailed('Пароль обязательное поле*')
         if not user.is_active:
             raise AuthenticationFailed('Account disabled, contact admin')
         if not user.is_verified:
@@ -170,7 +184,7 @@ class LoginSerializer(serializers.ModelSerializer):
             'tokens': user.tokens
         }
 
-        return super().validate(attrs)
+        return data
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -199,7 +213,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'first_name', 'date_birth', 'male', 'phone', 'email', 'password')
+        fields = ('username', 'first_name', 'last_name', 'date_birth', 'sex', 'points', 'phone', 'email', 'password')
 
 
 class UpdateUserSerializer(serializers.ModelSerializer):
@@ -207,7 +221,7 @@ class UpdateUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'first_name', 'date_birth', 'male', 'phone', 'email', 'password')
+        fields = ('username', 'first_name', 'last_name', 'date_birth', 'sex', 'phone', 'email', 'password')
         extra_kwargs = {
             'first_name': {'required': False},
             'username': {'required': False},
@@ -227,15 +241,15 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         return value
 
     def update(self, instance, validated_data):
-        user = self.context['request'].user
-
-        if user.pk != instance.pk:
-            raise serializers.ValidationError({"authorize": "You dont have permission for this user."})
+        # user = self.context['request'].user
+        #
+        # if user.pk != instance.pk:
+        #     raise serializers.ValidationError({"authorize": "You dont have permission for this user."})
 
         instance.username = validated_data['username']
         instance.first_name = validated_data['first_name']
         instance.date_birth = validated_data['date_birth']
-        instance.male = validated_data['male']
+        instance.sex = validated_data['sex']
         instance.email = validated_data['email']
         instance.phone = validated_data['phone']
         instance.set_password(validated_data['password'])
@@ -243,3 +257,9 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+class NewUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'username', 'password', ]

@@ -37,7 +37,7 @@ class DateBrithChangeForm(UserChangeForm):
 class MaleChangeForm(UserChangeForm):
     class Meta:
         model = CustomUser
-        fields = ('male',)
+        fields = ('sex',)
 
 
 class PhoneChangeForm(UserChangeForm):

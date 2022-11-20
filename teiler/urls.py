@@ -14,7 +14,7 @@ from products.views import HomeTemplate, AboutTemplateView, ContactTemplateView,
     ReviewModelSerializerListAPIView, AddRatingViewSet
 from user.views import edit_account_view, update_username, update_phone, update_email, update_date, \
     update_male, UserViewSet, UserDetailAPIView, UserProductDetail, TokenCreateView, LogoutView, UpdateProfileView, \
-    GetProfileView, MyTokenObtainPairView
+    GetProfileView, MyTokenObtainPairView, LoginAPIView, UserNewCreateView
 from orders.views import user_order_view, UserAPIListView, OrderAPIListView
 from .yasg import urlpatterns as doc_urls
 
@@ -32,7 +32,7 @@ urlpatterns = [
     path('order/', OrderTemplateView.as_view(), name='order'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('cart/', include('cart.urls', namespace='cart')),
-    path('orders/', include('orders.urls', namespace='orders')),
+    path('reviews/', include('orders.urls', namespace='reviews')),
     path('profile/<int:user_pk>', user_order_view, name='profile'),
     path('profilw_edit/<user_id>/edit/', edit_account_view, name='edit'),
     path('change_username/<user_id>/edit/', update_username, name='update_username'),
@@ -45,26 +45,17 @@ urlpatterns = [
     path('load-more-data/', load_more_data, name='load_more_data'),
     # path('api/v1/auth/', include('djoser.urls.authtoken')),
     # path('api/v1/auth/login/', TokenCreateView.as_view()),
-    path('api/token/login', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/logout', LogoutView.as_view(), name='logouts'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api-auth/', include('rest_framework.urls')),
-    path('api/v1/products/', ProductListAPIView.as_view(), name='products'),
-    path('api/v1/discount/', ProductDiscountAPIView.as_view()),
     path('api/v1/cities/', CountryListAPIView.as_view()),
-    path('api/v1/reviews/', ReviewModelSerializerListAPIView.as_view()),
-    path('api/v1/add-review/', AddRatingViewSet.as_view()),
     path('users/', include('user.urls')),
-    path('api/v1/products/<int:pk>/', ProductDetailAPIView.as_view()),
+    # path('reviewssss/', include('orders.urls', namespace='orders22')),
+
     path('api/v1/carousels', CarouselListAPIView.as_view()),
     path('api/v1/help', HelpListAPIView.as_view()),
     path('api/v1/categories', CategoryListAPIView.as_view()),
-    path('api/v1/lk/user/<int:pk>', UserDetailAPIView.as_view()),
-    path('api/v1/lk/user/products/<int:pk>', UserProductDetail.as_view()),
+    path('authorizations/', include('authorization.urls')),
     # path('api2/users/', UserAPIListView.as_view()),
-    path('api2/user-order/', OrderAPIListView.as_view()),
-    path('api/v1/editUser/<int:pk>/', UpdateProfileView.as_view(), name='auth_update_profile'),
-    path('api/v1/getUser/<int:pk>/', GetProfileView.as_view(), name='getUser'),
+    # path('api2/user-order/', OrderAPIListView.as_view()),
     path('', HomeTemplate.as_view())
 ]
 

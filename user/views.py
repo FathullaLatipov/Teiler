@@ -1,21 +1,26 @@
 from django.contrib.auth import logout
+from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, status, viewsets, serializers
 from rest_framework.authtoken.serializers import AuthTokenSerializer
-from rest_framework.generics import ListAPIView
+from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.generics import ListAPIView, ListCreateAPIView
+from rest_framework.mixins import CreateModelMixin
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.request import Request
 from djoser import utils
 from djoser.conf import settings
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from rest_framework.response import Response
+from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenViewBase
 
@@ -26,10 +31,11 @@ from user.forms import CustomUserChangeForm, UserNameChangeForm, PhoneChangeForm
     EmailChangeForm, DateBrithChangeForm, MaleChangeForm
 from user.models import CustomUser
 from user.serializers import RegistrationSerializer, LoginSerializer, MyTokenObtainPairSerializer, UserOrderSerializer, \
-    UpdateUserSerializer, UserInfoSerializer
-
+    UpdateUserSerializer, UserInfoSerializer, NewUserSerializer
 
 # new new
+from user.utils import generate_access_token, generate_refresh_token
+
 
 class AuthViewSet(GenericViewSet):
     serializer_class = AuthTokenSerializer
@@ -42,22 +48,34 @@ class AuthViewSet(GenericViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT, data=data)
 
 
+# class LogoutView(APIView):
+#     permission_classes = (IsAuthenticated,)
+#
+#     @swagger_auto_schema(
+#         operation_summary="Logout(POST)",
+#         operation_description="Метод для Logout",
+#     )
+#     def post(self, request):
+#         try:
+#             refresh_token = request.data["refresh_token"]
+#             token = RefreshToken(refresh_token)
+#             token.blacklist()
+#
+#             return Response({"Success": "Упешно"}, status=status.HTTP_205_RESET_CONTENT)
+#         except Exception as e:
+#             return Response({"Success": "Ошибка"}, status=status.HTTP_400_BAD_REQUEST)
+
+
 class LogoutView(APIView):
     permission_classes = (IsAuthenticated,)
 
-    @swagger_auto_schema(
-        operation_summary="Logout(POST)",
-        operation_description="Метод для Logout",
-    )
     def post(self, request):
-        try:
-            refresh_token = request.data["refresh_token"]
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-
-            return Response(status=status.HTTP_205_RESET_CONTENT)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        token = RefreshToken(request.data.get('refresh'))
+        token.blacklist()
+        if not token.blacklist():
+            return Response("Ошибка")
+        else:
+            return Response({"status": "Успешно"})
 
 
 # #
@@ -91,20 +109,27 @@ class LoginView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(generics.CreateAPIView):
     ''' Регистрация юзера '''
     queryset = CustomUser.objects.all()
     ordering = ['-date_joined']
     search_fields = ['username']
     serializer_class = RegistrationSerializer
 
-    def create(self, request):
+    def post(self, request, *args, **kwargs):
         serializer = RegistrationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response({"status": True})
         else:
             return Response(serializer.errors)
+    # def create(self, request):
+    #     serializer = RegistrationSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response({"status": True})
+    #     else:
+    #         return Response(serializer.errors)
 
 
 class UserDetailAPIView(APIView):
@@ -289,18 +314,27 @@ def update_male(request, *args, **kwargs):
 
 class UpdateProfileView(generics.UpdateAPIView):
     queryset = CustomUser.objects.all()
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     serializer_class = UpdateUserSerializer
 
 
 class GetProfileView(APIView):
     permission_classes = (IsAuthenticated,)
+
     @swagger_auto_schema(
         operation_summary="Принимает обновленные данные пользователя",
         operation_description="Метод для того что бы показать обновленные данные пользователя.В запросе надо в конце писать ID(Пользователя)",
     )
+    #  def to_internal_value(self, validated_data):
+    #         raw_password = validated_data.pop('password')
+    #         user = super().to_internal_value(validated_data)
+    #         user.set_password(raw_password)  # Hash the raw password
+    #         return user
     def get(self, request, pk):
         users = CustomUser.objects.get(pk=pk)
+        # password = request.GET.get('password'),
+        # print(password, 'passs')
+        #  make_password(users.password),
         serializer = UserInfoSerializer(users, context={'request': request})
         return Response(serializer.data)
 
@@ -308,3 +342,31 @@ class GetProfileView(APIView):
 class MyTokenObtainPairView(TokenViewBase):
     serializer_class = MyTokenObtainPairSerializer
     token_obtain_pair = TokenObtainPairView.as_view()
+
+
+class UserNewCreateView(generics.CreateAPIView):
+    serializer_class = NewUserSerializer
+
+    def create(self, request, *args, **kwargs):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        response = Response()
+
+        user = CustomUser.objects.filter(username=username).first()
+        if (user is None):
+            raise AuthenticationFailed('Имя пользователья обязательное поле')
+        if (not user.check_password(password)):
+            raise AuthenticationFailed('нужен password')
+
+        serialized_user = NewUserSerializer(user).data
+
+        access_token = generate_access_token(user)
+        refresh_token = generate_refresh_token(user)
+
+        response.set_cookie(key='refreshtoken', value=refresh_token, httponly=True)
+        response.data = {
+            'access_token': access_token,
+            'user': serialized_user,
+        }
+
+        return response
