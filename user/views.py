@@ -31,7 +31,7 @@ from user.forms import CustomUserChangeForm, UserNameChangeForm, PhoneChangeForm
     EmailChangeForm, DateBrithChangeForm, MaleChangeForm
 from user.models import CustomUser
 from user.serializers import RegistrationSerializer, LoginSerializer, MyTokenObtainPairSerializer, UserOrderSerializer, \
-    UpdateUserSerializer, UserInfoSerializer, NewUserSerializer
+    UpdateUserSerializer, UserInfoSerializer, NewUserSerializer, AddressCreateSerializer
 
 # new new
 from user.utils import generate_access_token, generate_refresh_token
@@ -370,3 +370,8 @@ class UserNewCreateView(generics.CreateAPIView):
         }
 
         return response
+
+
+class AddressInfoView(ListAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = AddressCreateSerializer

@@ -3,6 +3,11 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.db import models
 
 
+class AddressInfoModel(models.Model):
+    lat = models.DecimalField(max_digits=40, decimal_places=10)
+    lng = models.DecimalField(max_digits=40, decimal_places=10)
+
+
 class CustomUser(AbstractUser):
     MALE_CHOIСES = (
         ("None", "Не выбрано"),
@@ -19,6 +24,9 @@ class CustomUser(AbstractUser):
     )
     points = models.CharField(max_length=150, verbose_name='points', null=True)
     address = models.CharField(max_length=169, verbose_name='address', null=True)
+    address_coordinates = models.ForeignKey(AddressInfoModel, on_delete=models.PROTECT, null=True)
+    is_house = models.BooleanField(default=False)
+    comment = models.TextField(null=True, blank=True)
 
     def tokens(self):
         refresh = RefreshToken.for_user(self)

@@ -14,7 +14,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from orders.models import OrderItem, OrderModel
 from products.serializers import ProductSerializer
-from user.models import CustomUser
+from user.models import CustomUser, AddressInfoModel
 
 
 class CheckTokenSerializer(serializers.Serializer):
@@ -259,3 +259,17 @@ class NewUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'username', 'password', ]
+
+
+class ADDSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AddressInfoModel
+        fields = ['lat', 'lng']
+
+
+class AddressCreateSerializer(serializers.ModelSerializer):
+    address_coordinates = ADDSerializer()
+
+    class Meta:
+        model = CustomUser
+        fields = ['pk', 'address', 'address_coordinates', 'is_house', 'comment']
