@@ -96,7 +96,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'first_name', 'last_name', 'email', 'phone', 'password1', 'password2', 'date_birth', 'sex', 'address']
+        fields = ['username', 'first_name', 'last_name', 'email', 'phone', 'password1', 'password2', 'date_birth',
+                  'sex', 'address']
         extra_kwargs = dict(
             password=dict(required=True),
             date_birth={"read_only": True},
@@ -217,42 +218,37 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
 
 class UpdateUserSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(required=False)
-
     class Meta:
         model = CustomUser
-        fields = ('username', 'first_name', 'last_name', 'date_birth', 'sex', 'phone', 'email', 'password')
+        fields = ('first_name', 'last_name', 'date_birth', 'sex', 'phone', 'email', 'password')
         extra_kwargs = {
-            'first_name': {'required': False},
             'username': {'required': False},
             'password': {'required': False},
         }
 
-    def validate_email(self, value):
-        user = self.context['request'].user
-        if CustomUser.objects.exclude(pk=user.pk).filter(email=value).exists():
-            raise serializers.ValidationError({"email": "This email is already in use."})
-        return value
-
-    def validate_username(self, value):
-        user = self.context['request'].user
-        if CustomUser.objects.exclude(pk=user.pk).filter(username=value).exists():
-            raise serializers.ValidationError({"username": "This username is already in use."})
-        return value
-
     def update(self, instance, validated_data):
+        print(instance, validated_data)
         # user = self.context['request'].user
         #
         # if user.pk != instance.pk:
         #     raise serializers.ValidationError({"authorize": "You dont have permission for this user."})
-
-        instance.username = validated_data['username']
+        # if 'username' in validated_data:
+        # if 'first_name' in validated_data:
         instance.first_name = validated_data['first_name']
+        instance.last_name = validated_data['last_name']
+        # if 'date_birth' in validated_data:
         instance.date_birth = validated_data['date_birth']
+        # if 'sex' in validated_data:
         instance.sex = validated_data['sex']
+        # if 'email' in validated_data:
+        # if 'email' not in validated_data:
         instance.email = validated_data['email']
+        # if 'phone' in validated_data:
         instance.phone = validated_data['phone']
-        instance.set_password(validated_data['password'])
+        if 'password' in validated_data:
+            instance.set_password(validated_data['password'])
+        else:
+            return instance
 
         instance.save()
 
