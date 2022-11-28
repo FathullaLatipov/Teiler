@@ -1,6 +1,7 @@
 from collections import defaultdict
 
 from django.contrib.auth.hashers import make_password
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import serializers, status
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
@@ -277,14 +278,19 @@ class DeleteAddresUserSerializer(serializers.ModelSerializer):
             user={"read_only": True},
         )
 
+
 class AddresUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = AdressInfoModel
-        fields = ['pk', 'address', 'lat', 'lng', 'is_house', 'comment',]
+        fields = ['pk', 'address', 'lat', 'lng', 'is_house', 'comment', ]
         extra_kwargs = dict(
             user={"read_only": True},
         )
 
+    @swagger_auto_schema(
+        operation_summary="Update address(PUT)",
+        operation_description="Method for create ratings(POST)",
+    )
     def update(self, instance, validated_data):
         print(instance, validated_data)
         # user = self.context['request'].user

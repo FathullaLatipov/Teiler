@@ -376,6 +376,10 @@ class UserNewCreateView(generics.CreateAPIView):
 class SingelAddresInfoView(APIView):
     permission_classes = (IsAuthenticated,)
 
+    @swagger_auto_schema(
+        operation_summary="Один обьект адрес (GET)(ID)",
+        operation_description="Метод для того что бы показать данные адреса.В запросе надо в конце писать ID(адреса)",
+    )
     def get(self, request, pk):
         address = AdressInfoModel.objects.get(pk=pk)
         # password = request.GET.get('password'),
@@ -389,6 +393,19 @@ class AddressInfoView(ListAPIView):
     queryset = AdressInfoModel.objects.all()
     serializer_class = AddressCreateSerializer
 
+    @swagger_auto_schema(
+        operation_summary="Получения всех адресов(GET)",
+        operation_description="Метод для того что бы получать все данные(Адрес)",
+    )
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = AddressCreateSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @swagger_auto_schema(
+        operation_summary="Создание адресов(POST)",
+        operation_description="Метод для того что бы создать данные(Адрес)",
+    )
     def post(self, request):
         reviews = AdressInfoModel.objects.create(
             address=request.data['address'],
@@ -408,7 +425,7 @@ class AddressProfileView(generics.UpdateAPIView):
     serializer_class = AddresUserSerializer
 
 
-class DeleteAddressProfileView(generics.RetrieveDestroyAPIView):
+class DeleteAddressProfileView(generics.DestroyAPIView):
     queryset = AdressInfoModel.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = DeleteAddresUserSerializer
