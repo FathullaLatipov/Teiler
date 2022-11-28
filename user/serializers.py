@@ -14,7 +14,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from orders.models import OrderItem, OrderModel
 from products.serializers import ProductSerializer
-from user.models import CustomUser, AddressInfoModel
+from user.models import CustomUser, AdressInfoModel
 
 
 class CheckTokenSerializer(serializers.Serializer):
@@ -97,12 +97,11 @@ class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['username', 'first_name', 'last_name', 'email', 'phone', 'password1', 'password2', 'date_birth',
-                  'sex', 'address']
+                  'sex']
         extra_kwargs = dict(
             password=dict(required=True),
             date_birth={"read_only": True},
             sex={"read_only": True},
-            address={"read_only": True}
         )
 
     def validate(self, attrs):
@@ -261,15 +260,55 @@ class NewUserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'password', ]
 
 
-class ADDSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AddressInfoModel
-        fields = ['lat', 'lng']
-
-
 class AddressCreateSerializer(serializers.ModelSerializer):
-    address_coordinates = ADDSerializer()
-
     class Meta:
-        model = CustomUser
-        fields = ['pk', 'address', 'address_coordinates', 'is_house', 'comment']
+        model = AdressInfoModel
+        fields = ['pk', 'address', 'lat', 'lng', 'is_house', 'comment', 'user']
+        extra_kwargs = dict(
+            user={"read_only": True},
+        )
+
+
+class DeleteAddresUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdressInfoModel
+        fields = ['pk', 'address', 'lat', 'lng', 'is_house', 'comment', 'user']
+        extra_kwargs = dict(
+            user={"read_only": True},
+        )
+
+class AddresUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdressInfoModel
+        fields = ['pk', 'address', 'lat', 'lng', 'is_house', 'comment',]
+        extra_kwargs = dict(
+            user={"read_only": True},
+        )
+
+    def update(self, instance, validated_data):
+        print(instance, validated_data)
+        # user = self.context['request'].user
+        #
+        # if user.pk != instance.pk:
+        #     raise serializers.ValidationError({"authorize": "You dont have permission for this user."})
+        # if 'username' in validated_data:
+        # if 'first_name' in validated_data:
+        instance.address = validated_data['address']
+        instance.lat = validated_data['lat']
+        # if 'date_birth' in validated_data:
+        instance.lng = validated_data['lng']
+        # if 'sex' in validated_data:
+        instance.is_house = validated_data['is_house']
+        # if 'email' in validated_data:
+        # if 'email' not in validated_data:
+        instance.comment = validated_data['comment']
+        # if 'phone' in validated_data:
+        # instance.user = validated_data['user']
+        # if 'password' in validated_data:
+        #     instance.set_password(validated_data['password'])
+        # else:
+        #     return instance
+
+        instance.save()
+
+        return instance

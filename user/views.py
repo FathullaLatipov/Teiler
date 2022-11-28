@@ -29,9 +29,10 @@ from products.models import ProductModel
 from products.serializers import ProductDetailSerializer
 from user.forms import CustomUserChangeForm, UserNameChangeForm, PhoneChangeForm, \
     EmailChangeForm, DateBrithChangeForm, MaleChangeForm
-from user.models import CustomUser
+from user.models import CustomUser, AdressInfoModel
 from user.serializers import RegistrationSerializer, LoginSerializer, MyTokenObtainPairSerializer, UserOrderSerializer, \
-    UpdateUserSerializer, UserInfoSerializer, NewUserSerializer, AddressCreateSerializer
+    UpdateUserSerializer, UserInfoSerializer, NewUserSerializer, AddressCreateSerializer, AddresUserSerializer, \
+    DeleteAddresUserSerializer
 
 # new new
 from user.utils import generate_access_token, generate_refresh_token
@@ -372,6 +373,42 @@ class UserNewCreateView(generics.CreateAPIView):
         return response
 
 
+class SingelAddresInfoView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk):
+        address = AdressInfoModel.objects.get(pk=pk)
+        # password = request.GET.get('password'),
+        # print(password, 'passs')
+        #  make_password(users.password),
+        serializer = AddressCreateSerializer(address, context={'request': request})
+        return Response(serializer.data)
+
+
 class AddressInfoView(ListAPIView):
-    queryset = CustomUser.objects.all()
+    queryset = AdressInfoModel.objects.all()
     serializer_class = AddressCreateSerializer
+
+    def post(self, request):
+        reviews = AdressInfoModel.objects.create(
+            address=request.data['address'],
+            lat=request.data['lat'],
+            lng=request.data['lng'],
+            is_house=request.data['is_house'],
+            comment=request.data['comment'],
+        )
+
+        return Response(self.serializer_class(reviews, context={'request': request}).data,
+                        status=status.HTTP_201_CREATED)
+
+
+class AddressProfileView(generics.UpdateAPIView):
+    queryset = AdressInfoModel.objects.all()
+    permission_classes = (AllowAny,)
+    serializer_class = AddresUserSerializer
+
+
+class DeleteAddressProfileView(generics.RetrieveDestroyAPIView):
+    queryset = AdressInfoModel.objects.all()
+    permission_classes = (AllowAny,)
+    serializer_class = DeleteAddresUserSerializer

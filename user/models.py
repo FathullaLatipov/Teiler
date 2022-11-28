@@ -3,11 +3,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.db import models
 
 
-class AddressInfoModel(models.Model):
-    lat = models.DecimalField(max_digits=40, decimal_places=10)
-    lng = models.DecimalField(max_digits=40, decimal_places=10)
-
-
 class CustomUser(AbstractUser):
     MALE_CHOIСES = (
         ("None", "Не выбрано"),
@@ -23,10 +18,6 @@ class CustomUser(AbstractUser):
         choices=MALE_CHOIСES,
     )
     points = models.CharField(max_length=150, verbose_name='points', null=True)
-    address = models.CharField(max_length=169, verbose_name='address', null=True)
-    address_coordinates = models.ForeignKey(AddressInfoModel, on_delete=models.PROTECT, null=True)
-    is_house = models.BooleanField(default=False)
-    comment = models.TextField(null=True, blank=True)
 
     def tokens(self):
         refresh = RefreshToken.for_user(self)
@@ -34,3 +25,21 @@ class CustomUser(AbstractUser):
             'refresh': str(refresh),
             'access': str(refresh.access_token)
         }
+
+
+class AdressInfoModel(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.PROTECT, null=True)
+    address = models.CharField(max_length=169, verbose_name='address', null=True)
+    lat = models.FloatField(max_length=50, null=True)
+    lng = models.FloatField(max_length=50, null=True)
+    is_house = models.BooleanField(default=False)
+    comment = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return self.address
+
+    class Meta:
+        verbose_name = 'Address'
+        verbose_name_plural = 'Addresses'
+
