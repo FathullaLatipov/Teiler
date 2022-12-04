@@ -110,7 +110,7 @@ class ProductDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['cart_product_form'] = CartAddProductForm()
         context['related'] = ProductModel.objects.order_by('-pk')
-        context['colors'] = ProductAttributes.objects.all().values('color__id', 'color__code').distinct()
+        context['colors'] = ProductAttributes.objects.all()
         return context
 
     def add_to_object(request, pk):

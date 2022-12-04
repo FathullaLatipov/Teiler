@@ -27,6 +27,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenViewBase
 from orders.models import OrderItem
 from products.models import ProductModel
 from products.serializers import ProductDetailSerializer
+from user.filters import ModelFilter
 from user.forms import CustomUserChangeForm, UserNameChangeForm, PhoneChangeForm, \
     EmailChangeForm, DateBrithChangeForm, MaleChangeForm
 from user.models import CustomUser, AdressInfoModel
@@ -146,17 +147,69 @@ class UserDetailAPIView(APIView):
         return Response(serializer.data)
 
 
-class UserProductDetail(APIView):
-    permission_classes = (IsAuthenticated,)
+# class MyAPIViewKlass(APIView):
+#     filter_backends = (filters.DjangoFilterBackend,)
+#
+#     def filter_queryset(self, queryset):
+#         for backend in list(self.filter_backends):
+#             queryset = backend().filter_queryset(self.request, queryset, self)
+#         return queryset
+#
+#     def get(self, request, *args, **kwargs):
+#         base_qs = MyModel.objects.all()
+#         filtered_qs = self.filter_queryset(base_qs)
+#         serializer = MySerializer(filtered_qs, many=True)
+#         return Response(serializer.data)
+# class UserProductDetail(APIView):
+#     permission_classes = (AllowAny,)
+#     filter_backends = [DjangoFilterBackend]
+#     filterset_fields = ['price']
+#
+    # @swagger_auto_schema(
+    #     operation_summary="Получения данных товаров пользователья(ЛК)",
+    #     operation_description="Метод получения товаров пользователья. Помимо типа данных и токен авторизации, передаётся только ID заказа(ID заказа отображается на админке и оно генирируется сам) после оформления заказа.",
+    # )
+#     def get(self, request, pk):
+#         products = OrderItem.objects.get(order=pk)
+#         serializer = UserOrderSerializer(products, context={'request': request})
+#         return Response(serializer.data)
+
+
+class UserProductDetail(generics.ListAPIView):
+    serializer_class = UserOrderSerializer
+    queryset = OrderItem.objects.all()
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['product__status']
 
     @swagger_auto_schema(
         operation_summary="Получения данных товаров пользователья(ЛК)",
         operation_description="Метод получения товаров пользователья. Помимо типа данных и токен авторизации, передаётся только ID заказа(ID заказа отображается на админке и оно генирируется сам) после оформления заказа.",
     )
-    def get(self, request, pk):
-        products = OrderItem.objects.get(order=pk)
-        serializer = UserOrderSerializer(products, context={'request': request})
-        return Response(serializer.data)
+    def get(self):
+        pk = self.kwargs['pk']
+        return self.queryset.filter(
+            order_id=pk
+        )
+
+#     def get_queryset(self):
+#         """
+#         This view should return a list of all models by
+#         the maker passed in the URL
+#         """
+#         maker = self.kwargs['make']
+#         return Model.objects.filter(make=maker)
+
+# class CollectionVideoViewSet(ListAPIView):
+#     """ViewSet for operation with videos in collection"""
+#     permission_classes = (IsAuthenticated,)
+#     queryset = Video.objects.all()
+#     serializer_class = CollectionVideoSerializer
+#
+#     def get_queryset(self):
+#         # Assuming your `Video` model has a many-to-one relation to `Collection`
+#         return self.queryset.filter(
+#             collection__pk=self.kwargs['pk']
+#         )
 
 
 # class UserProductDetail(ListAPIView):

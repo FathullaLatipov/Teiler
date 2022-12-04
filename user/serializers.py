@@ -203,6 +203,7 @@ class OrderSerializer(serializers.ModelSerializer):
 class UserOrderSerializer(serializers.ModelSerializer):
     order = OrderSerializer()
     product = ProductSerializer()
+    # product_status = serializers.CharField(source='product.status')
 
     class Meta:
         model = OrderItem

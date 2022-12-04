@@ -12,7 +12,7 @@ router = DefaultRouter()
 
 urlpatterns = [
         path('api/v1/lk/user/<int:pk>', UserDetailAPIView.as_view()),
-        path('api/v1/lk/user/products/<int:pk>', UserProductDetail.as_view()),
+        path('api/v1/lk/user/products/<int:pk>/', UserProductDetail.as_view()),
         path('api/v1/editUser/<int:pk>/', UpdateProfileView.as_view(), name='auth_update_profile'),
         path('api/v1/getUser/<int:pk>/', GetProfileView.as_view(), name='getUser'),
         path('api/v1/address/', AddressInfoView.as_view(), name='address'),
