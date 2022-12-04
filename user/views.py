@@ -185,7 +185,7 @@ class UserProductDetail(generics.ListAPIView):
         operation_summary="Получения данных товаров пользователья(ЛК)",
         operation_description="Метод получения товаров пользователья. Помимо типа данных и токен авторизации, передаётся только ID заказа(ID заказа отображается на админке и оно генирируется сам) после оформления заказа.",
     )
-    def get(self):
+    def get_queryset(self):
         pk = self.kwargs['pk']
         return self.queryset.filter(
             order_id=pk
