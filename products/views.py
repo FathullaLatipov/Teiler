@@ -289,8 +289,9 @@ class ProductListAPIView(generics.ListAPIView):
     ''' Все продукты '''
     queryset = ProductModel.objects.filter().order_by('pk')
     serializer_class = ProductSerializer
-    filter_backends = [SearchFilter]
+    filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ['products_options__options_title']
+    filterset_fields = ['status']
 
     @swagger_auto_schema(
         operation_summary="All products(GET)",
