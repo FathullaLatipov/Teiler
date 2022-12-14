@@ -79,6 +79,7 @@ class ProductModel(models.Model):
     is_published = models.BooleanField(default=False)
     is_buy = models.BooleanField(default=False)
     is_fav = models.BooleanField(default=False)
+    variation = models.CharField(max_length=400, verbose_name=_('variation'), null=True)
     Condition_choices = (
         ("NEW", 'Новый'),
         ("USED", 'Б/у')
