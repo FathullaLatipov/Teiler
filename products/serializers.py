@@ -106,7 +106,7 @@ class ProductCurrentOptionsSerializer(serializers.ModelSerializer):
 class ProductAttributesSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductOptionsModel
-        exclude = ['product', 'id', 'created_at']
+        exclude = ['product', 'created_at']
 
 
 class ProductDetailSerializer(serializers.ModelSerializer):
