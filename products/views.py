@@ -291,7 +291,7 @@ class ProductListAPIView(generics.ListAPIView):
     serializer_class = ProductSerializer
     filter_backends = [SearchFilter, DjangoFilterBackend]
     search_fields = ['products_options__options_title']
-    filterset_fields = ['status', 'variation']
+    filterset_fields = ['status', 'variation', 'category', 'brand']
 
     @swagger_auto_schema(
         operation_summary="All products(GET)",
