@@ -290,7 +290,7 @@ class ProductListAPIView(generics.ListAPIView):
     queryset = ProductModel.objects.filter().order_by('pk')
     serializer_class = ProductSerializer
     filter_backends = [SearchFilter, DjangoFilterBackend]
-    search_fields = ['products_options__options_title']
+    search_fields = ['title', ]
     filterset_fields = ['status', 'variation', 'category', 'brand']
 
     @swagger_auto_schema(
