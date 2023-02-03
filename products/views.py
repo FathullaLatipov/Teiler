@@ -20,7 +20,6 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from drf_yasg import openapi
@@ -29,14 +28,13 @@ from drf_yasg.utils import swagger_auto_schema
 from carousel.models import CarouselModel
 from cart.forms import CartAddProductForm
 from help.models import HelpModel
-from products import models, forms
 from products.forms import ReviewForm
 from products.models import ProductModel, ProductAttributes, ReviewModel, CategoryModel, ProductImageModel, \
-    ReviewImageModel
+    ReviewImageModel, BrandModel
 from cart.cart import Cart
 from products.serializers import ProductSerializer, ProductRatingSerializer, CarouselSerializer, HelpSerializer, \
     CategorySerializer, ProductDetailSerializer, ProductImageModelSerializer, ProductDiscountSerializer, \
-    ReviewModelSerializer, ReviewCreateSerializer
+    ReviewModelSerializer, ReviewCreateSerializer, ProductCategoryFilterSerializer, ProductBrandFilterSerializer
 from products.utils import get_wishlist_data, get_cart_data
 from user.models import CustomUser
 
@@ -260,6 +258,7 @@ class ArticleTemplateView(TemplateView):
 
 class ProductRatingAPIView(APIView):
     ''' Рейтинг продуктов '''
+
     @swagger_auto_schema(
         operation_summary="All products ratings(GET)",
         operation_description="Method for all products ratings(GET)",
@@ -324,7 +323,6 @@ class ProductImageModelAPIView(generics.ListAPIView):
         page = self.paginate_queryset(queryset)
         serializer = ProductImageModelSerializer(page, many=True, context={'request': request})
         return self.get_paginated_response(serializer.data)
-
 
 
 class ProductDetailAPIView(APIView):
@@ -573,7 +571,6 @@ class ReviewModelSerializerListAPIView(generics.ListAPIView):
     ordering_fields = ['rating', 'created_at']
     filterset_fields = ['product__id']
 
-
     @swagger_auto_schema(
         operation_summary="All reviews(GET)",
         operation_description="Method for all reviews(GET)",
@@ -657,6 +654,7 @@ class AddRatingViewSet(ListAPIView):
         return Response(self.serializer_class(reviews, context={'request': request}).data,
                         status=status.HTTP_201_CREATED)
 
+
 # class AddRatingViewSet(APIView):
 #     serializer_class = ReviewCreateSerializer
 #     parser_classes = [MultiPartParser]
@@ -674,3 +672,12 @@ class AddRatingViewSet(ListAPIView):
 #         reviews = self.get_object().order_by(sort_type)
 #         serializer = self.serializer_class(reviews, context={'request': request}, many=True)
 #         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class ProductFilterListAPIView(generics.ListAPIView):
+    queryset = CategoryModel.objects.all()
+    serializer_class = ProductCategoryFilterSerializer
+
+
+class ProductBrandFilterListAPIView(generics.ListAPIView):
+    queryset = BrandModel.objects.all()
+    serializer_class = ProductBrandFilterSerializer

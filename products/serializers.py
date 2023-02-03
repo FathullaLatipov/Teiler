@@ -12,7 +12,8 @@ from carousel.models import CarouselModel
 from help.models import HelpModel
 from user.models import CustomUser
 from .models import ProductModel, ReviewModel, CategoryModel, ProductImageModel, ColorModel, \
-    ProductCharacteristicModel, ProductAttributes, ProductOptionsModel, ReviewImageModel, CurrentProductOptionsModel
+    ProductCharacteristicModel, ProductAttributes, ProductOptionsModel, ReviewImageModel, CurrentProductOptionsModel, \
+    BrandModel
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -124,7 +125,8 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductModel
         fields = ['id', 'sku', 'title', 'images', 'discount', 'price', 'get_price', 'rating', 'img_url', 'is_published',
-                  'condition', 'current_products_options', 'products_options', 'сolors', 'characteristics', 'description', 'brand',
+                  'condition', 'current_products_options', 'products_options', 'сolors', 'characteristics',
+                  'description', 'brand',
                   ]
 
     def get_img_url(self, obj):
@@ -153,6 +155,18 @@ class HelpSerializer(serializers.ModelSerializer):
     class Meta:
         model = HelpModel
         fields = ['title', 'category', 'subcategory', 'descriptions']
+
+
+class ProductCategoryFilterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CategoryModel
+        fields = ['id', 'title', 'created_at']
+
+
+class ProductBrandFilterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BrandModel
+        fields = ['id', 'brand', 'created_at']
 
 
 # class SubCategorySerializerField(serializers.RelatedField):
@@ -224,6 +238,7 @@ class RewiewCreateImageSerializer(serializers.Serializer):
 class ReviewCreateSerializer(serializers.ModelSerializer):
     images = serializers.FileField(use_url=True)
     img_url = serializers.SerializerMethodField()
+
     # user = UserSerializer()
 
     class Meta:
@@ -251,33 +266,3 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
         context['images'] = RewiewCreateImageSerializer(instance.images, many=True).data
 
         return context
-
-    # def get_img_url(self, obj):
-    #     return self.context['request'].build_absolute_url(obj.images.url)
-
-    # def create(self, validated_data):
-    #     print(validated_data)
-    #     # product = ProductModel.objects.get(id=validated_data['id'])/
-    #     # print(product)
-    #     uploaded_data = validated_data.pop('uploaded_images')
-    #     housemodel = ReviewModel.objects.create(name=validated_data['name'],
-    #                                             email=validated_data['email'],
-    #                                             rating=validated_data['rating'],
-    #                                             comments=validated_data['comments'],
-    #                                             product=validated_data['product'],
-    #                                             )
-    #     # housemodel.product.add(product.id)
-    #     for uploaded_item in uploaded_data:
-    #         new_product_image = ReviewImageModel.objects.create(image=uploaded_item)
-    #         # new_product_image.save()
-    #     housemodel.save()
-    #     return housemodel
-# def create(self, validated_data):
-#     uploaded_data = validated_data.pop('uploaded_images')
-#     product = ProductModel.objects.get(pk=validated_data['pk'])
-#     print(product)
-#     # product = validated_data.pop('product')
-#     new_product = ReviewModel.objects.create(**validated_data)
-#     for uploaded_item in uploaded_data:
-#         new_product_image = ReviewImageModel.objects.create(product=new_product, images=uploaded_item)
-#     return new_product

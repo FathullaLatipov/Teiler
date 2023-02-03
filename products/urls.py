@@ -3,7 +3,8 @@ from django.views.generic import TemplateView
 
 from cart import views
 from products.views import ProductTemplate, ProductDetailView, AddReview, WishlistModelListView, add_to_wishlist, \
-    CartModelListView, add_to_cart, load_more_data, ProductListAPIView, ProductDiscountAPIView, ProductDetailAPIView
+    CartModelListView, add_to_cart, load_more_data, ProductListAPIView, ProductDiscountAPIView, ProductDetailAPIView, \
+    ProductFilterListAPIView, ProductBrandFilterListAPIView
 
 app_name = 'product'
 
@@ -18,6 +19,8 @@ urlpatterns = [
     path('cart/', CartModelListView.as_view(), name='cart'),
     path('cart/<int:pk>/', add_to_cart, name='add-cart'),
     path('api/v1/products/', ProductListAPIView.as_view(), name='products'),
+    path('api/v1/products/filters-category', ProductFilterListAPIView.as_view(), name='products-filter'),
+    path('api/v1/products/filters-brand', ProductBrandFilterListAPIView.as_view(), name='products-filter-brand'),
     path('api/v1/discount/', ProductDiscountAPIView.as_view()),
     path('api/v1/products/<int:pk>/', ProductDetailAPIView.as_view()),
 
